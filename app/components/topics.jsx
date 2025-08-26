@@ -5,7 +5,7 @@ export default function Topics() {
                 <div className="row justify-content-center">
                     <div className="col-xxl-6 col-xl-7 col-lg-8">
                         <div className="section-title text-center mb-60">
-                            <h1>Know More About Upcoming Conference</h1>
+                            <h2>Know More About Upcoming Conference</h2>
                             <p>Conference topics</p>
                         </div>
                     </div>

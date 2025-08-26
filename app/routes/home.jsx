@@ -5,8 +5,8 @@ import { isValidPhoneNumber } from 'react-phone-number-input'
 
 export function meta() {
   return [
-    { title: "WRT2026 - Uzhhorod, Ukraine" },
-    { name: "description", content: "Welding and Related Technologies Conference 2026" },
+    { title: "WRT2026 Conference - Uzhhorod, Ukraine" },
+    { name: "description", content: "WRT2026 - Welding and Related Technologies Conference 2026, organized by the E.O.Paton Electric Welding Institute of the National Academy of Sciences of Ukraine" },
   ];
 }
 

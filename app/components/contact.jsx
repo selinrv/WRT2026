@@ -12,7 +12,7 @@ export default function ContactForm() {
                 <div className="row justify-content-center">
                     <div className="col-xxl-6 col-xl-7 col-lg-8">
                         <div className="section-title text-center mb-60">
-                            <h1>Get In Touch</h1>
+                            <h3>Get In Touch</h3>
                             <p>Subscribe to our newsletter and stay informed about our events and registration
                                 opening</p>
                         </div>
