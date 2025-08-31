@@ -1,3 +1,4 @@
+import * as React from 'react'
 import {
   isRouteErrorResponse,
   Links,
@@ -5,6 +6,8 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLocation,
+  useRouteLoaderData
 } from "react-router";
 
 
@@ -28,7 +31,25 @@ export const links = () => [
   },
 ];
 
+export async function loader() {
+  return Response.json({
+    GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID ?? null
+  });
+}
+
 export function Layout({ children }) {
+  const { GA_MEASUREMENT_ID } = useRouteLoaderData("root") ?? { GA_MEASUREMENT_ID: null };
+  const location = useLocation();
+  React.useEffect(() => {
+    if (!GA_MEASUREMENT_ID || typeof window === "undefined") return;
+    // If you use Consent Mode and haven’t granted consent yet, skip here.
+    window.gtag?.("event", "page_view", {
+      page_title: document.title,
+      page_location: window.location.href,
+      page_path: location.pathname + location.search
+    });
+  }, [location, GA_MEASUREMENT_ID]);
+
   return (
     <html lang="en">
       <head>
@@ -37,6 +58,22 @@ export function Layout({ children }) {
         <link rel="canonical" href="https://wrt2026.com.ua/" />
         <Meta />
         <Links />
+        {GA_MEASUREMENT_ID ? (
+            <>
+              <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} />
+              <script
+                  dangerouslySetInnerHTML={{
+                    __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  // Disable automatic page_view; we’ll send our own on route changes.
+                  gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false });
+                `
+                  }}
+              />
+            </>
+        ) : null}
       </head>
       <body>
         <Header />
