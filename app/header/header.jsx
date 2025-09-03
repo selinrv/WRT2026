@@ -1,4 +1,12 @@
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Modal, Button } from "react-bootstrap";
+import RegistrationForm from "../components/registration";
+
 export default function Header() {
+    const location = useLocation();
+    const [show, setShow] = useState(false);
+
     return (
         <header className="header">
             <div className="navbar-area">
@@ -20,15 +28,17 @@ export default function Header() {
                                 <div className="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                     <ul id="nav" className="navbar-nav ms-auto">
                                         <li className="nav-item">
-                                            <a className="page-scroll active" href="#home">Home</a>
+                                            <Link className="page-scroll active" to="https://wrt2026.com.ua">Home</Link>
                                         </li>
                                         <li className="nav-item">
-                                            <a className="page-scroll" href="#about">Topics</a>
+                                            <Link className="page-scroll" to="#about">Topics</Link>
                                         </li>
                                         <li className="nav-item">
-                                            <a className="page-scroll" href="#contact">Contact</a>
+                                            <Link className="page-scroll" to="#contact">Contact</Link>
                                         </li>
-
+                                        {/* <li className="nav-item">
+                                             <Link className="page-scroll" onClick={() => setShow(true)} >Registration</Link>
+                                         </li> */}
                                     </ul>
                                 </div>
                             </nav>
@@ -36,6 +46,23 @@ export default function Header() {
                     </div>
                 </div>
             </div>
+            <Modal show={show} onHide={() => setShow(false)}>
+                <Modal.Header closeButton>
+
+                </Modal.Header>
+                <Modal.Body >
+                    <RegistrationForm />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShow(false)}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={() => setShow(false)}>
+                        Save changes
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </header>
+
     )
 }

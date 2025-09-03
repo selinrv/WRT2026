@@ -32,7 +32,7 @@ export default function Topics() {
     )
 }
 
-const topics = [
+export const topics = [
     {
         name: "Technologies, Filler Materials and Equipment",
         descr: "Development and improvement of welding and related technologies; research on filler materials including wires, rods, powders, and fluxes; innovations in welding and processing equipment",

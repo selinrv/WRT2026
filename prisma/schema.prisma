@@ -22,3 +22,15 @@ model ContactForm {
   country      String
   phone_number String
 }
+
+model Registration {
+  id             Int    @id @default(autoincrement())
+  author         String
+  co_authors     String
+  abstract_title String @db.LongText
+  abstract       String @db.LongText
+  institutions   String @db.LongText
+  type           String
+  reg_category   String
+  topic          String
+}

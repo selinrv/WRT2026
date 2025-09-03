@@ -1553,6 +1553,7 @@ p {
   margin-bottom: 20px;
 }
 
+.contact-section form .single-form select,
 .contact-section form .single-form textarea,
 .contact-section form .single-form input {
   width: 100%;

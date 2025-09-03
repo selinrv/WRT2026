@@ -1,6 +1,7 @@
 import Homeslider from "../components/homeslider";
 import Topics from "../components/topics";
 import ContactForm from "../components/contact";
+import RegistrationForm from "../components/registration";
 import { isValidPhoneNumber } from 'react-phone-number-input'
 
 export function meta() {
