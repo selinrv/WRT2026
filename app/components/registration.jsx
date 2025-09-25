@@ -1,9 +1,6 @@
 import { Form, useActionData } from "react-router-dom";
 import { useState } from "react";
 import 'react-phone-number-input/style.css'
-
-
-
 import { topics } from "./topics";
 
 
@@ -29,20 +26,24 @@ export default function RegistrationForm() {
     const categories = [
         {
             label: "Delegate/Expert",
-            price: "11140",
+            price: "350€",
+            value: 350,
         },
         {
             label: "Young Professional",
-            price: "6685",
+            price: "175€",
+            value: 175,
+        },
+        {
+            label: "Student",
+            price: "50€",
+            value: 50,
         },
         {
             label: "Accompanying person / Visitor",
-            price: "3342",
+            price: "150€",
+            value: 150,
         },
-        {
-            label: "Only abstract",
-            price: "0"
-        }
     ]
 
 
@@ -53,7 +54,8 @@ export default function RegistrationForm() {
                     <div className="col-xxl-12 col-xl-12 col-lg-12">
                         <div className="section-title text-center mb-60">
                             <h3>Conference Registration Form</h3>
-                            <p>Register and submit your abstract</p>
+                            <h4>Register and submit your abstract</h4>
+                            <p>Early Bird registration available!</p>
                         </div>
                     </div>
                 </div>
@@ -91,23 +93,25 @@ export default function RegistrationForm() {
                                         <div className="single-form">
                                             <select
                                                 value={selected}
-                                                onChange={(e) => setSelected(e.target.value)}
+                                                name="category"
+                                                onChange={(e) => setSelected(e.target.options[e.target.selectedIndex].text)}
                                             >
                                                 <option value="">-- Choose your registration category --</option>
                                                 {categories.map((c) => (
-                                                    <option key={c.label} value={c.label}>
-                                                        {c.label} / {c.price} UAH
+                                                    <option key={c.label} value={c.value}>
+                                                        {c.label} / {c.price}
                                                     </option>
                                                 ))}
                                             </select>
 
-                                            <p>Selected: {selected}</p>
+                                            <p>Selected: {selected} </p>
                                         </div>
                                     </div>
                                     <div className="col-md-5">
                                         <div className="single-form">
                                             <select
                                                 value={topic}
+                                                name="topic"
                                                 onChange={(e) => setTopic(e.target.value)}
                                             >
                                                 <option value="">-- Choose your conference topic --</option>
@@ -125,6 +129,7 @@ export default function RegistrationForm() {
                                         <div className="single-form">
                                             <select
                                                 value={type}
+                                                name="p_type"
                                                 onChange={(e) => setType(e.target.value)}
                                             >
                                                 <option value="">-- Choose presentation type --</option>
