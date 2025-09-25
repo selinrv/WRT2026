@@ -3,7 +3,7 @@ import { TransactionalEmailsApi, SendSmtpEmail } from "@getbrevo/brevo";
 export async function sendEmail(emailData) {
     try {
         let emailAPI = new TransactionalEmailsApi();
-        emailAPI.authentications.apiKey.apiKey = "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";
+        emailAPI.authentications.apiKey.apiKey = process.env.SEND_IN_BLUE ?? null;
         let message = new SendSmtpEmail();
         message.subject = "Thank you for registering at WRT2026!";
         message.params = emailData;
