@@ -259,6 +259,14 @@ p {
   background: rgba(78, 110, 241, 0.8);
 }
 
+.contact-section form .single-form h3 {
+  display: flex;
+  gap: 10px;
+}
+.contact-section form .single-form input.currency-checkbox {
+  width: auto;
+  margin-right: 10px;
+}
 @keyframes animation1 {
   0% {
     transform: translateY(30px);

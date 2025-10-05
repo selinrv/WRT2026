@@ -11,6 +11,7 @@ export default function RegistrationForm() {
     const [selected, setSelected] = useState("");
     const [topic, setTopic] = useState("");
     const [type, setType] = useState("");
+    const [checked, setChecked] = useState(false);
     const types = [
         {
             label: "Oral in Person",
@@ -46,6 +47,15 @@ export default function RegistrationForm() {
         },
     ]
 
+    const handleChange = (e) => {
+        const selectedValue = Number(e.target.value);
+        const found = categories.find(c => c.value === selectedValue);
+        setSelected(found || "");
+    };
+
+    function multiply(a, b) {
+        return a * b;
+    }
 
     return (
         <section id="contact" className="contact-section pt-100 pb-100">
@@ -85,7 +95,7 @@ export default function RegistrationForm() {
                                     </div>
                                     <div className="col-md-6">
                                         <div className="single-form">
-                                            <input type="email" className="form-input" id="email" name="insitution"
+                                            <input type="insitution" className="form-input" id="email" name="insitution"
                                                    placeholder="Institutions" />
                                         </div>
                                     </div>
@@ -94,7 +104,7 @@ export default function RegistrationForm() {
                                             <select
                                                 value={selected}
                                                 name="category"
-                                                onChange={(e) => setSelected(e.target.options[e.target.selectedIndex].text)}
+                                                onChange={handleChange}
                                             >
                                                 <option value="">-- Choose your registration category --</option>
                                                 {categories.map((c) => (
@@ -104,7 +114,7 @@ export default function RegistrationForm() {
                                                 ))}
                                             </select>
 
-                                            <p>Selected: {selected} </p>
+                                            <p>Selected: {selected ? selected.label + " / " + selected.price : ' '} </p>
                                         </div>
                                     </div>
                                     <div className="col-md-5">
@@ -161,7 +171,29 @@ export default function RegistrationForm() {
                                             <p>{textareaValue.length}/{limit} characters</p>
                                         </div>
                                     </div>
-
+                                    <div className="col-md-12">
+                                        <div className="single-form">
+                                            <label>
+                                                <input className="currency-checkbox" type="checkbox" checked={checked}
+                                                    onChange={(e) => setChecked(e.target.checked)}
+                                                />
+                                                I want to pay in UAH
+                                            </label>
+                                            <input type="hidden" name="currency" value={checked ? "uah" : "euro"} />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-12">
+                                        <div className="single-form">
+                                            <h3>Total:
+                                                <span>
+                                                    {checked ? multiply(selected.value, 48.5) : selected.value}
+                                                    {checked ? " UAH" : " €"}
+                                                </span>
+                                            </h3>
+                                            <input type="hidden" name="currency" value={checked ? "uah" : "euro"} />
+                                            <input type="hidden" name="total" value={checked ? multiply(selected.value, 48.5) + " UAH" : selected.value + " €"} />
+                                        </div>
+                                    </div>
                                     <div className="col-12">
                                         <div className="submit-btn">
                                             <button type="submit" className="main-btn btn-hover" id="save-data">Register</button>

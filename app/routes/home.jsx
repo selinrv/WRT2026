@@ -19,8 +19,7 @@ export async function action({ request }) {
     const formData = await request.formData();
     const expenseData = Object.fromEntries(formData);
     const { sendEmail } = await import("../data/email.server");
-    console.log(expenseData);
-    //sendEmail(formData);
+    sendEmail(formData);
     // Save to MySQL via Prisma
     /*await prisma.ContactForm.create({
         data: { name, email, country, phone_number }
