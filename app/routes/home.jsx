@@ -1,8 +1,8 @@
 import Homeslider from "../components/homeslider";
 import Topics from "../components/topics";
-import ContactForm from "../components/contact";
+import Slider from "../components/slider";
+import Past from "../components/pastconference";
 import RegistrationForm from "../components/registration";
-import { isValidPhoneNumber } from 'react-phone-number-input'
 
 
 export function meta() {
@@ -29,10 +29,29 @@ export async function action({ request }) {
 }
 
 export default function Home() {
+  const photos = [
+      { src: "../../assets/img/conference/DSC_0789-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0697-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0777-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0681-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0659-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0627-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0611-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0442-1-1024x644.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0391-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0365-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0353-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0347-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0328-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0324-1-1024x683.jpeg", alt: "Beach sunset" },
+      { src: "../../assets/img/conference/DSC_0229-1-1024x832.jpeg", alt: "WRT2024" }
+  ]
   return (
       <>
         <Homeslider />
         <Topics />
+        <Slider photos={photos}/>
+        <Past />
         <RegistrationForm />
       </>
   )

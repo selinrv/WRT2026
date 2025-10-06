@@ -34,7 +34,13 @@ export default function Header() {
                                             <Link className="page-scroll" to="#about">Topics</Link>
                                         </li>
                                         <li className="nav-item">
-                                            <Link className="page-scroll" to="#contact">Contact</Link>
+                                            <Link className="page-scroll" to="#past-events-slider">Past Events</Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="page-scroll" to="#past-papers">Papers</Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            <Link className="page-scroll" to="#registration">Registration</Link>
                                         </li>
                                         {/* <li className="nav-item">
                                              <Link className="page-scroll" onClick={() => setShow(true)} >Registration</Link>

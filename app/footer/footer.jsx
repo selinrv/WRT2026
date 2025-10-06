@@ -65,7 +65,15 @@ const links = [
         link: "#about",
     },
     {
-        link_name: "Contact Us",
-        link: "#contact"
+        link_name: "Past Events",
+        link: "#past-events-slider"
+    },
+    {
+        link_name: "Papers",
+        link: "#past-papers",
+    },
+    {
+        link_name: "Registration",
+        link: "#registration"
     }
 ]

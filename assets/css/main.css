@@ -263,6 +263,17 @@ p {
   display: flex;
   gap: 10px;
 }
+.swiper-horizontal > .swiper-pagination-bullets, .swiper-pagination-horizontal.swiper-pagination-bullets {
+  top: 285px;
+}
+.abstracts-section .single-pricing {
+  text-align: center;
+}
+.abstracts-section img {
+  width: calc(100% - 100px);
+  max-height: 700px;
+  object-fit: contain;
+}
 .contact-section form .single-form input.currency-checkbox {
   width: auto;
   margin-right: 10px;
