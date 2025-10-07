@@ -24,13 +24,14 @@ model ContactForm {
 }
 
 model Registration {
-  id             Int    @id @default(autoincrement())
+  id             Int     @id @default(autoincrement())
   author         String
   co_authors     String
-  abstract_title String @db.LongText
-  abstract       String @db.LongText
-  institutions   String @db.LongText
+  abstract_title String  @db.LongText
+  abstract       String  @db.LongText
+  institutions   String  @db.LongText
   type           String
   reg_category   String
   topic          String
+  paid           Boolean
 }

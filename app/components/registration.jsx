@@ -9,6 +9,7 @@ export default function RegistrationForm() {
     const [value, setValue] = useState();
     const [textareaValue, setTextareaValue] = useState("");
     const [selected, setSelected] = useState("");
+    const [selectedText, setSelectedText] = useState("");
     const [topic, setTopic] = useState("");
     const [type, setType] = useState("");
     const [checked, setChecked] = useState(false);
@@ -50,7 +51,8 @@ export default function RegistrationForm() {
     const handleChange = (e) => {
         const selectedValue = Number(e.target.value);
         const found = categories.find(c => c.value === selectedValue);
-        setSelected(found || "");
+        setSelected(e.target.value || "");
+        setSelectedText(found || "");
     };
 
     function multiply(a, b) {
@@ -89,13 +91,13 @@ export default function RegistrationForm() {
                                     </div>
                                     <div className="col-md-6">
                                         <div className="single-form">
-                                            <input type="text" className="form-input" id="country" name="co_authors"
+                                            <input type="text" className="form-input" id="coauthors" name="co_authors"
                                                    placeholder="Co-Authors" />
                                         </div>
                                     </div>
                                     <div className="col-md-6">
                                         <div className="single-form">
-                                            <input type="insitution" className="form-input" id="email" name="insitution"
+                                            <input type="text" className="form-input" id="insitution" name="insitution"
                                                    placeholder="Institutions" />
                                         </div>
                                     </div>
@@ -114,7 +116,7 @@ export default function RegistrationForm() {
                                                 ))}
                                             </select>
 
-                                            <p>Selected: {selected ? selected.label + " / " + selected.price : ' '} </p>
+                                            <p>Selected: {selectedText ? selectedText.label + " / " + selectedText.price : ' '} </p>
                                         </div>
                                     </div>
                                     <div className="col-md-5">
@@ -155,7 +157,7 @@ export default function RegistrationForm() {
                                     </div>
                                     <div className="col-md-12">
                                         <div className="single-form">
-                                            <input type="text" className="form-input" id="country" name="abstract_title"
+                                            <input type="text" className="form-input" id="abstract_title" name="abstract_title"
                                                    placeholder="Abstract Title" />
                                         </div>
                                     </div>
@@ -186,7 +188,7 @@ export default function RegistrationForm() {
                                         <div className="single-form">
                                             <h3>Total:
                                                 <span>
-                                                    {checked ? multiply(selected.value, 48.5) : selected.value}
+                                                    {checked ? multiply(selectedText.value, 48.5) : selectedText.value}
                                                     {checked ? " UAH" : " €"}
                                                 </span>
                                             </h3>
@@ -204,7 +206,7 @@ export default function RegistrationForm() {
                                     </div>
                                 </div>
                             </Form>
-                            {data?.errors && <p style={{color: "red"}}>{JSON.stringify(data.errors)}</p>}
+                            {data?.errors && <p style={{color: "red"}}>{JSON.stringify(data.errors.title)}</p>}
                             {data?.success && <p style={{color: "green"}}>Saved!</p>}
                         </div>
                     </div>

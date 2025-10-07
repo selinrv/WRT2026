@@ -5,6 +5,7 @@ import Past from "../components/pastconference";
 import RegistrationForm from "../components/registration";
 
 
+
 export function meta() {
   return [
     { title: "WRT2026 Conference - Uzhhorod, Ukraine" },
@@ -13,13 +14,28 @@ export function meta() {
 }
 
 import { PrismaClient } from '@prisma/client';
+import {validateInput} from "../data/validation.server.js";
 
 const prisma = new PrismaClient();
 export async function action({ request }) {
     const formData = await request.formData();
     const expenseData = Object.fromEntries(formData);
     const { sendEmail } = await import("../data/email.server");
-    sendEmail(formData);
+    const { AddToDoc } = await import("../data/google.server");
+    try {
+        validateInput(Object.fromEntries(formData))
+    } catch (error) {
+        return { errors: error };
+    }
+    try {
+        await sendEmail(formData)
+    } catch (error) {
+        return { errors: error };
+    }
+
+    const doc = await AddToDoc(formData);
+
+    //sendEmail(formData);
     // Save to MySQL via Prisma
     /*await prisma.ContactForm.create({
         data: { name, email, country, phone_number }

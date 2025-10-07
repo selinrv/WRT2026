@@ -2,7 +2,7 @@ export default function Footer() {
     return (
         <footer className="footer">
             <div className="map-img">
-                <img src="assets/img/footer/map-bg.svg" alt="" />
+               {/* <img src="../assets/img/footer/map-bg.svg" alt="" /> */}
             </div>
             <div className="container">
                 <div className="row">

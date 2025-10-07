@@ -5,8 +5,6 @@ export async function sendEmail(emailData) {
         let emailAPI = new TransactionalEmailsApi();
         emailAPI.authentications.apiKey.apiKey = process.env.SEND_IN_BLUE ?? null;
         let currency = emailData.get('currency');
-        console.log(emailData.get('currency'));
-        console.log(emailData.get('total'));
         let message = new SendSmtpEmail();
         message.subject = "Thank you for registering at WRT2026!";
         message.params = {
@@ -22,8 +20,6 @@ export async function sendEmail(emailData) {
         message.to = [{ email: emailData.get('email'), name: emailData.get('author') }];
         {currency === 'uah' ? message.templateId = 22 : message.templateId = 21}
         emailAPI.sendTransacEmail(message).then(res => {
-            console.log(currency);
-            console.log(message.templateId);
             console.log(JSON.stringify(res.body));
         }).catch(err => {
             console.error("Error sending email:", err);

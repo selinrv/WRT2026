@@ -1,3 +1,4 @@
+import { topics } from "../components/topics";
 function isValidName(value) {
     return value && value.trim().length > 0 && value.trim().length <= 100;
 }
@@ -6,13 +7,40 @@ function isValidAbstract(value) {
     return value && value.trim().length > 0 && value.trim().length <= 3500;
 }
 
+function isValidAbstractTitle(value) {
+    return value && value.trim().length > 0 && value.trim().length <= 300;
+}
+
 function isValidAmount(value) {
     const amount = parseFloat(value);
     return !isNaN(amount) && amount > 0;
 }
 
+function isValidEmail(value) {
+    return value && value.trim().length > 0 && value.trim().length <= 100 && value.includes('@');
+}
+
 function isValidDate(value) {
     return value && new Date(value).getTime() < new Date().getTime();
+}
+
+function isValidSelected(value) {
+    const allowed = ["350", "175", "50", "150"];
+    if (allowed.includes(value)) {
+        return value;
+    }
+}
+
+function isValidTopic(selectedValue) {
+    const isValid = topics.some((item) => item.name === selectedValue);
+    return selectedValue && isValid;
+}
+
+function isValidType(value) {
+    const allowed = ["Oral in Person", "Oral Online", "Poster"];
+    if (allowed.includes(value)) {
+        return value;
+    }
 }
 
 export function validateInput(input) {
@@ -22,16 +50,32 @@ export function validateInput(input) {
         validationErrors.title = 'Incorrect author name. Must be at most 100 characters long.'
     }
 
+    if (!isValidEmail(input.email)) {
+        validationErrors.title = 'Incorrect email.';
+    }
+
     if (!isValidAbstract(input.abstract)) {
         validationErrors.title = 'Incorrect abstract. Must be at most 3500 characters long.'
     }
 
-    if (!isValidAmount(input.amount)) {
-        validationErrors.amount = 'Invalid amount. Must be a number greater than zero.'
+    if (!isValidSelected(input.category)) {
+        validationErrors.title = 'Please select registration category.'
     }
 
-    if (!isValidDate(input.date)) {
-        validationErrors.date = 'Invalid date. Must be a date before today.'
+    if (!isValidTopic(input.topic)) {
+        validationErrors.title = 'Please select registration conference topic.'
+    }
+
+    if (!isValidType(input.p_type)) {
+        validationErrors.title = 'Please select type of your presentation.'
+    }
+
+    if (!isValidAbstractTitle(input.abstract_title)) {
+        validationErrors.title = 'Abstract title cannot be empty.'
+    }
+
+    if (!isValidName(input.insitution)) {
+        validationErrors.title = 'Institution field cannot be empty.'
     }
 
     if (Object.keys(validationErrors).length > 0) {
