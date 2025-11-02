@@ -27,6 +27,29 @@ export default function Slider({ photos }) {
                         autoplay={{ delay: 4000, disableOnInteraction: false }}
                         navigation
                         style={{ width: "100%", height: "100%" }}
+                        breakpoints={{
+                            0: {
+                                slidesPerView: 1,
+                            },
+                            400:{
+                                slidesPerView:1,
+                            },
+                            639: {
+                                slidesPerView: 1,
+                            },
+                            865:{
+                                slidesPerView:2
+                            },
+                            1000:{
+                                slidesPerView:2
+                            },
+                            1500:{
+                                slidesPerView:3
+                            },
+                            1700:{
+                                slidesPerView:3
+                            }
+                        }}
                     >
                         {photos.map((p, i) => (
                             <SwiperSlide key={i}>

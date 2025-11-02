@@ -9,8 +9,8 @@ export default function Footer() {
                     <div className="col-lg-12">
                         <div className="footer-links">
                             <ul>
-                                {links.map(({ link_name, link }) => (
-                                    <li>
+                                {links.map(({ id, link_name, link }) => (
+                                    <li key={id}>
                                         <a href={link}>{link_name}</a>
                                     </li>
                                 ))}
@@ -57,22 +57,27 @@ export default function Footer() {
 
 const links = [
     {
+        id: 1,
         link_name: "Home",
         link: "#home"
     },
     {
+        id: 2,
         link_name: "Topics",
         link: "#about",
     },
     {
+        id: 3,
         link_name: "Past Events",
         link: "#past-events-slider"
     },
     {
+        id: 4,
         link_name: "Papers",
         link: "#past-papers",
     },
     {
+        id: 5,
         link_name: "Registration",
         link: "#registration"
     }

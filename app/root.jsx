@@ -29,6 +29,11 @@ export const links = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
   },
+  {
+    rel: "preload",
+    as: "script",
+    href: "../assets/js/main.js"
+  }
 ];
 
 export async function loader() {
@@ -58,6 +63,7 @@ export function Layout({ children }) {
         <link rel="canonical" href="https://wrt2026.com.ua/" />
         <Meta />
         <Links />
+        <script src={"../assets/js/main.js"}></script>
         {GA_MEASUREMENT_ID ? (
             <>
               <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} />

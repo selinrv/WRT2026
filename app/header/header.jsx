@@ -1,12 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Modal, Button } from "react-bootstrap";
-import RegistrationForm from "../components/registration";
 
 export default function Header() {
     const location = useLocation();
-    const [show, setShow] = useState(false);
-
+    const [open, setOpen] = useState(false);
     return (
         <header className="header">
             <div className="navbar-area">
@@ -19,16 +16,18 @@ export default function Header() {
                                 </a>
                                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                                        aria-expanded="false" aria-label="Toggle navigation">
+                                        aria-expanded={open} aria-label="Toggle navigation"
+                                        onClick={() => setOpen(v => !v)} >
                                     <span className="toggler-icon"></span>
                                     <span className="toggler-icon"></span>
                                     <span className="toggler-icon"></span>
                                 </button>
 
-                                <div className="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
+                                <div className={`md:hidden overflow-hidden collapse navbar-collapse sub-menu-bar duration-300 ${open ? "in show" : "max-h-0"}`}
+                                    id="navbarSupportedContent">
                                     <ul id="nav" className="navbar-nav ms-auto">
                                         <li className="nav-item">
-                                            <Link className="page-scroll active" to="https://wrt2026.com.ua">Home</Link>
+                                            <Link className="page-scroll active" to={location}>Home</Link>
                                         </li>
                                         <li className="nav-item">
                                             <Link className="page-scroll" to="#about">Topics</Link>
@@ -42,9 +41,6 @@ export default function Header() {
                                         <li className="nav-item">
                                             <Link className="page-scroll" to="#registration">Registration</Link>
                                         </li>
-                                        {/* <li className="nav-item">
-                                             <Link className="page-scroll" onClick={() => setShow(true)} >Registration</Link>
-                                         </li> */}
                                     </ul>
                                 </div>
                             </nav>
@@ -52,22 +48,6 @@ export default function Header() {
                     </div>
                 </div>
             </div>
-            <Modal show={show} onHide={() => setShow(false)}>
-                <Modal.Header closeButton>
-
-                </Modal.Header>
-                <Modal.Body >
-                    <RegistrationForm />
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={() => setShow(false)}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={() => setShow(false)}>
-                        Save changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </header>
 
     )

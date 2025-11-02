@@ -1146,6 +1146,12 @@ p {
   .schedule-section .schedule-tabs .schedule-nav-item .schedule-nav-link span {
     font-size: 18px;
   }
+  #past-papers .single-pricing {
+    margin-bottom: 30px;
+  }
+  #past-events-slider.pb-100 {
+    padding-bottom: 0;
+  }
 }
 
 @media (max-width: 767px) {

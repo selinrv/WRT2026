@@ -157,27 +157,3 @@ function fadeOut(element, duration = 5000) {
         element.style.opacity = opacity;
     }, interval);
 }
-function saveToFile() {
-    //e.preventDefault();
-    gtag('event', 'form_submit', {
-        form_id: 'contact-form',
-        form_name: 'Contact Us',
-        form_location: 'footer',
-    });
-    const data = document.getElementById('contact-form');
-    const formData = new FormData(data);
-
-    fetch("contact.php", {
-        method: "POST",
-        body: formData
-    })
-        .then(response => response.text())
-        .then(data => {
-            const response = document.getElementById("response");
-            response.innerText = data;
-            fadeOut(response, 5000);
-        })
-        .catch(error => {
-            document.getElementById("response").innerText = "Error: " + error;
-        });
-};

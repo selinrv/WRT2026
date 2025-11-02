@@ -8,8 +8,8 @@ export async function getRefreshToken() {
     const code = "1000.8b8d84a6ef8a23d705beb22fed74310a.bcbdea646d6075fc9213991318f9e613";
     const body = new URLSearchParams({
         code: code,
-        client_id: '1000.63SYKDL1M44EWKB3LF2K1017OAAZOZ',
-        client_secret: "36d5de3beaa8fb14100384d58caafae5e65481377f",
+        client_id: process.env.ZOHO_CLIENT_ID,
+        client_secret: process.env.ZOHO_CLIENT_SECRET,
         grant_type: "authorization_code",
         redirect_uri: "https://wrt2026.com.ua",
     });
@@ -39,8 +39,8 @@ async function updateAccessToken() {
     });
     const body = new URLSearchParams({
         refresh_token: getToken.refresh_token,
-        client_id: '1000.63SYKDL1M44EWKB3LF2K1017OAAZOZ',
-        client_secret: "36d5de3beaa8fb14100384d58caafae5e65481377f",
+        client_id: process.env.ZOHO_CLIENT_ID,
+        client_secret: process.env.ZOHO_CLIENT_SECRET,
         grant_type: "refresh_token",
     });
     try {
@@ -63,35 +63,6 @@ async function updateAccessToken() {
         return ({errors: error});
     }
 }
-
-async function createCurrency(token, API_BASE) {
-    const organizationId = "902053247";
-    const currency = {
-        "currency_code": "UAH",
-        "currency_symbol": "UAH",
-        "price_precision": 2,
-        "currency_format": "1,234,567.89"
-    }
-    try {
-        const {data} = await axios.post(
-            `${API_BASE}/invoice/v3/settings/currencies`,
-            {currency},
-            {
-                headers: {
-                    Authorization: `Zoho-oauthtoken ${token}`,
-                    "X-com-zoho-invoice-organizationid": organizationId,
-                    "Content-type": "application/json",
-                }
-            }
-        );
-        console.log("Create Currency:", data)
-        //return data?.code;
-    } catch (error) {
-        console.log("Create Currency error", error.response.data)
-        return ({errors: error});
-    }
-}
-
 export async function createInvoice(formData, registrationId) {
     const API_BASE = `https://www.zohoapis.com`;
     const organizationId = "902053247";
