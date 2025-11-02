@@ -74,8 +74,8 @@ export function validateInput(input) {
         validationErrors.title = 'Abstract title cannot be empty.'
     }
 
-    if (!isValidName(input.insitution)) {
-        validationErrors.title = 'Institution field cannot be empty.'
+    if (!isValidName(input.institutions)) {
+        validationErrors.title = 'Institutions field cannot be empty.'
     }
 
     if (Object.keys(validationErrors).length > 0) {

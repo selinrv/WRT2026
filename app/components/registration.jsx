@@ -97,7 +97,7 @@ export default function RegistrationForm() {
                                     </div>
                                     <div className="col-md-6">
                                         <div className="single-form">
-                                            <input type="text" className="form-input" id="insitution" name="insitution"
+                                            <input type="text" className="form-input" id="institutions" name="institutions"
                                                    placeholder="Institutions" />
                                         </div>
                                     </div>
@@ -193,7 +193,7 @@ export default function RegistrationForm() {
                                                 </span>
                                             </h3>
                                             <input type="hidden" name="currency" value={checked ? "uah" : "euro"} />
-                                            <input type="hidden" name="total" value={checked ? multiply(selected.value, 48.5) + " UAH" : selected.value + " €"} />
+                                            <input type="hidden" name="total" value={checked ? multiply(selectedText.value, 48.5) + " UAH" : selectedText.value + " €"} />
                                         </div>
                                     </div>
                                     <div className="col-12">

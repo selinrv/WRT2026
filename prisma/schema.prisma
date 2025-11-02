@@ -24,14 +24,47 @@ model ContactForm {
 }
 
 model Registration {
-  id             Int     @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   author         String
   co_authors     String
-  abstract_title String  @db.LongText
-  abstract       String  @db.LongText
-  institutions   String  @db.LongText
+  abstract_title String   @db.LongText
+  abstract       String   @db.LongText
+  institutions   String   @db.LongText
   type           String
   reg_category   String
   topic          String
+  email          String
+  invoiceUrl     String?  @db.LongText
   paid           Boolean
+  createdAt      DateTime @default(now())
+}
+
+model oauthtoken {
+  id            String @id @unique
+  user_mail     String
+  client_id     String
+  client_secret String
+  refresh_token String
+  access_token  String
+  grant_token   String
+  expiry_time   String
+  redirect_url  String
+}
+
+model Zohotoken {
+  id            Int    @id @default(autoincrement())
+  code          String @unique
+  access_token  String
+  refresh_token String
+  scope         String
+}
+
+model Zohocontacts {
+  id                 Int      @id @default(autoincrement())
+  name               String?
+  email              String?  @unique
+  zohoId             String?
+  registrationItemId String?
+  invoiceUrl         String?  @db.LongText
+  createdAt          DateTime @default(now())
 }
