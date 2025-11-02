@@ -14,9 +14,6 @@ export function meta() {
 }
 
 import { PrismaClient } from '@prisma/client';
-import {createInvoice} from "../data/zoho.server.js";
-import {validateInput} from "../data/validation.server.js";
-
 const prisma = new PrismaClient();
 
 async function addRegistation(formData) {
@@ -40,6 +37,8 @@ async function addRegistation(formData) {
 export async function action({ request }) {
     const formData = await request.formData();
     const expenseData = Object.fromEntries(formData);
+    const { validateInput } = await import("../data/validation.server");
+    const { createInvoice } = await import("../data/zoho.server");
     const { sendEmail } = await import("../data/email.server");
     const { AddToDoc } = await import("../data/google.server");
 
@@ -48,7 +47,7 @@ export async function action({ request }) {
     let emailStatus;
     let registrationId;
 
-        try {
+    try {
             console.log("starting validation")
             validateInput(Object.fromEntries(formData))
         } catch (error) {
@@ -99,7 +98,6 @@ export async function action({ request }) {
             console.log("Email error", error)
             return { errors: error };
         }
-
 
 
     //

@@ -5,7 +5,6 @@ import fs from "fs";
 
 const prisma = new PrismaClient();
 export async function getRefreshToken() {
-    const code = "1000.8b8d84a6ef8a23d705beb22fed74310a.bcbdea646d6075fc9213991318f9e613";
     const body = new URLSearchParams({
         code: code,
         client_id: process.env.ZOHO_CLIENT_ID,
@@ -27,7 +26,7 @@ export async function getRefreshToken() {
                 scope: "ZohoInvoice.invoices.CREATE,ZohoInvoice.invoices.READ,ZohoInvoice.invoices.UPDATE,ZohoInvoice.invoices.DELETE,ZohoInvoice.contacts.CREATE,ZohoInvoice.contacts.EDIT"
             }
         })
-
+        console.log("Data", data)
     } catch (error) {
         return ({errors: error});
     }
