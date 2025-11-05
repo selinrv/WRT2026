@@ -3,6 +3,7 @@ import Topics from "../components/topics";
 import Slider from "../components/slider";
 import Past from "../components/pastconference";
 import RegistrationForm from "../components/registration";
+import Venue from "../components/venus";
 
 
 
@@ -133,6 +134,7 @@ export default function Home() {
         <Topics />
         <Slider photos={photos}/>
         <Past />
+        <Venue />
         <RegistrationForm />
       </>
   )

@@ -196,6 +196,7 @@ async function getZohoCustomer(formData, token) {
         console.log("Customer not found")
         try {
             const createAuthour = await createZohoCustomer(formData, token);
+            console.log("createAuthour", createAuthour)
             return createAuthour;
         } catch (error) {
         }
@@ -206,11 +207,11 @@ async function createZohoCustomer(formData, token) {
     const API_BASE = `https://www.zohoapis.com`;
     const organizationId = "902053247";
     const name = formData.get("author").split(" ");
-
+    console.log("Creating new customer", name[0], name[1])
     //const token = await checkAccessToken();
     const customer = {
         contact_name: formData.get("author"),
-        company_name: formData.get("insitution"),
+        company_name: formData.get("institutions"),
         contact_persons: [
             {
                 first_name: name[0],
@@ -231,6 +232,7 @@ async function createZohoCustomer(formData, token) {
                 }
             }
         );
+        console.log("new customer", data?.response)
         await prisma.zohocontacts.create({
             data: {
                 name: data?.contact?.contact_name,
@@ -240,6 +242,7 @@ async function createZohoCustomer(formData, token) {
         })
         return data.contact.contact_id;
     } catch (error) {
+        console.log("new customer error", error?.response)
         return ({errors: error});
     }
 }

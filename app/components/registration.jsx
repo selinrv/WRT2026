@@ -1,4 +1,4 @@
-import { Form, useActionData } from "react-router-dom";
+import { Form, useActionData, useNavigation } from "react-router-dom";
 import { useState } from "react";
 import 'react-phone-number-input/style.css'
 import { topics } from "./topics";
@@ -13,6 +13,10 @@ export default function RegistrationForm() {
     const [topic, setTopic] = useState("");
     const [type, setType] = useState("");
     const [checked, setChecked] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
+    const navigation = useNavigation();
+    const isSubmitting = navigation.formData != null;
+    const isBusy = navigation.state !== "idle";
     const types = [
         {
             label: "Oral in Person",
@@ -198,7 +202,9 @@ export default function RegistrationForm() {
                                     </div>
                                     <div className="col-12">
                                         <div className="submit-btn">
-                                            <button type="submit" className="main-btn btn-hover" id="save-data">Register</button>
+                                            <button type="submit" className={isSubmitting ? "main-btn btn-hover loading" : "main-btn btn-hover"} id="save-data"  disabled={isBusy}>
+                                                {isSubmitting ? "Please wait, registration in process" : "Register"}
+                                            </button>
                                         </div>
                                     </div>
                                     <div className="col-12">
@@ -206,8 +212,10 @@ export default function RegistrationForm() {
                                     </div>
                                 </div>
                             </Form>
-                            {data?.errors && <p style={{color: "red"}}>{JSON.stringify(data.errors.title)}</p>}
-                            {data?.success && <p style={{color: "green"}}>Saved!</p>}
+                            <div class="return-wrapper">
+                                {data?.errors && <p style={{color: "red"}}>{JSON.stringify(data.errors.title)}</p>}
+                                {data?.success && <p style={{color: "green"}}>Thank you for registration! You should now receive an email with your registration details and payment instructions!</p>}
+                            </div>
                         </div>
                     </div>
 
