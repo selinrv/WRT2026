@@ -10,7 +10,7 @@ import Venue from "../components/venus";
 export function meta() {
   return [
     { title: "WRT2026 Conference - Uzhhorod, Ukraine" },
-    { name: "description", content: "WRT2026 - Welding and Related Technologies Conference 2026, organized by the E.O.Paton Electric Welding Institute of the National Academy of Sciences of Ukraine" },
+    { name: "description", content: "WRT2026 - Welding and Related Technologies Conference 2026, organized by E.O.Paton Electric Welding Institute of the National Academy of Sciences of Ukraine" },
   ];
 }
 
