@@ -1600,6 +1600,28 @@ p {
   .contact-section .contact-form-wrapper {
     margin-right: 0;
   }
+  .venue-section {
+    padding-top: 0;
+  }
+  .venue-section p {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .venue-section .section-title {
+    text-align: center;
+    margin-top: 50px;
+  }
+  .venue-section .container {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .venue-section .countdown-img {
+    position: relative;
+    left: -15px;
+    max-width: unset;
+    top: 0;
+    width: 100%;
+  }
 }
 
 .contact-section form .single-form {
