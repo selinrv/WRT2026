@@ -46,14 +46,6 @@ function isValidType(value) {
 export function validateInput(input) {
     let validationErrors = {};
 
-    if (!isValidName(input.author)) {
-        validationErrors.title = 'Incorrect author name. Must be at most 100 characters long.'
-    }
-
-    if (!isValidEmail(input.email)) {
-        validationErrors.title = 'Incorrect email.';
-    }
-
     if (!isValidAbstract(input.abstract)) {
         validationErrors.title = 'Incorrect abstract. Must be at most 3500 characters long.'
     }
@@ -76,6 +68,15 @@ export function validateInput(input) {
 
     if (!isValidName(input.institutions)) {
         validationErrors.title = 'Institutions field cannot be empty.'
+    }
+
+
+    if (!isValidEmail(input.email)) {
+        validationErrors.title = 'Incorrect email.';
+    }
+
+    if (!isValidName(input.author)) {
+        validationErrors.title = 'Incorrect author name. Must be at most 100 characters long.'
     }
 
     if (Object.keys(validationErrors).length > 0) {

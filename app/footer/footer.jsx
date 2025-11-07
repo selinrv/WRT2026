@@ -78,6 +78,11 @@ const links = [
     },
     {
         id: 5,
+        link_name: "Venue",
+        link: "#venue-section",
+    },
+    {
+        id: 6,
         link_name: "Registration",
         link: "#registration"
     }

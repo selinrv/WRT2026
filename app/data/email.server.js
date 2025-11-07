@@ -22,6 +22,7 @@ export async function sendEmail(emailData, registrationId) {
             author: emailData.get('author'),
             co_authors: emailData.get('co_authors'),
             insitution: emailData.get('institutions'),
+            category: emailData.get('category'),
             topic: emailData.get('topic'),
             p_type: emailData.get('p_type'),
             abstract_title: emailData.get('abstract_title'),

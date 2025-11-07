@@ -51,7 +51,7 @@ export const topics = [
     {
         id: 4,
         name: "Surface Engineering and Additive Technologies",
-        descr: "rogress in surface modification methods (coating, hardfacing, cladding), additive manufacturing (e.g., SLM, DED), and hybrid processes for enhanced material performance",
+        descr: "Progress in surface modification methods (coating, hardfacing, cladding), additive manufacturing (e.g., SLM, PAD, DED), and hybrid processes for enhanced material performance",
     },
     {
         id: 5,

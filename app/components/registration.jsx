@@ -1,5 +1,5 @@
 import { Form, useActionData, useNavigation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import 'react-phone-number-input/style.css'
 import { topics } from "./topics";
 
@@ -13,7 +13,7 @@ export default function RegistrationForm() {
     const [topic, setTopic] = useState("");
     const [type, setType] = useState("");
     const [checked, setChecked] = useState(false);
-    const [isDisabled, setIsDisabled] = useState(false);
+    const formRef = useRef();
     const navigation = useNavigation();
     const isSubmitting = navigation.formData != null;
     const isBusy = navigation.state !== "idle";
@@ -52,6 +52,13 @@ export default function RegistrationForm() {
         },
     ]
 
+    useEffect(() => {
+        // When form finished submitting, clear it
+        if (navigation.state === "idle" && formRef.current) {
+            formRef.current.reset();
+        }
+    }, [navigation.state]);
+
     const handleChange = (e) => {
         const selectedValue = Number(e.target.value);
         const found = categories.find(c => c.value === selectedValue);
@@ -79,7 +86,7 @@ export default function RegistrationForm() {
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="contact-form-wrapper">
-                            <Form method="post" id="contact-form" className="contact-form">
+                            <Form method="post" id="contact-form" className="contact-form" ref={formRef}>
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="single-form">
@@ -173,7 +180,7 @@ export default function RegistrationForm() {
                                                       rows={20}
                                                       cols={80}
                                                       className="form-input" id="country" name="abstract"
-                                                   placeholder="Abstract" />
+                                                   placeholder="Abstract  (No images, tables or equations)" />
                                             <p>{textareaValue.length}/{limit} characters</p>
                                         </div>
                                     </div>

@@ -39,6 +39,9 @@ export default function Header() {
                                             <Link className="page-scroll" to="#past-papers">Papers</Link>
                                         </li>
                                         <li className="nav-item">
+                                            <Link className="page-scroll" to="#venue-section">Venue</Link>
+                                        </li>
+                                        <li className="nav-item">
                                             <Link className="page-scroll" to="#registration">Registration</Link>
                                         </li>
                                     </ul>
