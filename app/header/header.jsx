@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { links } from "../footer/footer"
 
 export default function Header() {
     const location = useLocation();
@@ -26,24 +27,11 @@ export default function Header() {
                                 <div className={`md:hidden overflow-hidden collapse navbar-collapse sub-menu-bar duration-300 ${open ? "in show" : "max-h-0"}`}
                                     id="navbarSupportedContent">
                                     <ul id="nav" className="navbar-nav ms-auto">
-                                        <li className="nav-item">
-                                            <Link className="page-scroll active" to={location}>Home</Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link className="page-scroll" to="#about">Topics</Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link className="page-scroll" to="#past-events-slider">Past Events</Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link className="page-scroll" to="#past-papers">Papers</Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link className="page-scroll" to="#venue-section">Venue</Link>
-                                        </li>
-                                        <li className="nav-item">
-                                            <Link className="page-scroll" to="#registration">Registration</Link>
-                                        </li>
+                                        {links.map((link) => (
+                                            <li className="nav-item">
+                                                <Link className="page-scroll" to={link.link}>{link.link_name}</Link>
+                                            </li>
+                                        ))}
                                     </ul>
                                 </div>
                             </nav>

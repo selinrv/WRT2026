@@ -1000,6 +1000,35 @@ p {
   font-weight: 400;
 }
 
+.committee-section {
+  background: #282E63;
+}
+.schedule-item .image img.addBgS {
+  background-color: #fff;
+  object-fit: contain;
+}
+.schedule-item .image img.addbg {
+  background-color: #bfc3cd;
+}
+.schedule-item .image img {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+}
+.schedule-item .content {
+  margin-left: 30px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.schedule-item {
+  display: flex;
+  padding: 40px 30px;
+  background: #282E63;
+}
 /* ==================== video css ================== */
 .video-section {
   position: relative;
@@ -1120,6 +1149,63 @@ p {
   background: none;
 }
 
+.deadlines-section {
+  background-color: #282E63;
+}
+.deadlines-section h3,
+.deadlines-section p {
+  text-align: center  ;
+}
+.deadlines-section .section-title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 50px;
+}
+
+.deadlines-list {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.deadline-item {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-left: 4px solid #d0d4da;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+.deadline-item.highlight {
+  border-left-color: #c51f1f; /* accent / conference color */
+}
+
+.deadline-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #2b2b2b;
+}
+
+.deadline-date {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1c1c1c;
+}
+
+@media (max-width: 600px) {
+  .deadline-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+
 /* ================= schedule css ============= */
 .schedule-section .schedule-tabs {
   justify-content: space-between;
@@ -1153,6 +1239,17 @@ p {
   #past-events-slider.pb-100 {
     padding-bottom: 0;
   }
+  .row .col-sm-6 {
+    flex:0 0 auto;
+    width:50%
+  }
+  .pricing-section .single-pricing h3 {
+    font-size: 16px;
+  }
+  .pricing-section .single-pricing .main-btn {
+    padding: 15px;
+    margin-top: 20px;
+  }
 }
 
 @media (max-width: 767px) {
@@ -1181,6 +1278,9 @@ p {
 @media (max-width: 767px) {
   .schedule-section .schedule-tab-content .schedule-item {
     flex-direction: column;
+  }
+  .schedule-item {
+    padding: 20px 30px;
   }
 }
 
@@ -1602,7 +1702,7 @@ p {
     margin-right: 0;
   }
   .venue-section {
-    padding-top: 0;
+    padding-top: 80px;
   }
   .venue-section p {
     text-align: center;

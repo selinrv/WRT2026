@@ -28,7 +28,7 @@ export default function Tickets() {
 
                 <div className="row justify-content-center">
                     {categories.map((ticket) => (
-                        <div className="col-md-3 mb-4">
+                        <div className="col-sm-6 col-md-3 mb-4">
                             <div className="single-pricing text-center p-4rounded">
                                 <h3>{ticket.label}</h3>
                                 <span className="price d-block my-3">{ticket.price}</span>

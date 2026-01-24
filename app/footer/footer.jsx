@@ -55,7 +55,7 @@ export default function Footer() {
     )
 }
 
-const links = [
+export const links = [
     {
         id: 1,
         link_name: "Home",
@@ -73,17 +73,27 @@ const links = [
     },
     {
         id: 4,
+        link_name: "Committee",
+        link: "#committee"
+    },
+    {
+        id: 5,
         link_name: "Papers",
         link: "#past-papers",
     },
     {
-        id: 5,
+        id: 6,
+        link_name: "Dates",
+        link: "#dates",
+    },
+    {
+        id: 7,
         link_name: "Venue",
         link: "#venue-section",
     },
     {
-        id: 6,
+        id: 8,
         link_name: "Registration",
-        link: "#registration"
+        link: "#pricing"
     }
 ]

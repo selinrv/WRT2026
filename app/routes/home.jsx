@@ -5,6 +5,8 @@ import Past from "../components/pastconference";
 import RegistrationForm from "../components/registration";
 import Tickets from "../components/tickets";
 import Venue from "../components/venus";
+import Committie from "../components/commettie";
+import Deadlines from "../components/deadline"
 
 
 
@@ -136,7 +138,9 @@ export default function Home() {
         <Homeslider />
         <Topics />
         <Slider photos={photos}/>
+        <Committie />
         <Past />
+        <Deadlines />
         <Venue />
         <Tickets />
         <RegistrationForm />
