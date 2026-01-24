@@ -1088,6 +1088,7 @@ p {
   font-size: 25px;
   font-weight: 700;
   margin-bottom: 25px;
+  min-height: 3em;
 }
 
 .pricing-section .single-pricing .price {

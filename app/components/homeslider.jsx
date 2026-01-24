@@ -1,6 +1,6 @@
 export default function Homeslider() {
     return (
-        <section id="home" className="hero-area img-bg">
+            <section id="home" className="hero-area img-bg">
             <div className="container">
                 <div className="row align-items-center">
                     <div className="col-lg-6">

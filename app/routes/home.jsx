@@ -3,7 +3,9 @@ import Topics from "../components/topics";
 import Slider from "../components/slider";
 import Past from "../components/pastconference";
 import RegistrationForm from "../components/registration";
+import Tickets from "../components/tickets";
 import Venue from "../components/venus";
+
 
 
 
@@ -111,6 +113,7 @@ export async function action({ request }) {
 }
 
 export default function Home() {
+
   const photos = [
       { src: "../../assets/img/conference/DSC_0789-1-1024x683.jpeg", alt: "Beach sunset" },
       { src: "../../assets/img/conference/DSC_0697-1-1024x683.jpeg", alt: "Beach sunset" },
@@ -135,6 +138,7 @@ export default function Home() {
         <Slider photos={photos}/>
         <Past />
         <Venue />
+        <Tickets />
         <RegistrationForm />
       </>
   )

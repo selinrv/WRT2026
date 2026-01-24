@@ -1,7 +1,30 @@
-import { Form, useActionData, useNavigation } from "react-router-dom";
+import { Form, useActionData, useNavigation, useSearchParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import 'react-phone-number-input/style.css'
 import { topics } from "./topics";
+
+export const categories = [
+    {
+        label: "Delegate / Expert",
+        price: "350€",
+        value: 350,
+    },
+    {
+        label: "Young Professional",
+        price: "175€",
+        value: 175,
+    },
+    {
+        label: "Student",
+        price: "50€",
+        value: 50,
+    },
+    {
+        label: "Accompanying person / Visitor",
+        price: "150€",
+        value: 150,
+    },
+]
 
 
 export default function RegistrationForm() {
@@ -29,28 +52,7 @@ export default function RegistrationForm() {
         }
     ]
     const limit = 3500;
-    const categories = [
-        {
-            label: "Delegate/Expert",
-            price: "350€",
-            value: 350,
-        },
-        {
-            label: "Young Professional",
-            price: "175€",
-            value: 175,
-        },
-        {
-            label: "Student",
-            price: "50€",
-            value: 50,
-        },
-        {
-            label: "Accompanying person / Visitor",
-            price: "150€",
-            value: 150,
-        },
-    ]
+
 
     useEffect(() => {
         // When form finished submitting, clear it
@@ -65,6 +67,18 @@ export default function RegistrationForm() {
         setSelected(e.target.value || "");
         setSelectedText(found || "");
     };
+
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        const price = searchParams.get("price");
+        if (price) {
+            setSelected(price);
+
+            const el = document.getElementById("registration-category");
+            el?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+    }, []);
 
     function multiply(a, b) {
         return a * b;
@@ -118,6 +132,7 @@ export default function RegistrationForm() {
                                                 value={selected}
                                                 name="category"
                                                 onChange={handleChange}
+                                                id="registration-category"
                                             >
                                                 <option value="">-- Choose your registration category --</option>
                                                 {categories.map((c) => (
