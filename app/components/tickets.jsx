@@ -22,7 +22,7 @@ export default function Tickets() {
                 <div className="row justify-content-center mb-5">
                     <div className="col-lg-8 text-center">
                         <h3>Registration Fee</h3>
-                        <p className="mt-3">Early Bird Pricing: Lowest Rate Available</p>
+                        <p className="mt-3">Early Bird Available Until May 1st</p>
                     </div>
                 </div>
 
@@ -31,7 +31,10 @@ export default function Tickets() {
                         <div className="col-sm-6 col-md-3 mb-4">
                             <div className="single-pricing text-center p-4rounded">
                                 <h3>{ticket.label}</h3>
-                                <span className="price d-block my-3">{ticket.price}</span>
+                                <span className="price d-block my-3">
+                                    <p>Early Bird/Regular</p>
+                                    {ticket.earlybird}
+                                </span>
                                 <Link to="#contact-form" className="main-btn btn-hover" onClick={() => chooseAndScroll(ticket.value)}>Buy Ticket</Link>
                             </div>
                         </div>

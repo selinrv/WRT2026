@@ -5,6 +5,7 @@ export default function Homeslider() {
                 <div className="row align-items-center">
                     <div className="col-lg-6">
                         <div className="hero-content">
+
                             <h1>WRT <span>2026</span></h1>
                             <p>
                                 VIII International Conference on <br />Welding and Related Technologies
@@ -39,5 +40,10 @@ const logos = [
         id: 2,
         class_name: "intitutions-logos",
         link: "../assets/img/logo/iez.png"
+    },
+    {
+        id: 3,
+        class_name: "intitutions-logos",
+        link: "../assets/img/logo/logo.jpg"
     },
 ];

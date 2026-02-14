@@ -792,7 +792,6 @@ p {
   background: #ffffff6e;
   padding: 10px;
   border-radius: 4px;
-  width: 65%;
   justify-content: center;
 }
 .intitutions-logos {
@@ -810,6 +809,15 @@ p {
 @media (max-width: 767px) {
   .logos {
     width: 100%;
+    align-content: center;
+    align-items: center;
+  }
+  .navbar-brand {
+    color: #fff;
+  }
+  .intitutions-logos {
+    height: 60px;
+    width: auto;
   }
   #save-data {
     width: 100%;
@@ -2621,4 +2629,159 @@ p {
 
 .pb-225 {
   padding-bottom: 225px;
+}
+
+
+/* ====== Base section helpers (safe to include once) ====== */
+.wrt-container{
+  width: min(1140px, calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+.wrt-section{
+  padding: clamp(3rem, 6vw, 5rem) 0;
+}
+
+.wrt-section__head{
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  text-align: center;
+}
+
+.wrt-section__title{
+  margin: 0;
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.wrt-section__subtitle{
+  margin: .75rem auto 0;
+  max-width: 68ch;
+  opacity: .8;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* ====== Committee cards ====== */
+.wrt-committee__grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(1rem, 2vw, 1.25rem);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.wrt-committee__card{
+  display: flex;
+  gap: 1rem;
+  padding: 1.25rem;
+  border-radius: 18px;
+  background: rgb(40, 46, 99);
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  backdrop-filter: blur(8px);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .wrt-committee__card{ transition: none; }
+}
+
+.wrt-committee__card:hover{
+  transform: translateY(-2px);
+  border-color: rgba(0,0,0,.10);
+  box-shadow: 0 14px 40px rgba(0,0,0,.09);
+}
+
+.wrt-committee__avatar{
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background:
+          var(--avatar) center/cover no-repeat,
+          radial-gradient(circle at 30% 30%, rgba(0,0,0,.08), rgba(0,0,0,0) 55%),
+          linear-gradient(135deg, rgba(0,0,0,.08), rgba(0,0,0,.03));
+  border: 1px solid rgba(0,0,0,.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Initials fallback (no photo) */
+.wrt-committee__avatar::after{
+  content: var(--initials, '');
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 650;
+  letter-spacing: .02em;
+  opacity: .75;
+}
+
+.wrt-committee__body{ min-width: 0; }
+
+.wrt-committee__name{
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.wrt-committee__meta{
+  margin: .35rem 0 0;
+  opacity: .8;
+  line-height: 1.45;
+  font-size: .98rem;
+}
+
+.wrt-committee__country{
+  margin: .4rem 0 0;
+  font-size: .95rem;
+  opacity: .7;
+}
+
+/* Tags */
+.wrt-committee__tags{
+  margin-top: .75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.wrt-tag{
+  display: inline-flex;
+  align-items: center;
+  padding: .35rem .6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,.08);
+  background: rgb(38, 41, 77);
+  font-size: .82rem;
+  line-height: 1;
+  opacity: .9;
+}
+.wrt-tag.position-tag {
+  background: rgb(44, 56, 205);
+}
+@media (max-width: 991px) {
+  .wrt-committee__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+    gap: clamp(10px, 2vw, 1.25rem);
+  }
+}
+
+/* Dark backgrounds safety (if a parent section uses dark theme) */
+@media (prefers-color-scheme: dark){
+  .wrt-committee__card{
+    background: rgba(20,20,20,.55);
+    border-color: rgba(255,255,255,.10);
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+  .wrt-committee__avatar{
+    border-color: rgba(255,255,255,.14);
+  }
+  .wrt-tag{
+    background: rgb(38, 41, 77);
+    border-color: rgba(255,255,255,.12);
+  }
 }

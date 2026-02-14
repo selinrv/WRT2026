@@ -6,23 +6,27 @@ import { topics } from "./topics";
 export const categories = [
     {
         label: "Delegate / Expert",
-        price: "350€",
-        value: 350,
+        price: "250€",
+        earlybird: "250/300€",
+        value: 250,
     },
     {
         label: "Young Professional",
         price: "175€",
+        earlybird: "175/200€",
         value: 175,
     },
     {
         label: "Student",
         price: "50€",
+        earlybird: "50€",
         value: 50,
     },
     {
         label: "Accompanying person / Visitor",
-        price: "150€",
-        value: 150,
+        price: "175€",
+        earlybird: "175/200€",
+        value: 175,
     },
 ]
 

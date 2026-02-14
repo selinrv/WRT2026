@@ -37,7 +37,77 @@ export default function Committie() {
 
     ]
 
+    const intComm = [
+        {
+            name: 'Igor KRIVTSUN',
+            country: 'Ukraine',
+            label: 'Head of Program Committee',
+            institute: 'E.O.Paton Electric Welding Institute'
+        },
+        {
+            name: 'Serhiy AKHONIN',
+            country: 'Ukraine',
+            institute: 'E.O.Paton Electric Welding Institute'
+        },
+        {
+            name: 'Luca COSTA',
+            country: 'Italy',
+            institute: 'International Institute of Welding'
+        },
+        {
+            name: 'Volodymyr KORZHYK',
+            country: 'Ukraine',
+            institute: 'E.O.Paton Electric Welding Institute'
+        },
+        {
+            name: 'Viktor KVASNYTSKYI',
+            country: 'Ukraine',
+            institute: 'Igor Sikorsky Kyiv Polytechnic Institute'
+        },
+        {
+            name: 'Steffen KEITEL',
+            country: 'Germany',
+            institute: 'Schweißtechnische Lehr-und Versuchsanstalt Halle GmbH'
+        },
+        {
+            name: 'Serhiy MAKSYMOV',
+            country: 'Ukraine',
+            institute: 'E.O.Paton Electric Welding Institute'
+        },
+        {
+            name: 'Zinoviy NAZARCHUK',
+            country: 'Ukraine',
+            institute: 'Karpenko Physico-Mechanical Institute',
+        },
+        {
+            name: 'Jean-Marc OLIVE',
+            country: 'France',
+            institute: 'French National Centre for Scientific Research'
+        },
+        {
+            name: 'Uwe REISGEN',
+            country: 'Germany',
+            institute: 'RWTH Aachen University',
+        },
+        {
+            name: 'Viktor SHAPOVALOV',
+            country: 'Ukraine',
+            institute: 'E.O.Paton Electric Welding Institute'
+        },
+        {
+            name: 'Igor VLADYMYRSKYI',
+            country: 'Ukraine',
+            institute: 'Igor Sikorsky Kyiv Polytechnic Institute'
+        },
+        {
+            name: 'Valeriy POZNIAKOV',
+            country: 'Ukraine',
+            institute: 'E.O.Paton Electric Welding Institute'
+        },
+    ]
+
     return(
+        <>
         <section id="committee" className="committee-section pt-150 pb-100">
             <div className="container">
                 <div className="row justify-content-center">
@@ -70,5 +140,39 @@ export default function Committie() {
                 </div>
             </div>
         </section>
+            <section id="international-committee" className="wrt-section wrt-committee">
+                <div className="wrt-container">
+                    <header className="wrt-section__head">
+                        <h2 className="wrt-section__title">International Committee</h2>
+                        <p className="wrt-section__subtitle">
+                            International experts contributing to the scientific programme of WRT 2026.
+                        </p>
+                    </header>
+
+
+                    <ul className="wrt-committee__grid" role="list">
+                        {intComm.map((c) => (
+                            <li className="wrt-committee__card">
+
+                                <div className="wrt-committee__body">
+                                    <h3 className="wrt-committee__name">{c.name}</h3>
+                                    {/*<p className="wrt-committee__meta">E.O. Paton Electric Welding Institute, Kyiv</p>*/}
+                                    <p className="wrt-committee__country">{c.country}</p>
+
+                                    {(c.label || c.institute) &&
+                                        (<div className="wrt-committee__tags" aria-label="Member tags">
+                                            {c.label && (<span className="wrt-tag position-tag">{c.label}</span>)}
+                                            {c.institute && (<span className="wrt-tag">{c.institute}</span>)}
+                                        </div>)}
+                                </div>
+                            </li>
+                        ))}
+
+                    </ul>
+
+
+                </div>
+            </section>
+        </>
     );
 }
