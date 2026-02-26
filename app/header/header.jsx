@@ -13,7 +13,7 @@ export default function Header() {
                         <div className="col-lg-12">
                             <nav className="navbar navbar-expand-lg">
                                 <a className="navbar-brand" href="index.html">
-                                    WRT2026
+                                    <img src="assets/img/logo/logo.jpg" className="main-image-logo"/>
                                 </a>
                                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

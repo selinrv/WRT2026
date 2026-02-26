@@ -1,34 +1,62 @@
 export default function Topics() {
     return (
-        <section id="about" className="upcoming-section pt-150">
-            <div className="container">
-                <div className="row justify-content-center">
-                    <div className="col-xxl-6 col-xl-7 col-lg-8">
-                        <div className="section-title text-center mb-60">
-                            <h2>Know More About Upcoming Conference</h2>
-                            <p>Conference topics</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="row justify-content-center">
-                    {topics.map(({id, name, descr}) => (
-                        <div key={id} className="col-lg-4 col-md-8 col-sm-10">
-                            <div className="single-counter">
-                                <div className="map-img">
-                                    <img src="assets/img/upcoming/map-img.svg" alt="" />
-                                </div>
-                                <h4>{name}</h4>
-                                <span>{descr}</span>
+        <>
+            <section id="about" className="upcoming-section pt-150">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-xxl-6 col-xl-7 col-lg-8">
+                            <div className="section-title text-center mb-60">
+                                <h2>Main Organizers</h2>
+                                <p>The Institutions Driving WRT 2026</p>
                             </div>
                         </div>
-                    ))}
+                    </div>
 
+                    <div className="row justify-content-center">
+                        <p className="logos">
+                            {logos.map(({ id, class_name, link , descr}) => (
+                                <div className="org-logos">
+                                    <img key={id} className={class_name} src={link} />
+                                    <div className="iiw-text">{descr}</div>
+                                </div>
+                            ))}
+                        </p>
+
+
+                    </div>
 
                 </div>
+            </section>
+            <section id="about" className="upcoming-section pt-150">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-xxl-6 col-xl-7 col-lg-8">
+                            <div className="section-title text-center mb-60">
+                                <h2>Know More About Upcoming Conference</h2>
+                                <p>Conference topics</p>
+                            </div>
+                        </div>
+                    </div>
 
-            </div>
-        </section>
+                    <div className="row justify-content-center">
+                        {topics.map(({id, name, descr}) => (
+                            <div key={id} className="col-lg-4 col-md-8 col-sm-10">
+                                <div className="single-counter">
+                                    <div className="map-img">
+                                        <img src="assets/img/upcoming/map-img.svg" alt="" />
+                                    </div>
+                                    <h4>{name}</h4>
+                                    <span>{descr}</span>
+                                </div>
+                            </div>
+                        ))}
+
+
+                    </div>
+
+                </div>
+            </section>
+        </>
     )
 }
 
@@ -79,4 +107,32 @@ export const topics = [
         descr: "Use of AI, machine learning, and data analytics for process optimization, defect detection, predictive maintenance, and intelligent control in welding and manufacturing",
     },
 
-]
+];
+
+
+const logos = [
+    {
+        id: 1,
+        class_name: "intitutions-logos iiw-logo",
+        link: "../assets/img/logo/iiw.png",
+        descr: "Associated event"
+    },
+    {
+        id: 2,
+        class_name: "intitutions-logos",
+        link: "../assets/img/logo/iez.png",
+        descr: "Organizer"
+    },
+    {
+        id: 3,
+        class_name: "intitutions-logos",
+        link: "../assets/img/logo/logo-irc-1.png",
+        descr: "Organizer"
+    },
+    {
+        id: 4,
+        class_name: "intitutions-logos wrtys-logo",
+        link: "../assets/img/logo/wrtys-ClOHIq4n-1.jpg",
+        descr: "Co-Organizer"
+    },
+];

@@ -33,7 +33,8 @@ export const links = () => [
     rel: "preload",
     as: "script",
     href: "../assets/js/main.js"
-  }
+  },
+  { rel: "icon", type: "image/ico", href: "assets/img/favicon.ico" }
 ];
 
 export async function loader() {

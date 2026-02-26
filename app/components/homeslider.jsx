@@ -12,11 +12,7 @@ export default function Homeslider() {
                             </p>
                             <p className="date">5-9 October 2026</p>
                             <p className="date">Uzhhorod, Ukraine</p>
-                            <p className="logos">
-                                {logos.map(({ id, class_name, link }) => (
-                                    <img key={id} className={class_name} src={link} />
-                                ))}
-                            </p>
+
                         </div>
                     </div>
                     <div className="col-lg-6">
@@ -29,21 +25,3 @@ export default function Homeslider() {
         </section>
     )
 }
-
-const logos = [
-    {
-        id: 1,
-        class_name: "intitutions-logos",
-        link: "../assets/img/logo/Logo-IIW-Colour.png"
-    },
-    {
-        id: 2,
-        class_name: "intitutions-logos",
-        link: "../assets/img/logo/iez.png"
-    },
-    {
-        id: 3,
-        class_name: "intitutions-logos",
-        link: "../assets/img/logo/logo.jpg"
-    },
-];

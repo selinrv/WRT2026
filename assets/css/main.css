@@ -175,7 +175,9 @@ p {
 .success {
   color: #fff;
 }
-
+.main-image-logo {
+  width: 100%;
+}
 /*===== All Button Style =====*/
 .main-btn {
   display: inline-block;
@@ -770,6 +772,18 @@ p {
   }
 }
 
+.hero-content {
+  padding-top: 50px;
+}
+.org-logos {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
 .hero-area .hero-content h1 {
   font-size: 60px;
   font-weight: 700;
@@ -787,18 +801,26 @@ p {
 .logos {
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 30px;
   margin-top: 30px;
-  background: #ffffff6e;
   padding: 10px;
   border-radius: 4px;
   justify-content: center;
+  position: relative;
 }
 .intitutions-logos {
-  max-height: 100px;
+  height: 120px;
+}
+.wrtys-logo {
+  max-width: 200px;
+  height: auto;
 }
 .contact-right a {
   color: #fff;
+}
+.iiw-text {
+  position: absolute;
+  bottom: -30px;
 }
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .hero-area .hero-content h1 {
@@ -807,17 +829,24 @@ p {
 }
 
 @media (max-width: 767px) {
+  .org-logos {
+    width: 100%;
+    position: relative;
+  }
+
   .logos {
     width: 100%;
     align-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 50px;
   }
   .navbar-brand {
     color: #fff;
   }
   .intitutions-logos {
-    height: 60px;
-    width: auto;
+    height: auto;
+    width: 150px;
   }
   #save-data {
     width: 100%;

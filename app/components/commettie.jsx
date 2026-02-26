@@ -34,6 +34,10 @@ export default function Committie() {
             name: 'Vadym Yashenkov',
             img: 'assets/img/yashenkov.jpg'
         },
+        {
+            name: 'Lina Gribanova',
+            img: 'assets/img/photo_2026-02-26 20.23.08.jpeg'
+        },
 
     ]
 
@@ -103,6 +107,11 @@ export default function Committie() {
             name: 'Valeriy POZNIAKOV',
             country: 'Ukraine',
             institute: 'E.O.Paton Electric Welding Institute'
+        },
+        {
+            name: 'Viktor Gorbach',
+            country: 'Ukraine',
+            institute: 'International Research Centre for Advanced Functional Nanostructured Materials and Technologies'
         },
     ]
 
