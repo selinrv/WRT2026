@@ -822,6 +822,39 @@ p {
   position: absolute;
   bottom: -30px;
 }
+
+.registration-includes { padding: 56px 0; }
+.registration-includes .container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+.section-header h2 { margin: 0 0 10px; font-size: 32px; line-height: 1.2; text-align:center}
+.section-header p { margin: 0 0 28px; font-size: 16px; line-height: 1.6; max-width: 780px; }
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+.benefit-card {
+  grid-column: span 6;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 16px;
+  padding: 18px 18px 16px;
+  background: #fff;
+}
+
+.benefit-card h3 { margin: 0 0 8px; font-size: 18px; line-height: 1.3; color: #26294d;}
+.benefit-card p { margin: 0; font-size: 14.5px; line-height: 1.55; color: #26294d;}
+
+.section-note { margin-top: 18px; }
+.muted { opacity: 0.75; }
+
+@media (max-width: 900px) {
+  .section-header h2 { font-size: 26px; }
+  .benefit-card { grid-column: span 12; }
+}
+
+
 @media only screen and (min-width: 992px) and (max-width: 1199px) {
   .hero-area .hero-content h1 {
     font-size: 42px;

@@ -25,7 +25,7 @@ function isValidDate(value) {
 }
 
 function isValidSelected(value) {
-    const allowed = ["350", "175", "50", "150"];
+    const allowed = ["350", "175", "50", "150", "250", "300", "200"];
     if (allowed.includes(value)) {
         return value;
     }

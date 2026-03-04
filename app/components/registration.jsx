@@ -6,15 +6,15 @@ import { topics } from "./topics";
 export const categories = [
     {
         label: "Delegate / Expert",
-        price: "250€",
+        price: "300€",
         earlybird: "250/300€",
-        value: 250,
+        value: 300,
     },
     {
         label: "Young Professional",
-        price: "175€",
+        price: "200€",
         earlybird: "175/200€",
-        value: 175,
+        value: 200,
     },
     {
         label: "Student",
@@ -24,9 +24,9 @@ export const categories = [
     },
     {
         label: "Accompanying person / Visitor",
-        price: "175€",
+        price: "200€",
         earlybird: "175/200€",
-        value: 175,
+        value: 201,
     },
 ]
 
@@ -40,6 +40,7 @@ export default function RegistrationForm() {
     const [topic, setTopic] = useState("");
     const [type, setType] = useState("");
     const [checked, setChecked] = useState(false);
+    const [book, setBook] = useState(false);
     const formRef = useRef();
     const navigation = useNavigation();
     const isSubmitting = navigation.formData != null;
@@ -86,6 +87,27 @@ export default function RegistrationForm() {
 
     function multiply(a, b) {
         return a * b;
+    }
+
+    function setTotalValue(checked, book, total) {
+        let finalTotal;
+        if (total == 201) {
+            finalTotal = 200;
+        } else {
+            finalTotal = total;
+        }
+        if (checked && !book) {
+            return multiply(finalTotal, 51.3);
+        } else if (checked && book) {
+            const new_total = finalTotal + 100;
+            return multiply(new_total, 51.3);
+        } else if (!checked && book) {
+            const new_total = finalTotal + 100;
+            return new_total;
+        } else {
+            return finalTotal;
+        }
+
     }
 
     return (
@@ -147,6 +169,7 @@ export default function RegistrationForm() {
                                             </select>
 
                                             <p>Selected: {selectedText ? selectedText.label + " / " + selectedText.price : ' '} </p>
+                                            <input type="hidden" name="selected_category" value={selectedText && selectedText.label} />
                                         </div>
                                     </div>
                                     <div className="col-md-5">
@@ -216,14 +239,25 @@ export default function RegistrationForm() {
                                     </div>
                                     <div className="col-md-12">
                                         <div className="single-form">
+                                            <label>
+                                                <input className="currency-checkbox" type="checkbox" checked={book}
+                                                    onChange={(e) => setBook(e.target.checked)}
+                                                />
+                                                I want printed copy of full paper publication
+                                            </label>
+                                            <input type="hidden" name="currency" value={book ? 100 : 0} />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-12">
+                                        <div className="single-form">
                                             <h3>Total:
                                                 <span>
-                                                    {checked ? multiply(selectedText.value, 48.5) : selectedText.value}
+                                                    {setTotalValue(checked, book, selectedText.value)}
                                                     {checked ? " UAH" : " €"}
                                                 </span>
                                             </h3>
                                             <input type="hidden" name="currency" value={checked ? "uah" : "euro"} />
-                                            <input type="hidden" name="total" value={checked ? multiply(selectedText.value, 48.5) + " UAH" : selectedText.value + " €"} />
+                                            <input type="hidden" name="total" value={setTotalValue(checked, book, selectedText.value)} />
                                         </div>
                                     </div>
                                     <div className="col-12">

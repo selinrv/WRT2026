@@ -17,12 +17,13 @@ export async function sendEmail(emailData, registrationId) {
         let currency = emailData.get('currency');
         let message = new SendSmtpEmail();
         message.subject = "Thank you for registering at WRT2026!";
+        let category;
         message.params = {
             id: getInvouceUrl.id,
             author: emailData.get('author'),
             co_authors: emailData.get('co_authors'),
             insitution: emailData.get('institutions'),
-            category: emailData.get('category'),
+            category: emailData.get('selected_category'),
             topic: emailData.get('topic'),
             p_type: emailData.get('p_type'),
             abstract_title: emailData.get('abstract_title'),
