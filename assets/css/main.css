@@ -255,6 +255,9 @@ p {
   cursor: pointer;
   transition: all 0.3s ease-out 0s;
 }
+.swiper-slide img {
+  border-radius: 12px;
+}
 
 .scroll-top:hover {
   color: #fff;
@@ -275,6 +278,7 @@ p {
   width: calc(100% - 100px);
   max-height: 700px;
   object-fit: contain;
+  border-radius: 12px;
 }
 .contact-section form .single-form input.currency-checkbox {
   width: auto;
@@ -775,13 +779,17 @@ p {
 .hero-content {
   padding-top: 50px;
 }
+.org-logos a {
+  color: #fff;
+}
 .org-logos {
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: flex-start;
   align-content: center;
   align-items: center;
+  text-align: center;
 }
 
 .hero-area .hero-content h1 {
@@ -798,31 +806,38 @@ p {
 .hero-area .hero-content h1 span {
   font-weight: 400;
 }
+.institutions-logos {
+  max-height: 150px;
+}
 .logos {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   gap: 30px;
-  margin-top: 30px;
-  padding: 10px;
-  border-radius: 4px;
-  justify-content: center;
-  position: relative;
-}
-.intitutions-logos {
-  height: 120px;
-}
-.wrtys-logo {
-  max-width: 200px;
-  height: auto;
-}
-.contact-right a {
-  color: #fff;
-}
-.iiw-text {
-  position: absolute;
-  bottom: -30px;
 }
 
+.logos-row {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+.logos-row.single {
+  justify-content: center;
+}
+
+.org-name {
+  font-weight: 600;
+  margin-top: 6px;
+  max-width: 300px;
+}
+
+.org-role {
+  font-size: 14px;
+  color: #666;
+}
+.wrtys-logo {
+  max-width: 50%;
+}
 .registration-includes { padding: 56px 0; }
 .registration-includes .container { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 
@@ -862,11 +877,21 @@ p {
 }
 
 @media (max-width: 767px) {
+  .logos-row {
+    gap: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .institutions-logos {
+    max-height: 75px;
+  }
   .org-logos {
-    width: 100%;
+    max-width: calc(50% - 10px);
     position: relative;
   }
-
+  .wrtys-logo {
+    max-width: 100%;
+  }
   .logos {
     width: 100%;
     align-content: center;
@@ -903,6 +928,7 @@ p {
 
 .hero-area .hero-img img {
   width: 100%;
+  border-radius: 12px;
 }
 
 .upcoming-section .single-counter {
@@ -912,6 +938,7 @@ p {
   margin-bottom: 30px;
   position: relative;
   z-index: 1;
+  border-radius: 12px;
 }
 
 .upcoming-section .single-counter:hover .map-img {
@@ -1424,20 +1451,56 @@ p {
 }
 
 .venue-section {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  padding-top: 150px;
-  padding-bottom: 150px;
+  padding: 100px 0;
 }
-.venue-section .countdown-img img {
+
+.venue-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.venue-text {
+  margin-bottom: 40px;
+}
+
+.venue-text p {
+  margin-bottom: 18px;
+}
+
+.venue-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.venue-gallery-item img {
   width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+  border-radius: 12px;
 }
-.venue-section .countdown-img {
-  position: absolute;
-  left: 0;
-  max-width: 650px;
-  top: 150px;
+
+.venue-map {
+  width: 100%;
+  height: 350px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+@media (max-width: 767px) {
+  .venue-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .venue-gallery-item img {
+    height: 220px;
+  }
+
+  .venue-map {
+    height: 300px;
+  }
 }
 /* ================= speaker css =============== */
 .speaker-section .speaker-row {

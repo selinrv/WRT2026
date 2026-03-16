@@ -13,14 +13,38 @@ export default function Topics() {
                     </div>
 
                     <div className="row justify-content-center">
-                        <p className="logos">
-                            {logos.map(({ id, class_name, link , descr}) => (
+                        <div className="logos">
+
+                            {/* First row */}
+                            <div className="logos-row">
+                                {mainOrgs.map(({id, name, role, logo, className, link}) => (
+                                    <div key={id} className="org-logos">
+                                        <a href={link}><img className={className} src={logo} alt={name}/></a>
+                                        <a href={link}><div className="org-name">{name}</div></a>
+                                        <div className="org-role">{role}</div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            {/* Second row (single item) */}
+                            <div className="logos-row single">
                                 <div className="org-logos">
-                                    <img key={id} className={class_name} src={link} />
-                                    <div className="iiw-text">{descr}</div>
+                                    <a href={coOrganizer.link}>
+                                        <img
+                                            className={coOrganizer.className}
+                                            src={coOrganizer.logo}
+                                            alt={coOrganizer.name}
+                                        />
+                                    </a>
+                                    <a href={coOrganizer.link}>
+                                        <div className="org-name">{coOrganizer.name}</div>
+                                    </a>
+                                    <div className="org-role">{coOrganizer.role}</div>
+
                                 </div>
-                            ))}
-                        </p>
+                            </div>
+
+                        </div>
 
 
                     </div>
@@ -41,7 +65,7 @@ export default function Topics() {
                     <div className="row justify-content-center">
                         {topics.map(({id, name, descr}) => (
                             <div key={id} className="col-lg-4 col-md-8 col-sm-10">
-                                <div className="single-counter">
+                            <div className="single-counter">
                                     <div className="map-img">
                                         <img src="assets/img/upcoming/map-img.svg" alt="" />
                                     </div>
@@ -110,29 +134,48 @@ export const topics = [
 ];
 
 
-const logos = [
+const organizations = [
     {
         id: 1,
-        class_name: "intitutions-logos iiw-logo",
-        link: "../assets/img/logo/iiw.png",
-        descr: "Associated event"
+        name: "International Institute of Welding",
+        role: "Associated event",
+        logo: "../assets/img/logo/iiw.png",
+        className: "institutions-logos iiw-logo",
+        link: "https://iiwelding.org/"
     },
     {
         id: 2,
-        class_name: "intitutions-logos",
-        link: "../assets/img/logo/iez.png",
-        descr: "Organizer"
+        name: "E.O. Paton Electric Welding Institute",
+        role: "Organizer",
+        logo: "../assets/img/logo/iez.png",
+        className: "institutions-logos",
+        link: "https://paton.org.ua/en"
     },
     {
         id: 3,
-        class_name: "intitutions-logos",
-        link: "../assets/img/logo/logo-irc-1.png",
-        descr: "Organizer"
+        name: "International Research Centre for Advanced Functional Nanostructured Materials and technologies",
+        role: "Organizer",
+        logo: "../assets/img/logo/logo-irc-1.png",
+        className: "institutions-logos",
+        link: "https://irc-nano.org/"
     },
     {
         id: 4,
-        class_name: "intitutions-logos wrtys-logo",
-        link: "../assets/img/logo/wrtys-ClOHIq4n-1.jpg",
-        descr: "Co-Organizer"
+        name: "Kyiv Academic University",
+        role: "Co-Organizer",
+        logo: "../assets/img/logo/KAU+tree_Large.png",
+        className: "institutions-logos",
+        link: "https://kau.org.ua/en/about",
     },
+    {
+        id: 5,
+        name: "NGO 'WRTYS'",
+        role: "Co-Organizer",
+        logo: "../assets/img/logo/wrtys-ClOHIq4n.jpg",
+        className: "institutions-logos wrtys-logo",
+        link: "https://wrtys.org.ua/"
+    }
 ];
+
+const mainOrgs = organizations.slice(0, -1);
+const coOrganizer = organizations.at(-1);

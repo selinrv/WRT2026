@@ -3,12 +3,12 @@ export default function Deadlines() {
         {
             id: 1,
             label: "Abstract submission",
-            date: "April 1, 2026"
+            date: "July 1, 2026"
         },
         {
             id: 2,
             label: "Full paper submission",
-            date: "July 1, 2026"
+            date: "September 15, 2026"
         },
         {
             id: 3,

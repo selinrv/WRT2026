@@ -29,7 +29,8 @@ export async function sendEmail(emailData, registrationId) {
             abstract_title: emailData.get('abstract_title'),
             total: emailData.get('total'),
             invoiceId: getInvouceUrl.invoiceUrl,
-            invoiceUrl: invoiceUrl
+            invoiceUrl: invoiceUrl,
+            voucher: 'WRT2026'
         };
         message.sender = { name: "WRT2026 Office", email: "office@wrt2026.com.ua" };
         message.to = [{ email: emailData.get('email'), name: emailData.get('author') }];

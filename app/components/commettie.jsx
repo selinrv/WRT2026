@@ -27,8 +27,8 @@ export default function Committie() {
             img: 'assets/img/200122162815410-9218.jpg'
         },
         {
-            name: 'Maksym Khokhlov',
-            img: 'assets/img/451704621_3275217939277376_1242551368050047420_n.jpg'
+            name: 'Maksym Iurzhenko',
+            img: 'assets/img/1733221352073.jpg'
         },
         {
             name: 'Vadym Yashenkov',
@@ -45,7 +45,7 @@ export default function Committie() {
         {
             name: 'Igor KRIVTSUN',
             country: 'Ukraine',
-            label: 'Head of Program Committee',
+            label: 'Conference Chairman',
             institute: 'E.O.Paton Electric Welding Institute'
         },
         {
@@ -99,6 +99,11 @@ export default function Committie() {
             institute: 'E.O.Paton Electric Welding Institute'
         },
         {
+            name: 'Oleksandra ANTONIOUK',
+            country: 'Ukraine',
+            institute: 'Kyiv Academic University'
+        },
+        {
             name: 'Igor VLADYMYRSKYI',
             country: 'Ukraine',
             institute: 'Igor Sikorsky Kyiv Polytechnic Institute'
@@ -117,38 +122,6 @@ export default function Committie() {
 
     return(
         <>
-        <section id="committee" className="committee-section pt-150 pb-100">
-            <div className="container">
-                <div className="row justify-content-center">
-                    <div className="col-xxl-6 col-xl-7 col-lg-8">
-                        <div className="section-title text-center mb-60">
-                            <h3>Organization Committee</h3>
-                            <p>Dedicated to excellence in organization and delivery</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="row">
-                    {comm.map((c) => (
-                        <div className="col-lg-6">
-                            <div className="schedule-item">
-                                <div className="image">
-                                    <img src={c.img} alt="" className={
-                                        c.name == "Mariia Pryzihlei" ? "addbg" : "" ||
-                                        c.name == "Serhiy Schwab" ? "addBgS" : ""
-                                    } />
-                                </div>
-                                <div className="content">
-                                    <h3>{c.name}</h3>
-                                    <p>{c.label ?? c.label}</p>
-                                </div>
-                            </div>
-                        </div>
-                        ))}
-
-                </div>
-            </div>
-        </section>
             <section id="international-committee" className="wrt-section wrt-committee">
                 <div className="wrt-container">
                     <header className="wrt-section__head">
@@ -182,6 +155,39 @@ export default function Committie() {
 
                 </div>
             </section>
+            <section id="committee" className="committee-section pt-150 pb-100">
+                <div className="container">
+                    <div className="row justify-content-center">
+                        <div className="col-xxl-6 col-xl-7 col-lg-8">
+                            <div className="section-title text-center mb-60">
+                                <h3>Organization Committee</h3>
+                                <p>Dedicated to excellence in organization and delivery</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        {comm.map((c) => (
+                            <div className="col-lg-6">
+                                <div className="schedule-item">
+                                    <div className="image">
+                                        <img src={c.img} alt="" className={
+                                            c.name == "Mariia Pryzihlei" ? "addbg" : "" ||
+                                            c.name == "Serhiy Schwab" ? "addBgS" : ""
+                                        }/>
+                                    </div>
+                                    <div className="content">
+                                        <h3>{c.name}</h3>
+                                        <p>{c.label ?? c.label}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+
+                    </div>
+                </div>
+            </section>
+
         </>
     );
 }
