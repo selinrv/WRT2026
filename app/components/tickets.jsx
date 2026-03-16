@@ -32,7 +32,7 @@ export default function Tickets() {
                             <div className="single-pricing text-center p-4rounded">
                                 <h3>{ticket.label}</h3>
                                 <span className="price d-block my-3">
-                                    <p>Early Bird/Regular</p>
+                                    <p>Regular</p>
                                     {ticket.price}
                                 </span>
                                 <Link to="#contact-form" className="main-btn btn-hover" onClick={() => chooseAndScroll(ticket.value)}>Buy Ticket</Link>
