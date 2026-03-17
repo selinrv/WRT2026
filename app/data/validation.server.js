@@ -1,6 +1,6 @@
 import { topics } from "../components/topics";
 function isValidName(value) {
-    return value && value.trim().length > 0 && value.trim().length <= 100;
+    return value && value.trim().length > 0 && value.trim().length <= 200;
 }
 
 function isValidAbstract(value) {
@@ -67,9 +67,8 @@ export function validateInput(input) {
     }
 
     if (!isValidName(input.institutions)) {
-        validationErrors.title = 'Institutions field cannot be empty.'
+        validationErrors.title = 'Institutions field cannot be empty and no longer than 200 characters.'
     }
-
 
     if (!isValidEmail(input.email)) {
         validationErrors.title = 'Incorrect email.';

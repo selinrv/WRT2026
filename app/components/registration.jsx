@@ -61,7 +61,7 @@ export default function RegistrationForm() {
 
     useEffect(() => {
         // When form finished submitting, clear it
-        if (navigation.state === "idle" && formRef.current) {
+        if (navigation.state === "idle" && formRef.current && !(data?.errors)) {
             formRef.current.reset();
         }
     }, [navigation.state]);
