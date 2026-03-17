@@ -19,6 +19,7 @@ export function meta() {
 }
 
 import { PrismaClient } from '@prisma/client';
+
 const prisma = new PrismaClient();
 
 async function addRegistation(formData) {
@@ -46,6 +47,7 @@ export async function action({ request }) {
     const { createInvoice } = await import("../data/zoho.server");
     const { sendEmail } = await import("../data/email.server");
     const { AddToDoc } = await import("../data/google.server");
+    const { SaveToTable } = await import("../data/sheets.server");
 
     let docStatus;
     let invoiceStatus;
@@ -101,6 +103,16 @@ export async function action({ request }) {
             }
         } catch (error) {
             console.log("Email error", error)
+            return { errors: error };
+        }
+
+        try {
+            if (invoiceStatus?.ok) {
+                const sheet = await SaveToTable(formData, registrationId)
+                console.log("Save status", sheet);
+            }
+        } catch (error) {
+            console.log("Save sheet error", error);
             return { errors: error };
         }
 
