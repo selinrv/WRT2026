@@ -748,7 +748,7 @@ p {
 .hero-area {
   background-image: url("../img/hero/hero-bg.png");
   position: relative;
-  padding: 120px 0 0;
+  padding: 120px 0 60px 0;
   z-index: 2;
 }
 
@@ -2909,4 +2909,12 @@ p {
     background: rgb(38, 41, 77);
     border-color: rgba(255,255,255,.12);
   }
+}
+
+/* modal */
+.contact-us-button {
+  margin-top: 40px;
+}
+.modal-title, .modal label {
+  color: #282E63;
 }

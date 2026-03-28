@@ -2,7 +2,7 @@ import { TransactionalEmailsApi, SendSmtpEmail } from "@getbrevo/brevo";
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function sendEmail(emailData, registrationId) {
+export async function sendEmail(emailData, registrationId, plainPassword) {
     const getInvouceUrl = await prisma.registration.findFirst({
         where: {
             id: registrationId,
@@ -28,6 +28,7 @@ export async function sendEmail(emailData, registrationId) {
             p_type: emailData.get('p_type'),
             abstract_title: emailData.get('abstract_title'),
             total: emailData.get('total'),
+            password: plainPassword,
             invoiceId: getInvouceUrl.invoiceUrl,
             invoiceUrl: invoiceUrl,
             voucher: 'WRT2026'

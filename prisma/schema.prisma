@@ -36,6 +36,7 @@ model Registration {
   email          String
   invoiceUrl     String?  @db.LongText
   paid           Boolean
+  password       String?
   createdAt      DateTime @default(now())
 }
 

@@ -7,7 +7,8 @@ import Tickets from "../components/tickets";
 import Venue from "../components/venus";
 import Committie from "../components/commettie";
 import Deadlines from "../components/deadline"
-
+import bcrypt from 'bcryptjs';
+import crypto from 'node:crypto';
 
 
 
@@ -21,6 +22,14 @@ export function meta() {
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+const plainPassword = crypto
+    .randomBytes(12)
+    .toString('base64')
+    .slice(0, 12)
+    .replace(/[+/=]/g, 'x');
+
+// 2. Hash it
+const hashedPassword = await bcrypt.hash(plainPassword, 10);
 
 async function addRegistation(formData) {
     return await prisma.registration.create({
@@ -34,6 +43,7 @@ async function addRegistation(formData) {
             reg_category: formData.get('category'),
             topic: formData.get('topic'),
             email: formData.get('email'),
+            password: hashedPassword,
             paid: false
         },
         select: { id: true }
@@ -42,7 +52,6 @@ async function addRegistation(formData) {
 
 export async function action({ request }) {
     const formData = await request.formData();
-    console.log('formData', formData);
     const expenseData = Object.fromEntries(formData);
     const { validateInput } = await import("../data/validation.server");
     const { createInvoice } = await import("../data/zoho.server");
@@ -54,6 +63,8 @@ export async function action({ request }) {
     let invoiceStatus;
     let emailStatus;
     let registrationId;
+
+
 
     try {
             console.log("starting validation")
@@ -98,8 +109,10 @@ export async function action({ request }) {
 
         try {
             if (invoiceStatus?.ok) {
+                console.log("registrationId", registrationId);
+                console.log("plainPassword", plainPassword);
                 console.log("Starting sending email");
-                const email = sendEmail(formData, registrationId);
+                const email = sendEmail(formData, registrationId, plainPassword);
                 console.log("Email", email)
             }
         } catch (error) {
