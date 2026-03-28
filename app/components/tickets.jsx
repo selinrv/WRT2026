@@ -69,7 +69,7 @@ export default function Tickets() {
 
                             <div className="benefit-card">
                                 <h3>Open Access Publication*</h3>
-                                <p>Scopus indexed Full paper Open Access publication online by Taylor&Francis Group.
+                                <p>Scopus indexed Full paper Open Access publication online by Taylor&Francis Group, accepted after peer review.
                                     <br /><span className="muted"> *400 euro conference fee with printed book.</span>
                                 </p>
                             </div>

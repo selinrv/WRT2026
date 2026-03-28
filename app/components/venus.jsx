@@ -39,7 +39,7 @@ export default function Venue() {
                     <div className="section-title text-center mb-40">
                         <h3>Conference Venue</h3>
                         <h4>Derenivska Kupil Resort, Zakarpattia</h4>
-                        <p>Where science meets serenity in the heart of the Carpathians</p>
+                        <p>Special Accommodation Fee for Conference Participants!</p>
                     </div>
 
                     <div className="venue-text">

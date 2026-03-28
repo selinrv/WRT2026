@@ -125,7 +125,7 @@ export default function Committie() {
             <section id="international-committee" className="wrt-section wrt-committee">
                 <div className="wrt-container">
                     <header className="wrt-section__head">
-                        <h2 className="wrt-section__title">International Committee</h2>
+                        <h2 className="wrt-section__title">International Scientific and Editorial Board Committee</h2>
                         <p className="wrt-section__subtitle">
                             International experts contributing to the scientific programme of WRT 2026.
                         </p>

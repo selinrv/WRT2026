@@ -42,6 +42,7 @@ async function addRegistation(formData) {
 
 export async function action({ request }) {
     const formData = await request.formData();
+    console.log('formData', formData);
     const expenseData = Object.fromEntries(formData);
     const { validateInput } = await import("../data/validation.server");
     const { createInvoice } = await import("../data/zoho.server");
