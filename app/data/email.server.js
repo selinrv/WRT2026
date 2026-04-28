@@ -25,6 +25,8 @@ export async function sendEmail(emailData, registrationId, plainPassword) {
             insitution: emailData.get('institutions'),
             category: emailData.get('selected_category'),
             topic: emailData.get('topic'),
+
+            
             p_type: emailData.get('p_type'),
             abstract_title: emailData.get('abstract_title'),
             total: emailData.get('total'),

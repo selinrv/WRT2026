@@ -33,21 +33,21 @@ export default function Footer() {
 }
 
 export const links = [
-    {
+   /* {
         id: 1,
         link_name: "Home",
         link: "#home"
-    },
+    },*/
     {
         id: 2,
         link_name: "Topics",
         link: "#about",
     },
-    {
+   /* {
         id: 3,
         link_name: "Past Events",
         link: "#past-events-slider"
-    },
+    },*/
     {
         id: 4,
         link_name: "Committee",
@@ -71,6 +71,11 @@ export const links = [
     {
         id: 8,
         link_name: "Registration",
-        link: "#pricing"
+        link: "#pricing",
+    },
+    {
+        id: 9,
+        link_name: "Conference Editorial Policy",
+        link: "#conference-editorial-policy"
     }
 ]

@@ -762,7 +762,11 @@ p {
   background: rgba(38, 41, 77, 0.9);
   z-index: -1;
 }
-
+.hero-buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
 @media only screen and (min-width: 768px) and (max-width: 991px) {
   .hero-area .hero-content {
     margin-bottom: 50px;
@@ -2887,14 +2891,28 @@ p {
 .wrt-tag.position-tag {
   background: rgb(44, 56, 205);
 }
+.editorial-modal {
+  color: #26294D
+}
+@media (min-width: 576px) {
+  .editorial-modal .modal-dialog {
+    max-width: 700px;
+  }
+}
 @media (max-width: 991px) {
   .wrt-committee__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
     gap: clamp(10px, 2vw, 1.25rem);
   }
+  .pt-md-50 {
+    padding-top: 50px;
+  }
 }
-
+.footer .footer-links ul {
+  margin-left: 0;
+  padding-left: 0;
+}
 /* Dark backgrounds safety (if a parent section uses dark theme) */
 @media (prefers-color-scheme: dark){
   .wrt-committee__card{

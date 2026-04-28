@@ -1,7 +1,7 @@
 export default function Topics() {
     return (
         <>
-            <section id="about" className="upcoming-section pt-150">
+            <section id="about" className="upcoming-section pt-150 pt-md-50">
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-xxl-6 col-xl-7 col-lg-8">

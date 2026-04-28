@@ -19,7 +19,7 @@ export default function Past() {
     }, []);
 
     return(
-        <section className="abstracts-section pt-100 pb-100" id="past-papers">
+        <section className="abstracts-section pt-100 pb-100 pt-md-50" id="past-papers">
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-xxl-6 col-xl-7 col-lg-8">

@@ -111,7 +111,7 @@ export default function RegistrationForm() {
     }
 
     return (
-        <section id="registration" className="contact-section pt-100 pb-100">
+        <section id="registration" className="contact-section pt-150 pb-100 pt-md-50">
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-xxl-12 col-xl-12 col-lg-12">

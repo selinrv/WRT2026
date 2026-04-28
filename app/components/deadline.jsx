@@ -23,7 +23,7 @@ export default function Deadlines() {
 
     ]
     return(
-        <section className="deadlines-section pt-150 pb-100" id="dates">
+        <section className="deadlines-section pt-150 pb-100 pt-md-50" id="dates">
             <div className="container">
                 <div className="section-title mb-60">
                     <h3>Important Dates</h3>

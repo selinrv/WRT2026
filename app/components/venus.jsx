@@ -33,7 +33,7 @@ const venueImages = [
 
 export default function Venue() {
     return (
-        <section className="venue-section" id="venue-section">
+        <section className="venue-section pt-md-50" id="venue-section">
             <div className="container">
                 <div className="venue-content">
                     <div className="section-title text-center mb-40">

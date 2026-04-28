@@ -1,5 +1,5 @@
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useActionData, useNavigation } from 'react-router-dom';
 import { useSubmit } from "react-router";
 import { useFetcher } from 'react-router-dom';
@@ -8,9 +8,9 @@ export default function Homeslider() {
 
     const [isOpen, setIsOpen] = useState(false);
     const [show, setShow] = useState(false);
-    const submit     = useSubmit();       // 👈 react-router's submit hook
-    const actionData = useActionData();   // 👈 gets { success: true } back
-    const navigation = useNavigation();   // 👈 tracks pending state
+    const submit     = useSubmit();
+    const actionData = useActionData();
+    const navigation = useNavigation();
 
     const [error, setError]     = useState('');
     const fetcher = useFetcher();
@@ -36,9 +36,16 @@ export default function Homeslider() {
     useEffect(() => {
         if (success) {
             setShow(false);
-            setFormData({ name: '', email: '', subject: 'general', message: '' });
+            setFormData({ name: '', email: '', message: '' });
         }
     }, [success]);
+
+    const handleClick = () => {
+        const element = document.getElementById('pricing');
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
 
 
     return (
@@ -54,9 +61,14 @@ export default function Homeslider() {
                             </p>
                             <p className="date">5-9 October 2026</p>
                             <p className="date">Uzhhorod, Ukraine</p>
-                            <Button className="contact-us-button" variant="primary" onClick={() => setShow(true)}>
-                                Contact Us
-                            </Button>
+                            <div className="hero-buttons-container">
+                                <Button className="contact-us-button" variant="primary" onClick={handleClick}>
+                                    Register Now!
+                                </Button>
+                                <Button className="contact-us-button" variant="primary" onClick={() => setShow(true)}>
+                                    Contact Us
+                                </Button>
+                            </div>
                             <Modal show={show} onHide={() => setShow(false)} centered>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Contact Form</Modal.Title>
