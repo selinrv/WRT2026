@@ -108,7 +108,7 @@ export default function Tickets() {
 
                             <div className="benefit-card">
                                 <h3>Abstract Publication</h3>
-                                <p>Your submitted abstract will be published in the official conference proceedings.</p>
+                                <p>Your submitted abstract will be published in the official conference abstracts book.</p>
                             </div>
 
                             <div className="benefit-card">
