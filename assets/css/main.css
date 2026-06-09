@@ -2899,6 +2899,7 @@ p {
     max-width: 700px;
   }
 }
+
 @media (max-width: 991px) {
   .wrt-committee__grid {
     display: grid;
@@ -2908,11 +2909,15 @@ p {
   .pt-md-50 {
     padding-top: 50px;
   }
+  .pb-md-100 {
+    padding-bottom: 100px;
+  }
 }
 .footer .footer-links ul {
   margin-left: 0;
   padding-left: 0;
 }
+
 /* Dark backgrounds safety (if a parent section uses dark theme) */
 @media (prefers-color-scheme: dark){
   .wrt-committee__card{

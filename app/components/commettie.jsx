@@ -14,10 +14,10 @@ export default function Committie() {
             name: 'Ganna Polishko',
             img: 'assets/img/1659448959810-350x350.jpg'
         },
-        {
+        /*{
             name: 'Mariia Pryzihlei',
             img: 'assets/img/fb267f49-df6f-4748-89e4-331f347264a5-350x350.png'
-        },
+        },*/
         {
             name: 'Roman Selin',
             img: 'assets/img/IMG_50071-350x350.jpg'
@@ -72,6 +72,11 @@ export default function Committie() {
             name: 'Steffen KEITEL',
             country: 'Germany',
             institute: 'Schweißtechnische Lehr-und Versuchsanstalt Halle GmbH'
+        },
+        {
+            name: 'Joanna WOJEWODA-BUDKA',
+            country: 'Poland',
+            institute: 'Institute of Metallurgy and Material Sceinces'
         },
         {
             name: 'Serhiy MAKSYMOV',

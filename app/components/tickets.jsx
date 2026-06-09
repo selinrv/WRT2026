@@ -2,6 +2,12 @@ import { Link } from "react-router-dom";
 import { categories } from "../components/registration";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Pagination, Autoplay, A11y } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 export default function Tickets() {
     const [searchParams] = useSearchParams();
     const chooseAndScroll = (price) => {
@@ -22,32 +28,70 @@ export default function Tickets() {
                 <div className="row justify-content-center mb-5">
                     <div className="col-lg-8 text-center">
                         <h3>Registration Fee</h3>
-                        <p className="mt-3">Early Bird Available Until May 1st</p>
+                        <p className="mt-3">Registration is open!</p>
                     </div>
                 </div>
 
                 <div className="row justify-content-center">
-                    {categories.map((ticket) => (
-                        <div className="col-sm-6 col-md-3 mb-4">
-                            <div className="single-pricing text-center p-4rounded">
-                                <h3>{ticket.label}</h3>
-                                <span className="price d-block my-3">
+                    <Swiper
+                        modules={[Navigation, Pagination, Autoplay, A11y]}
+                        spaceBetween={10}
+                        slidesPerView={4}
+                        loop={true}
+                        autoplay={{ delay: 4000, disableOnInteraction: false }}
+                        navigation
+                        style={{ width: "100%", height: "100%" }}
+                        breakpoints={{
+                            0: {
+                                slidesPerView: 1,
+                            },
+                            400:{
+                                slidesPerView:1,
+                            },
+                            639: {
+                                slidesPerView: 1,
+                            },
+                            865:{
+                                slidesPerView:3
+                            },
+                            1000:{
+                                slidesPerView:3
+                            },
+                            1500:{
+                                slidesPerView:4
+                            },
+                            1700:{
+                                slidesPerView:4
+                            }
+                        }}
+                    >
+                        {categories.map((p, i) => (
+                            <SwiperSlide key={i}>
+                                <div className="col-sm-12 col-md-12 mb-12">
+                                    <div className="single-pricing text-center p-4rounded">
+                                        <h3>{p.label}</h3>
+                                        <span className="price d-block my-3">
                                     <p>Regular</p>
-                                    {ticket.price}
+                                            {p.price}
                                 </span>
-                                <Link to="#contact-form" className="main-btn btn-hover" onClick={() => chooseAndScroll(ticket.value)}>Buy Ticket</Link>
-                            </div>
-                        </div>
+                                        <Link to="#contact-form" className="main-btn btn-hover"
+                                              onClick={() => chooseAndScroll(p.value)}>Buy Ticket</Link>
+                                    </div>
+                                </div>
+                            </SwiperSlide>
                         ))}
+                    </Swiper>
+
+
                 </div>
                 <section className="registration-includes" aria-labelledby="registration-includes-title">
 
-                        <div className="col-lg-12 text-center mb-5">
-                            <h3>Conference Fee Includes</h3>
-                            <p className="mt-3">
-                                Your conference fee covers full participation in the scientific program, official
-                                materials,
-                                and key networking events—so you can focus on learning, sharing, and connecting.
+                    <div className="col-lg-12 text-center mb-5">
+                        <h3>Conference Fee Includes</h3>
+                        <p className="mt-3">
+                            Your conference fee covers full participation in the scientific program, official
+                            materials,
+                            and key networking events—so you can focus on learning, sharing, and connecting.
                             </p>
                         </div>
 
@@ -69,7 +113,7 @@ export default function Tickets() {
 
                             <div className="benefit-card">
                                 <h3>Open Access Publication*</h3>
-                                <p>Scopus indexed Full paper Open Access publication online by Taylor&Francis Group, accepted after peer review.
+                                <p>Scopus indexed Full paper Open Access publication online, accepted after peer review.
                                     <br /><span className="muted"> *400 euro conference fee with printed book.</span>
                                 </p>
                             </div>
@@ -103,7 +147,7 @@ export default function Tickets() {
 
 const tickets = [
     {
-        title: "Delegate/Expert",
+        title: "Regular Participant",
         price: 350,
     },
     {
