@@ -69,11 +69,14 @@ export default function Tickets() {
                             <SwiperSlide key={i}>
                                 <div className="col-sm-12 col-md-12 mb-12">
                                     <div className="single-pricing text-center p-4rounded">
-                                        <h3>{p.label}</h3>
+                                        <h3>
+                                            {p.label}
+                                            <p className="subtext">{p.subtext ? p.subtext : " "}</p>
+                                        </h3>
+
                                         <span className="price d-block my-3">
-                                    <p>Regular</p>
                                             {p.price}
-                                </span>
+                                        </span>
                                         <Link to="#contact-form" className="main-btn btn-hover"
                                               onClick={() => chooseAndScroll(p.value)}>Buy Ticket</Link>
                                     </div>

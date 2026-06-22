@@ -76,7 +76,7 @@ export default function Committie() {
         {
             name: 'Joanna WOJEWODA-BUDKA',
             country: 'Poland',
-            institute: 'Institute of Metallurgy and Material Sceinces'
+            institute: 'Institute of Metallurgy and Material Sceinces of the Polish Academy of Sciences'
         },
         {
             name: 'Serhiy MAKSYMOV',
@@ -150,6 +150,7 @@ export default function Committie() {
                                         (<div className="wrt-committee__tags" aria-label="Member tags">
                                             {c.label && (<span className="wrt-tag position-tag">{c.label}</span>)}
                                             {c.institute && (<span className="wrt-tag">{c.institute}</span>)}
+                                            {c.affiliation && (<span className="wrt-tag wrt-affiliation">{c.affiliation}</span>)}
                                         </div>)}
                                 </div>
                             </li>

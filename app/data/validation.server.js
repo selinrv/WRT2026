@@ -25,7 +25,7 @@ function isValidDate(value) {
 }
 
 function isValidSelected(value) {
-    const allowed = ["350", "175", "50", "150", "250", "300", "200", "201"];
+    const allowed = ["350", "175", "50", "150", "250", "300", "200", "201", "202", "1"];
     if (allowed.includes(value)) {
         return value;
     }
@@ -67,7 +67,7 @@ export function validateInput(input) {
     }
 
     if (!isValidName(input.institutions)) {
-        validationErrors.title = 'Institutions field cannot be empty and no longer than 200 characters.'
+        validationErrors.title = 'Organizations field cannot be empty and no longer than 200 characters.'
     }
 
     if (!isValidEmail(input.email)) {

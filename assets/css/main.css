@@ -2941,3 +2941,14 @@ p {
 .modal-title, .modal label {
   color: #282E63;
 }
+:root {
+  /* success toast */
+  --success-bg: hsl(233.9, 42.4%, 27.3%);
+  --success-text: #ffffff;
+  --success-border: hsl(228.2, 85.3%, 62.5%);
+
+  /* error toast */
+  --error-bg: #b3261e;
+  --error-text: #ffffff;
+  --error-border: #8c1d18;
+}

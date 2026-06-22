@@ -1,29 +1,34 @@
 import { Form, useActionData, useNavigation, useSearchParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
+import { toast } from "sonner";
 import 'react-phone-number-input/style.css'
 import { topics } from "./topics";
 
 export const categories = [
     {
         label: "Regular",
+        subtext: "Full Conference Package",
         price: "300€",
         earlybird: "250/300€",
         value: 300,
     },
     {
-        label: "Regular Without Paper Publication",
+        label: "Regular",
+        subtext: "Without Paper Publication",
         price: "200€",
         earlybird: "250/300€",
         value: 200,
     },
     {
         label: "Young Professional",
+        subtext: "Full Conference Package",
         price: "200€",
         earlybird: "175/200€",
-        value: 200,
+        value: 202,
     },
     {
         label: "Student",
+        subtext: "Without Paper Publication",
         price: "50€",
         earlybird: "50€",
         value: 50,
@@ -35,10 +40,11 @@ export const categories = [
         value: 201,
     },
     {
-        label: "Online without publication",
+        label: "Online",
+        subtext: "Without Paper Publication",
         price: "0€",
         earlybird: "175/200€",
-        value: 0,
+        value: 1,
     },
 ]
 
@@ -78,6 +84,14 @@ export default function RegistrationForm() {
         }
     }, [navigation.state]);
 
+    useEffect(() => {
+        if (data?.success) {
+            toast.success("Thank you for registering! Check your email for your registration details and payment instructions.");
+        } else if (data?.errors) {
+            toast.error("Something went wrong with your registration. Please check the form and try again.");
+        }
+    }, [data]);
+
     const handleChange = (e) => {
         const selectedValue = Number(e.target.value);
         const found = categories.find(c => c.value === selectedValue);
@@ -103,8 +117,10 @@ export default function RegistrationForm() {
 
     function setTotalValue(checked, book, total) {
         let finalTotal;
-        if (total == 201) {
+        if (total == 201 || total == 202) {
             finalTotal = 200;
+        } else if (total == 1) {
+            finalTotal = 0;
         } else {
             finalTotal = total;
         }
@@ -161,7 +177,7 @@ export default function RegistrationForm() {
                                     <div className="col-md-6">
                                         <div className="single-form">
                                             <input type="text" className="form-input" id="institutions" name="institutions"
-                                                   placeholder="Institutions" />
+                                                   placeholder="Organizations" />
                                         </div>
                                     </div>
                                     <div className="col-md-4">
@@ -175,7 +191,7 @@ export default function RegistrationForm() {
                                                 <option value="">-- Choose your registration category --</option>
                                                 {categories.map((c) => (
                                                     <option key={c.label} value={c.value}>
-                                                        {c.label} / {c.price}
+                                                        {c.label} {c.subtext ? " - " + c.subtext : ""} / {c.price}
                                                     </option>
                                                 ))}
                                             </select>

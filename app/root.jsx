@@ -17,6 +17,7 @@ import "../assets/css/LineIcons.2.0.css";
 import "../assets/css/bootstrap-5.0.0-beta1.min.css";
 import Header from "./header/header.jsx";
 import Footer from "./footer/footer.jsx";
+import { Toaster } from "sonner";
 
 export const links = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -86,6 +87,7 @@ export function Layout({ children }) {
         <Header />
         {children}
         <Footer />
+        <Toaster position="bottom-center" richColors />
         <ScrollRestoration />
         <Scripts />
       </body>

@@ -76,9 +76,11 @@ export async function createInvoice(formData, registrationId) {
             "Назва банку: АТ КБ «ПриватБанк»\n" +
             "Рахунок одержувача у форматі IBAN: UA223052990000026000016803603\n" +
             "Валюта: UAH";
+            "Призначення платежу: Інформаційно-консультаційні послуги для Ganna POLISHKO в рамках VIII Міжнародної конференції WRT2026 5-9 жовтня 2026 року"
     } else {
         notes = "Payment details:\n" +
             "Company Name: ГО ВІРТУС\n" +
+            "Purpose of payment: Information and consulting services for Ganna POLISHKO within the framework of the VIII International Conference WRT2026 October 5-9, 2026\n" +
             "IBAN Code: UA343052990000026007016802276\n" +
             "Name of the bank: JSC CB \"PRIVATBANK\", 1D HRUSHEVSKOHO STR., KYIV, 01001, UKRAINE\n" +
             "Bank SWIFT Code: PBANUA2X\n" +
