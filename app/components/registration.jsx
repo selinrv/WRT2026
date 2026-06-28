@@ -46,6 +46,13 @@ export const categories = [
         earlybird: "175/200€",
         value: 1,
     },
+    {
+        label: "Online",
+        subtext: "With Paper Publication",
+        price: "100€",
+        earlybird: "175/200€",
+        value: 100,
+    },
 ]
 
 
@@ -145,8 +152,7 @@ export default function RegistrationForm() {
                     <div className="col-xxl-12 col-xl-12 col-lg-12">
                         <div className="section-title text-center mb-60">
                             <h3>Conference Registration Form</h3>
-                            <h4>Register and submit your abstract</h4>
-                            <p>Early Bird registration available!</p>
+                            <p>Register and submit your abstract</p>
                         </div>
                     </div>
                 </div>
