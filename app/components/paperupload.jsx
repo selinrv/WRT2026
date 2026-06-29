@@ -1,4 +1,4 @@
-import { Form, useActionData, useNavigation, useSubmit } from "react-router-dom";
+import { Form, useActionData, useFetcher, useNavigation, useSubmit } from "react-router-dom";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 const STEPS = [
@@ -8,7 +8,7 @@ const STEPS = [
 ];
 
 const MAX_FILE_MB = 25;
-const ACCEPTED = [".pdf", ".doc", ".docx"];
+const ACCEPTED = [".doc", ".docx"];
 
 // Human-readable labels for error keys, used in the failure toast.
 const FIELD_LABELS = {
@@ -56,7 +56,9 @@ export default function PaperUpload() {
     const data = useActionData();
     const navigation = useNavigation();
     const submit = useSubmit();
+    const emailCheck = useFetcher();
     const isSubmitting = navigation.state !== "idle";
+    const isCheckingEmail = emailCheck.state !== "idle";
 
     const [step, setStep] = useState(0);
     const [values, setValues] = useState(EMPTY);
@@ -69,6 +71,7 @@ export default function PaperUpload() {
     const formRef = useRef();
     const paperInputRef = useRef();
     const suppInputRef = useRef();
+    const awaitingCheck = useRef(false);
 
     const update = (name) => (e) => setValues((v) => ({ ...v, [name]: e.target.value }));
 
@@ -103,6 +106,8 @@ export default function PaperUpload() {
             if (!values.author.trim()) e.author = "Author name is required.";
             if (!values.email.trim()) e.email = "Email is required.";
             else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) e.email = "Enter a valid email address.";
+            if (!values.co_authors.trim()) e.co_authors = "Co-authors are required.";
+            if (!values.institutions.trim()) e.institutions = "Organization is required.";
         }
         if (current === 1) {
             if (!values.abstract_title.trim()) e.abstract_title = "Paper title is required.";
@@ -117,14 +122,36 @@ export default function PaperUpload() {
             if (!confirmed) e.confirm = "Please confirm the information is correct.";
         }
         setErrors(e);
+        Object.values(e).forEach((msg) => toast.error(msg));
         return Object.keys(e).length === 0;
     }
 
-    function next() {
-        if (validateStep(step)) {
-            setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    // After step 0, only advance once the server confirms the author email
+    // belongs to a registered participant.
+    useEffect(() => {
+        if (!awaitingCheck.current || isCheckingEmail || !emailCheck.data) return;
+        awaitingCheck.current = false;
+        if (emailCheck.data.emailValid) {
+            setStep(1);
             window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+            setErrors((prev) => ({ ...prev, email: emailCheck.data.message }));
+            toast.error(emailCheck.data.message);
         }
+    }, [isCheckingEmail, emailCheck.data]);
+
+    function next() {
+        if (!validateStep(step)) return;
+        if (step === 0) {
+            awaitingCheck.current = true;
+            emailCheck.submit(
+                { intent: "check-email", email: values.email },
+                { method: "post" }
+            );
+            return;
+        }
+        setStep((s) => Math.min(s + 1, STEPS.length - 1));
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
     function back() {
@@ -160,6 +187,7 @@ export default function PaperUpload() {
         const fileError = fileIsValid(paperFile);
         if (fileError) {
             setErrors((prev) => ({ ...prev, paper: fileError }));
+            toast.error(fileError);
             return;
         }
 
@@ -177,7 +205,7 @@ export default function PaperUpload() {
     }
 
     return (
-        <section id="paper-upload" className="contact-section pt-150 pb-100 pt-md-50">
+        <section id="paper-upload" className="contact-section pt-150 pb-100 pt-md-200">
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-xxl-10 col-xl-11 col-lg-12">
@@ -237,6 +265,7 @@ export default function PaperUpload() {
                                                 <input type="text" className="form-input" name="co_authors"
                                                        placeholder="Co-Authors (comma separated)"
                                                        value={values.co_authors} onChange={update("co_authors")} />
+                                                {errors.co_authors && <p className="pu-error">{errors.co_authors}</p>}
                                             </div>
                                         </div>
                                         <div className="col-md-6">
@@ -244,6 +273,7 @@ export default function PaperUpload() {
                                                 <input type="text" className="form-input" name="institutions"
                                                        placeholder="Organizations / Affiliations"
                                                        value={values.institutions} onChange={update("institutions")} />
+                                                {errors.institutions && <p className="pu-error">{errors.institutions}</p>}
                                             </div>
                                         </div>
                                     </div>
@@ -368,8 +398,8 @@ export default function PaperUpload() {
                                     ) : <span />}
 
                                     {step < STEPS.length - 1 ? (
-                                        <button type="button" className="main-btn btn-hover" onClick={next}>
-                                            Continue
+                                        <button type="button" className={isCheckingEmail ? "main-btn btn-hover loading" : "main-btn btn-hover"} onClick={next} disabled={isCheckingEmail}>
+                                            {step === 0 && isCheckingEmail ? "Checking email…" : "Continue"}
                                         </button>
                                     ) : (
                                         <button type="submit" className={isSubmitting ? "main-btn btn-hover loading" : "main-btn btn-hover"} disabled={isSubmitting}>
@@ -443,5 +473,5 @@ const paperUploadStyles = `
 form.contact-form .pu-panel .pu-confirm input { width: auto; margin-top:0; }
 .pu-nav { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-top:34px; }
 .pu-btn--ghost { background:#eef1f6 !important; color:#374151 !important; }
-@media (max-width:575px){ .pu-step__label{ display:none; } .pu-review__row{ flex-direction:column; gap:2px; } .pu-review__label{ flex:none; } }
+@media (max-width:575px){ .pu-review__row{ flex-direction:column; gap:2px; } .pu-review__label{ flex:none; } }
 `;

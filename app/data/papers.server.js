@@ -10,6 +10,18 @@ export function manuscriptLink(filename) {
     return `${BASE_URL}/uploads/papers/${filename}`;
 }
 
+// True when the email exists in the Registration table (the author must be a
+// registered conference participant before they can submit a paper).
+export async function emailIsRegistered(email) {
+    const trimmed = (email || "").trim();
+    if (!trimmed) return false;
+    const found = await prisma.registration.findFirst({
+        where: { email: trimmed },
+        select: { id: true },
+    });
+    return Boolean(found);
+}
+
 export async function savePaper({ author, email, co_authors, organization, paper_title, filename }) {
     return prisma.paper.create({
         data: {

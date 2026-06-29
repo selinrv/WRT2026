@@ -14,7 +14,7 @@ export function meta() {
 
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads", "papers");
 const MAX_FILE_BYTES = 25 * 1024 * 1024;
-const ACCEPTED_EXT = [".pdf", ".doc", ".docx"];
+const ACCEPTED_EXT = [".doc", ".docx"];
 
 function sanitize(name) {
     return name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 120);
@@ -39,6 +39,21 @@ async function saveUpload(file) {
 export async function action({ request }) {
     const formData = await request.formData();
 
+    const { emailIsRegistered } = await import("../data/papers.server");
+
+    // Lightweight step-1 check fired from the "Continue" button: the author's
+    // email must belong to a registered conference participant.
+    if (formData.get("intent") === "check-email") {
+        const email = formData.get("email");
+        const registered = await emailIsRegistered(email);
+        return {
+            emailValid: registered,
+            message: registered
+                ? null
+                : "This email is not registered for WRT2026. Please complete conference registration and send abstracts first.",
+        };
+    }
+
     // Server-side validation mirrors the client steps.
     const errors = {};
     const author = formData.get("author");
@@ -48,11 +63,11 @@ export async function action({ request }) {
 
     if (!author?.trim()) errors.author = "Author name is required.";
     if (!email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.email = "A valid email is required.";
+    else if (!(await emailIsRegistered(email))) errors.email = "This email is not registered for WRT2026. Please complete conference registration first.";
     if (!title?.trim()) errors.abstract_title = "Paper title is required.";
     if (!paper || typeof paper.arrayBuffer !== "function" || paper.size === 0) {
         errors.paper = "Please attach your manuscript.";
     }
-    console.log(paper)
     if (Object.keys(errors).length > 0) {
         return { errors };
     }

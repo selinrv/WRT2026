@@ -2901,6 +2901,12 @@ p {
 }
 
 @media (max-width: 991px) {
+  .pt-md-300 {
+    padding-top: 300px;
+  }
+  .pt-md-200 {
+    padding-top: 200px;
+  }
   .wrt-committee__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
