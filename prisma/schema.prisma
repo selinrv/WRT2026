@@ -40,6 +40,19 @@ model Registration {
   createdAt      DateTime @default(now())
 }
 
+model Paper {
+  id              Int      @id @default(autoincrement())
+  author          String
+  email           String
+  co_authors      String?  @db.LongText
+  organization    String?  @db.LongText
+  paper_title     String   @db.LongText
+  manuscript_link String   @db.LongText
+  createdAt       DateTime @default(now())
+
+  @@map("papers")
+}
+
 model oauthtoken {
   id            String @id @unique
   user_mail     String
