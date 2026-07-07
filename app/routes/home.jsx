@@ -43,6 +43,7 @@ async function addRegistation(formData) {
             reg_category: formData.get('category'),
             topic: formData.get('topic'),
             email: formData.get('email'),
+            orcidId: formData.get('orcidId'),
             password: hashedPassword,
             paid: false
         },

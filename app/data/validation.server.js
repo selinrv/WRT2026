@@ -20,6 +20,11 @@ function isValidEmail(value) {
     return value && value.trim().length > 0 && value.trim().length <= 100 && value.includes('@');
 }
 
+function isValidOrcidId(value) {
+    // ORCID iD: 16 digits in groups of 4, last character may be an X checksum.
+    return value && /^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/.test(value.trim());
+}
+
 function isValidDate(value) {
     return value && new Date(value).getTime() < new Date().getTime();
 }
@@ -72,6 +77,10 @@ export function validateInput(input) {
 
     if (!isValidEmail(input.email)) {
         validationErrors.title = 'Incorrect email.';
+    }
+
+    if (!isValidOrcidId(input.orcidId)) {
+        validationErrors.title = 'Please provide a valid ORCID iD (e.g. 0000-0002-1825-0097).';
     }
 
     if (!isValidName(input.author)) {

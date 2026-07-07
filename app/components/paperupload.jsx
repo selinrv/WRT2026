@@ -9,6 +9,7 @@ const STEPS = [
 
 const MAX_FILE_MB = 25;
 const ACCEPTED = [".doc", ".docx"];
+const LICENSE_ACCEPTED = [".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png"];
 
 // Human-readable labels for error keys, used in the failure toast.
 const FIELD_LABELS = {
@@ -19,6 +20,7 @@ const FIELD_LABELS = {
     abstract_title: "Paper title",
     keywords: "Keywords",
     paper: "Manuscript file",
+    license: "Signed license agreement",
     supplementary: "Supplementary file",
     confirm: "Confirmation",
 };
@@ -32,10 +34,10 @@ const EMPTY = {
     keywords: "",
 };
 
-function fileIsValid(file) {
-    if (!file) return "Please attach your manuscript file.";
+function fileIsValid(file, accepted = ACCEPTED, label = "manuscript") {
+    if (!file) return `Please attach your ${label} file.`;
     const ext = "." + file.name.split(".").pop().toLowerCase();
-    if (!ACCEPTED.includes(ext)) return `Unsupported file type. Allowed: ${ACCEPTED.join(", ")}`;
+    if (!accepted.includes(ext)) return `Unsupported file type. Allowed: ${accepted.join(", ")}`;
     if (file.size > MAX_FILE_MB * 1024 * 1024) return `File is too large (max ${MAX_FILE_MB} MB).`;
     return null;
 }
@@ -63,13 +65,16 @@ export default function PaperUpload() {
     const [step, setStep] = useState(0);
     const [values, setValues] = useState(EMPTY);
     const [paperFile, setPaperFile] = useState(null);
+    const [licenseFile, setLicenseFile] = useState(null);
     const [supplementaryFile, setSupplementaryFile] = useState(null);
     const [confirmed, setConfirmed] = useState(false);
     const [errors, setErrors] = useState({});
     const [dragging, setDragging] = useState(false);
+    const [licenseDragging, setLicenseDragging] = useState(false);
 
     const formRef = useRef();
     const paperInputRef = useRef();
+    const licenseInputRef = useRef();
     const suppInputRef = useRef();
     const awaitingCheck = useRef(false);
 
@@ -78,10 +83,11 @@ export default function PaperUpload() {
     // Reset on successful submission.
     useEffect(() => {
         if (data?.success) {
-            toast.success("Your paper was submitted. A confirmation email is on its way.");
+            toast.success("Your paper was submitted successfully. Thank you!");
             formRef.current?.reset();
             setValues(EMPTY);
             setPaperFile(null);
+            setLicenseFile(null);
             setSupplementaryFile(null);
             setConfirmed(false);
             setErrors({});
@@ -106,13 +112,14 @@ export default function PaperUpload() {
             if (!values.author.trim()) e.author = "Author name is required.";
             if (!values.email.trim()) e.email = "Email is required.";
             else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) e.email = "Enter a valid email address.";
-            if (!values.co_authors.trim()) e.co_authors = "Co-authors are required.";
             if (!values.institutions.trim()) e.institutions = "Organization is required.";
         }
         if (current === 1) {
             if (!values.abstract_title.trim()) e.abstract_title = "Paper title is required.";
             const fileError = fileIsValid(paperFile);
             if (fileError) e.paper = fileError;
+            const licenseError = fileIsValid(licenseFile, LICENSE_ACCEPTED, "signed license agreement");
+            if (licenseError) e.license = licenseError;
             if (supplementaryFile) {
                 const supErr = fileIsValid(supplementaryFile);
                 if (supErr) e.supplementary = supErr;
@@ -174,6 +181,19 @@ export default function PaperUpload() {
         }
     }
 
+    function handleLicenseDrop(e) {
+        e.preventDefault();
+        setLicenseDragging(false);
+        const file = e.dataTransfer.files?.[0];
+        if (file) {
+            setLicenseFile(file);
+            if (licenseInputRef.current) {
+                licenseInputRef.current.files = e.dataTransfer.files;
+            }
+            setErrors((prev) => ({ ...prev, license: fileIsValid(file, LICENSE_ACCEPTED, "signed license agreement") || undefined }));
+        }
+    }
+
     const progress = useMemo(() => ((step + 1) / STEPS.length) * 100, [step]);
 
     // Submit programmatically so the actual File objects from state are sent,
@@ -191,6 +211,13 @@ export default function PaperUpload() {
             return;
         }
 
+        const licenseError = fileIsValid(licenseFile, LICENSE_ACCEPTED, "signed license agreement");
+        if (licenseError) {
+            setErrors((prev) => ({ ...prev, license: licenseError }));
+            toast.error(licenseError);
+            return;
+        }
+
         const fd = new FormData();
         fd.set("author", values.author);
         fd.set("email", values.email);
@@ -199,6 +226,7 @@ export default function PaperUpload() {
         fd.set("abstract_title", values.abstract_title);
         fd.set("keywords", values.keywords);
         fd.set("paper", paperFile);
+        fd.set("license", licenseFile);
         if (supplementaryFile) fd.set("supplementary", supplementaryFile);
 
         submit(fd, { method: "post", encType: "multipart/form-data" });
@@ -212,6 +240,36 @@ export default function PaperUpload() {
                         <div className="section-title text-center mb-40">
                             <h3>Paper Submission</h3>
                             <p>Upload your full paper for WRT2026 in a few quick steps</p>
+                        </div>
+
+                        {/* Required documents to download before submitting */}
+                        <div className="pu-downloads">
+                            <p className="pu-downloads__text">
+                                Before you start, please download the two documents below. Prepare your
+                                manuscript using the <strong>Paper Template</strong>, sign the{" "}
+                                <strong>Publication License Agreement</strong>, and upload both files in{" "}
+                                <strong>Step 2 (Paper)</strong>.
+                            </p>
+                            <div className="pu-downloads__actions">
+                                <a
+                                    className="main-btn btn-hover pu-download-btn"
+                                    href="https://wrt2026.com.ua/MRF-PubLicenseAgreement.pdf"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    download
+                                >
+                                    ⬇ License Agreement (PDF)
+                                </a>
+                                <a
+                                    className="main-btn btn-hover pu-download-btn"
+                                    href="https://wrt2026.com.ua/Paper_template_2026.docx"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    download
+                                >
+                                    ⬇ Paper Template (DOCX)
+                                </a>
+                            </div>
                         </div>
 
                         {/* Stepper */}
@@ -263,7 +321,7 @@ export default function PaperUpload() {
                                         <div className="col-md-6">
                                             <div className="single-form">
                                                 <input type="text" className="form-input" name="co_authors"
-                                                       placeholder="Co-Authors (comma separated)"
+                                                       placeholder="Co-Authors (comma separated, optional)"
                                                        value={values.co_authors} onChange={update("co_authors")} />
                                                 {errors.co_authors && <p className="pu-error">{errors.co_authors}</p>}
                                             </div>
@@ -347,6 +405,56 @@ export default function PaperUpload() {
                                         </div>
 
                                         <div className="col-md-12">
+                                            <label className="pu-supp__label pu-supp__label--spaced">Signed License Agreement (required)</label>
+                                            <div
+                                                className={`pu-dropzone${licenseDragging ? " pu-dropzone--active" : ""}${licenseFile ? " pu-dropzone--filled" : ""}`}
+                                                onDragOver={(e) => { e.preventDefault(); setLicenseDragging(true); }}
+                                                onDragLeave={() => setLicenseDragging(false)}
+                                                onDrop={handleLicenseDrop}
+                                                onClick={() => licenseInputRef.current?.click()}
+                                                role="button"
+                                                tabIndex={0}
+                                            >
+                                                <input
+                                                    ref={licenseInputRef}
+                                                    type="file"
+                                                    name="license"
+                                                    accept={LICENSE_ACCEPTED.join(",")}
+                                                    className="pu-file-hidden"
+                                                    onChange={(e) => {
+                                                        const f = e.target.files?.[0] || null;
+                                                        setLicenseFile(f);
+                                                        setErrors((prev) => ({ ...prev, license: f ? (fileIsValid(f, LICENSE_ACCEPTED, "signed license agreement") || undefined) : undefined }));
+                                                    }}
+                                                />
+                                                {licenseFile ? (
+                                                    <div className="pu-file-card">
+                                                        <span className="pu-file-icon">📝</span>
+                                                        <div className="pu-file-meta">
+                                                            <strong>{licenseFile.name}</strong>
+                                                            <span>{humanSize(licenseFile.size)}</span>
+                                                        </div>
+                                                        <button type="button" className="pu-file-remove"
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setLicenseFile(null);
+                                                                    if (licenseInputRef.current) licenseInputRef.current.value = "";
+                                                                }}>
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <div className="pu-dropzone__hint">
+                                                        <span className="pu-dropzone__icon">⬆</span>
+                                                        <strong>Drag &amp; drop your signed license agreement</strong>
+                                                        <span>or click to browse — {LICENSE_ACCEPTED.join(", ")} up to {MAX_FILE_MB} MB</span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {errors.license && <p className="pu-error">{errors.license}</p>}
+                                        </div>
+
+                                        <div className="col-md-12">
                                             <div className="single-form pu-supp">
                                                 <label className="pu-supp__label">Supplementary file (optional)</label>
                                                 <input
@@ -376,6 +484,7 @@ export default function PaperUpload() {
                                         <Row label="Title" value={values.abstract_title} />
                                         <Row label="Keywords" value={values.keywords || "—"} />
                                         <Row label="Manuscript" value={paperFile ? `${paperFile.name} (${humanSize(paperFile.size)})` : "—"} />
+                                        <Row label="Signed license" value={licenseFile ? `${licenseFile.name} (${humanSize(licenseFile.size)})` : "—"} />
                                         <Row label="Supplementary" value={supplementaryFile ? supplementaryFile.name : "—"} />
                                     </div>
 
@@ -434,6 +543,12 @@ function Row({ label, value }) {
 }
 
 const paperUploadStyles = `
+.pu-downloads { background:#fbfcfe; border:1px solid #eef1f6; border-radius:14px; padding:22px 24px; margin-bottom:30px; }
+.pu-downloads__text { color:#374151; font-size:15px; line-height:1.6; margin:0 0 18px; }
+.pu-downloads__text strong { color:#1f2937; }
+.pu-downloads__actions { display:flex; gap:14px; flex-wrap:wrap; }
+.pu-download-btn { display:inline-flex; align-items:center; gap:8px; }
+@media (max-width:575px){ .pu-downloads__actions{ flex-direction:column; } .pu-download-btn{ width:100%; justify-content:center; } }
 .pu-stepper { display:flex; gap:12px; justify-content:space-between; flex-wrap:wrap; }
 .pu-step { display:flex; align-items:center; gap:12px; flex:1 1 180px; min-width:160px; }
 .pu-step__dot { width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; background:#eef1f6; color:#8a94a6; flex-shrink:0; transition:all .25s; }
@@ -462,6 +577,7 @@ const paperUploadStyles = `
 .pu-file-remove { background:#fee2e2; color:#dc2626; border:0; border-radius:8px; padding:8px 14px; font-weight:600; cursor:pointer; }
 .pu-supp { margin-top:24px; }
 .pu-supp__label { display:block; margin-bottom:8px; font-weight:600; color:#fff; }
+.pu-supp__label--spaced { margin-top:24px; }
 .pu-review { background:#fbfcfe; border:1px solid #eef1f6; border-radius:14px; padding:10px 22px; }
 .pu-review__row { display:flex; gap:16px; padding:12px 0; border-bottom:1px solid #eef1f6; }
 .pu-review__label { flex:0 0 180px; color:#9aa3b2; font-size:13px; text-transform:uppercase; letter-spacing:.03em; }

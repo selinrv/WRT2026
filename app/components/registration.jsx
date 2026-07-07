@@ -174,13 +174,19 @@ export default function RegistrationForm() {
                                                    placeholder="Author Email" />
                                         </div>
                                     </div>
-                                    <div className="col-md-6">
+                                    <div className="col-md-4">
+                                        <div className="single-form">
+                                            <input type="text" className="form-input" id="orcidId" name="orcidId"
+                                                   placeholder="ORCID iD (e.g. 0000-0002-1825-0097)" required />
+                                        </div>
+                                    </div>
+                                    <div className="col-md-4">
                                         <div className="single-form">
                                             <input type="text" className="form-input" id="coauthors" name="co_authors"
                                                    placeholder="Co-Authors" />
                                         </div>
                                     </div>
-                                    <div className="col-md-6">
+                                    <div className="col-md-4">
                                         <div className="single-form">
                                             <input type="text" className="form-input" id="institutions" name="institutions"
                                                    placeholder="Organizations" />
@@ -203,7 +209,7 @@ export default function RegistrationForm() {
                                             </select>
 
                                             <p>Selected: {selectedText ? selectedText.label + " / " + selectedText.price : ' '} </p>
-                                            <input type="hidden" name="selected_category" value={selectedText && selectedText.label} />
+                                            <input type="hidden" name="selected_category" value={selectedText ? selectedText.label + (selectedText.subtext ? " - " + selectedText.subtext : "") : ""} />
                                         </div>
                                     </div>
                                     <div className="col-md-5">

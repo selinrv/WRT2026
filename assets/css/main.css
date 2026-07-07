@@ -5,7 +5,7 @@
   Version: 1.0
 =============================== */
 /*===========================
-    01.COMMON css 
+    01.COMMON css
 ===========================*/
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap");
 html {
@@ -449,7 +449,7 @@ p {
 }
 
 /*===========================
-    02.HEADER css 
+    02.HEADER css
 ===========================*/
 /*===== NAVBAR =====*/
 .navbar-area {
@@ -1937,7 +1937,7 @@ p {
 }
 
 /*===========================
-    13.footer css 
+    13.footer css
 ===========================*/
 .footer {
   position: relative;
@@ -2899,7 +2899,22 @@ p {
     max-width: 700px;
   }
 }
-
+.ps-search input:focus {
+  border-color: #fff;
+}
+.ps-search input::placeholder {
+  opacity: 1;
+  color: #fff;
+}
+.ps-search input {
+  width: 100%;
+  background: #26294D;
+  border: 1px solid transparent;
+  border-radius: 0px;
+  padding: 15px 25px;
+  color: #fff;
+  transition: all 0.3s ease-out 0s;
+}
 @media (max-width: 991px) {
   .pt-md-300 {
     padding-top: 300px;

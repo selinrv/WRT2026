@@ -23,6 +23,7 @@ export async function SaveToTable(formData, registrationId) {
     const topic = formData.get('topic');
     const presentation_type = formData.get('p_type');
     const currency = formData.get('currency');
+    const orcidId = formData.get('orcidId');
     const getInvouceUrl = await prisma.registration.findFirst({
         where: {
             id: registrationId,
@@ -55,14 +56,12 @@ export async function SaveToTable(formData, registrationId) {
             range: 'Sheet1',
             valueInputOption: 'USER_ENTERED',
             requestBody: {
-                values: [[author, email, co_authors, institution, category, topic, presentation_type, title, currency, invoiceUrl, date]],
+                values: [[author, email, co_authors, institution, category, topic, presentation_type, title, currency, orcidId, invoiceUrl, date]],
             },
         });
 
-        console.log(r);
         return r;
     } catch(e) {
         console.log(e)
-
     }
 }

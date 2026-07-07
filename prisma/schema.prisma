@@ -34,6 +34,7 @@ model Registration {
   reg_category   String
   topic          String
   email          String
+  orcidId        String   @default("")
   invoiceUrl     String?  @db.LongText
   paid           Boolean
   password       String?
@@ -48,6 +49,8 @@ model Paper {
   organization    String?  @db.LongText
   paper_title     String   @db.LongText
   manuscript_link String   @db.LongText
+  license_link    String?  @db.LongText
+  status          String   @default("Uploaded. Waiting to start the review process")
   createdAt       DateTime @default(now())
 
   @@map("papers")
