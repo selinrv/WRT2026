@@ -65,6 +65,10 @@ export async function action({ request }) {
     let emailStatus;
     let registrationId;
 
+    // These registrations carry no abstract, so there is nothing to publish to
+    // the abstracts Google Doc — they skip it and go straight to the invoice.
+    const isOnlineViewing = formData.get('online_viewing') === 'yes';
+
 
 
     try {
@@ -86,9 +90,11 @@ export async function action({ request }) {
         }
 
         try {
-            const doc = await AddToDoc(formData);
-            console.log("Doc Status", doc)
-            docStatus = doc;
+            if (!isOnlineViewing) {
+                const doc = await AddToDoc(formData);
+                console.log("Doc Status", doc)
+                docStatus = doc;
+            }
 
         } catch (error) {
             console.log("Document error", error)
@@ -96,7 +102,7 @@ export async function action({ request }) {
         }
 
         try {
-            if (docStatus?.data.ok) {
+            if (isOnlineViewing || docStatus?.data.ok) {
                 console.log("Starting creating invoice");
                 const invoice = await createInvoice(formData, registrationId);
                 console.log("invoiceStatus", invoice)

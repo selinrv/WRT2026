@@ -1,4 +1,10 @@
 import { topics } from "../components/topics";
+
+// Registration category values that correspond to the "Online" categories
+// defined in app/components/registration.jsx (Online / Online + Paper). Poster
+// presentations are not offered for these.
+const ONLINE_CATEGORY_VALUES = ["1", "100"];
+
 function isValidName(value) {
     return value && value.trim().length > 0 && value.trim().length <= 200;
 }
@@ -51,7 +57,11 @@ function isValidType(value) {
 export function validateInput(input) {
     let validationErrors = {};
 
-    if (!isValidAbstract(input.abstract)) {
+    // "Online viewing without participation and abstract" registrations submit no
+    // abstract at all, so the abstract checks below do not apply to them.
+    const isOnlineViewing = input.online_viewing === "yes";
+
+    if (!isOnlineViewing && !isValidAbstract(input.abstract)) {
         validationErrors.title = 'Incorrect abstract. Must be at most 3500 characters long.'
     }
 
@@ -67,7 +77,11 @@ export function validateInput(input) {
         validationErrors.title = 'Please select type of your presentation.'
     }
 
-    if (!isValidAbstractTitle(input.abstract_title)) {
+    if (ONLINE_CATEGORY_VALUES.includes(String(input.category)) && input.p_type === "Poster") {
+        validationErrors.title = 'Poster presentation is not available for the Online registration categories.'
+    }
+
+    if (!isOnlineViewing && !isValidAbstractTitle(input.abstract_title)) {
         validationErrors.title = 'Abstract title cannot be empty.'
     }
 

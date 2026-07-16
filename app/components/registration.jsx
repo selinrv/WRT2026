@@ -66,6 +66,7 @@ export default function RegistrationForm() {
     const [type, setType] = useState("");
     const [checked, setChecked] = useState(false);
     const [book, setBook] = useState(false);
+    const [onlineViewing, setOnlineViewing] = useState(false);
     const [coAuthors, setCoAuthors] = useState([{ name: "", organization: "", orcidId: "" }]);
     const formRef = useRef();
     const navigation = useNavigation();
@@ -106,6 +107,10 @@ export default function RegistrationForm() {
         const found = categories.find(c => c.value === selectedValue);
         setSelected(e.target.value || "");
         setSelectedText(found || "");
+        // "Poster" is not available for the Online registration categories.
+        if (found?.label === "Online" && type === "Poster") {
+            setType("");
+        }
     };
 
     const handleCoAuthorChange = (index, field, val) => {
@@ -185,6 +190,10 @@ export default function RegistrationForm() {
     };
     const coAuthorAddBtnStyle = { ...coAuthorBtnBaseStyle, background: "#1a7f5a" };
     const coAuthorRemoveBtnStyle = { ...coAuthorBtnBaseStyle, background: "#b23b3b" };
+
+    // "Poster" presentation is not offered for the Online registration categories.
+    const isOnlineCategory =
+        categories.find((c) => String(c.value) === String(selected))?.label === "Online";
 
     return (
         <section id="registration" className="contact-section pt-150 pb-100 pt-md-50">
@@ -313,7 +322,8 @@ export default function RegistrationForm() {
                                             >
                                                 <option value="">-- Choose presentation type --</option>
                                                 {types.map((c) => (
-                                                    <option key={c.label} value={c.label}>
+                                                    <option key={c.label} value={c.label}
+                                                            disabled={isOnlineCategory && c.label === "Poster"}>
                                                         {c.label}
                                                     </option>
                                                 ))}
@@ -322,24 +332,47 @@ export default function RegistrationForm() {
                                             <p>Selected: {type}</p>
                                         </div>
                                     </div>
-                                    <div className="col-md-12">
-                                        <div className="single-form">
-                                            <input type="text" className="form-input" id="abstract_title" name="abstract_title"
-                                                   placeholder="Abstract Title" />
+                                    {!onlineViewing && (
+                                        <div className="col-md-6">
+                                            <div className="single-form">
+                                                <input type="text" className="form-input" id="abstract_title" name="abstract_title"
+                                                       placeholder="Abstract Title" />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className="col-md-6">
+                                        <div className="single-form" style={{ display: "flex", alignItems: "center", minHeight: "56px" }}>
+                                            <label style={{ marginBottom: 0 }}>
+                                                <input className="currency-checkbox" type="checkbox" checked={onlineViewing}
+                                                    onChange={(e) => setOnlineViewing(e.target.checked)}
+                                                />
+                                                Online viewing without participation and abstract
+                                            </label>
+                                            <input type="hidden" name="online_viewing" value={onlineViewing ? "yes" : "no"} />
+                                            {/* abstract_title and abstract are NOT NULL columns, so send a blank
+                                                placeholder rather than omitting the fields entirely. */}
+                                            {onlineViewing && (
+                                                <>
+                                                    <input type="hidden" name="abstract_title" value=" " />
+                                                    <input type="hidden" name="abstract" value=" " />
+                                                </>
+                                            )}
                                         </div>
                                     </div>
-                                    <div className="col-md-12">
-                                        <div className="single-form">
-                                            <textarea value={value}
-                                                      onChange={(e) => setTextareaValue(e.target.value)}
-                                                      maxLength={limit}
-                                                      rows={20}
-                                                      cols={80}
-                                                      className="form-input" id="country" name="abstract"
-                                                   placeholder="Abstract  (No images, tables or equations)" />
-                                            <p>{textareaValue.length}/{limit} characters</p>
+                                    {!onlineViewing && (
+                                        <div className="col-md-12">
+                                            <div className="single-form">
+                                                <textarea value={value}
+                                                          onChange={(e) => setTextareaValue(e.target.value)}
+                                                          maxLength={limit}
+                                                          rows={20}
+                                                          cols={80}
+                                                          className="form-input" id="country" name="abstract"
+                                                       placeholder="Abstract  (No images, tables or equations)" />
+                                                <p>{textareaValue.length}/{limit} characters</p>
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                     <div className="col-md-12">
                                         <div className="single-form">
                                             <label>
