@@ -28,7 +28,7 @@ export const categories = [
     },
     {
         label: "Student",
-        subtext: "Without Paper Publication",
+        subtext: "",
         price: "50€",
         earlybird: "50€",
         value: 50,
@@ -41,7 +41,7 @@ export const categories = [
     },
     {
         label: "Online",
-        subtext: "Without Paper Publication",
+        subtext: "",
         price: "0€",
         earlybird: "175/200€",
         value: 1,
@@ -66,6 +66,7 @@ export default function RegistrationForm() {
     const [type, setType] = useState("");
     const [checked, setChecked] = useState(false);
     const [book, setBook] = useState(false);
+    const [coAuthors, setCoAuthors] = useState([{ name: "", organization: "", orcidId: "" }]);
     const formRef = useRef();
     const navigation = useNavigation();
     const isSubmitting = navigation.formData != null;
@@ -94,6 +95,7 @@ export default function RegistrationForm() {
     useEffect(() => {
         if (data?.success) {
             toast.success("Thank you for registering! Check your email for your registration details and payment instructions.");
+            setCoAuthors([{ name: "", organization: "", orcidId: "" }]);
         } else if (data?.errors) {
             toast.error("Something went wrong with your registration. Please check the form and try again.");
         }
@@ -105,6 +107,28 @@ export default function RegistrationForm() {
         setSelected(e.target.value || "");
         setSelectedText(found || "");
     };
+
+    const handleCoAuthorChange = (index, field, val) => {
+        setCoAuthors((prev) =>
+            prev.map((ca, i) => (i === index ? { ...ca, [field]: val } : ca))
+        );
+    };
+
+    const addCoAuthor = () => {
+        setCoAuthors((prev) => [...prev, { name: "", organization: "", orcidId: "" }]);
+    };
+
+    const removeCoAuthor = (index) => {
+        setCoAuthors((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    // Only keep co-author rows that have at least one field filled in, then
+    // serialize to a JSON string for the `co_authors` DB column.
+    const coAuthorsJson = JSON.stringify(
+        coAuthors.filter(
+            (ca) => ca.name.trim() || ca.organization.trim() || ca.orcidId.trim()
+        )
+    );
 
     const [searchParams] = useSearchParams();
 
@@ -145,6 +169,23 @@ export default function RegistrationForm() {
 
     }
 
+    const coAuthorBtnBaseStyle = {
+        width: "44px",
+        height: "44px",
+        flexShrink: 0,
+        borderRadius: "50%",
+        border: "none",
+        cursor: "pointer",
+        fontSize: "24px",
+        lineHeight: 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        color: "#fff",
+    };
+    const coAuthorAddBtnStyle = { ...coAuthorBtnBaseStyle, background: "#1a7f5a" };
+    const coAuthorRemoveBtnStyle = { ...coAuthorBtnBaseStyle, background: "#b23b3b" };
+
     return (
         <section id="registration" className="contact-section pt-150 pb-100 pt-md-50">
             <div className="container">
@@ -174,23 +215,56 @@ export default function RegistrationForm() {
                                                    placeholder="Author Email" />
                                         </div>
                                     </div>
-                                    <div className="col-md-4">
+                                    <div className="col-md-6">
                                         <div className="single-form">
                                             <input type="text" className="form-input" id="orcidId" name="orcidId"
                                                    placeholder="ORCID iD (e.g. 0000-0002-1825-0097)" required />
                                         </div>
                                     </div>
-                                    <div className="col-md-4">
-                                        <div className="single-form">
-                                            <input type="text" className="form-input" id="coauthors" name="co_authors"
-                                                   placeholder="Co-Authors" />
-                                        </div>
-                                    </div>
-                                    <div className="col-md-4">
+                                    <div className="col-md-6">
                                         <div className="single-form">
                                             <input type="text" className="form-input" id="institutions" name="institutions"
-                                                   placeholder="Organizations" />
+                                                   placeholder="Organization" />
                                         </div>
+                                    </div>
+                                    <div className="col-md-12">
+                                        <label style={{ display: "block", marginBottom: "10px" }}>Co-Authors</label>
+                                        {coAuthors.map((ca, index) => (
+                                            <div key={index}
+                                                 className="single-form"
+                                                 style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "20px" }}>
+                                                <input type="text" className="form-input"
+                                                       style={{ flex: 1, marginBottom: 0 }}
+                                                       placeholder="Co-Author Name"
+                                                       value={ca.name}
+                                                       onChange={(e) => handleCoAuthorChange(index, "name", e.target.value)} />
+                                                <input type="text" className="form-input"
+                                                       style={{ flex: 1, marginBottom: 0 }}
+                                                       placeholder="Organization"
+                                                       value={ca.organization}
+                                                       onChange={(e) => handleCoAuthorChange(index, "organization", e.target.value)} />
+                                                <input type="text" className="form-input"
+                                                       style={{ flex: 1, marginBottom: 0 }}
+                                                       placeholder="ORCID iD"
+                                                       value={ca.orcidId}
+                                                       onChange={(e) => handleCoAuthorChange(index, "orcidId", e.target.value)} />
+                                                <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
+                                                    {coAuthors.length > 1 && (
+                                                        <button type="button"
+                                                                onClick={() => removeCoAuthor(index)}
+                                                                aria-label="Remove co-author"
+                                                                style={coAuthorRemoveBtnStyle}>&minus;</button>
+                                                    )}
+                                                    {index === coAuthors.length - 1 && (
+                                                        <button type="button"
+                                                                onClick={addCoAuthor}
+                                                                aria-label="Add co-author"
+                                                                style={coAuthorAddBtnStyle}>+</button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        ))}
+                                        <input type="hidden" name="co_authors" value={coAuthorsJson} />
                                     </div>
                                     <div className="col-md-4">
                                         <div className="single-form">

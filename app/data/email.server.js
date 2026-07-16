@@ -10,6 +10,28 @@ function escapeHtml(value) {
         .replace(/"/g, "&quot;");
 }
 
+// The registration form stores co-authors as a JSON array of
+// { name, organization, orcidId }. Render it as a human-readable string:
+// "Name, Organization, ORCID; Name, Organization, ORCID".
+function formatCoAuthors(raw) {
+    let list = [];
+    try {
+        const parsed = JSON.parse(raw || "[]");
+        if (Array.isArray(parsed)) list = parsed;
+    } catch (e) {
+        list = [];
+    }
+    return list
+        .map((ca) =>
+            [ca.name, ca.organization, ca.orcidId]
+                .map((v) => (v || "").trim())
+                .filter(Boolean)
+                .join(", ")
+        )
+        .filter(Boolean)
+        .join("; ");
+}
+
 function paperUploadHtml(paper) {
     const row = (label, value) =>
         `<tr>
@@ -87,7 +109,7 @@ export async function sendEmail(emailData, registrationId, plainPassword) {
         message.params = {
             id: getInvouceUrl.id,
             author: emailData.get('author'),
-            co_authors: emailData.get('co_authors'),
+            co_authors: formatCoAuthors(emailData.get('co_authors')),
             insitution: emailData.get('institutions'),
             category: emailData.get('selected_category'),
             topic: emailData.get('topic'),

@@ -4,6 +4,22 @@ import path from "path";
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
+// The registration form stores co-authors as a JSON array of
+// { name, organization, orcidId }. Collapse it into a single cell formatted as
+// "Name/Organization/OrcidID | Name/Organization/OrcidID".
+function formatCoAuthors(raw) {
+    let list = [];
+    try {
+        const parsed = JSON.parse(raw || "[]");
+        if (Array.isArray(parsed)) list = parsed;
+    } catch (e) {
+        list = [];
+    }
+    return list
+        .map((ca) => [ca.name, ca.organization, ca.orcidId].map((v) => (v || "").trim()).join("/"))
+        .join(" | ");
+}
+
 export async function SaveToTable(formData, registrationId) {
     const documentId = '1YGvWaxqr3cYkXX8-zsPlkivNDQoYzcVKAfQ5hHLIfdk';
     const keyPath = path.join(process.cwd(), "assets/files/wrt2026-ec853efd581d.json");
@@ -17,7 +33,7 @@ export async function SaveToTable(formData, registrationId) {
     const author = formData.get('author');
     const email = formData.get('email');
     const title = formData.get('abstract_title');
-    const co_authors = formData.get('co_authors');
+    const co_authors = formatCoAuthors(formData.get('co_authors'));
     const institution = formData.get('institutions');
     const category = formData.get('selected_category');
     const topic = formData.get('topic');

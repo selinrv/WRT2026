@@ -14,51 +14,76 @@ export async function AddToDoc(formData) {
     const author = formData.get('author');
     const co_authors = formData.get('co_authors');
     const institution = formData.get('institutions');
+    const orcidId = formData.get('orcidId');
     const abstract = formData.get('abstract');
     const docs = google.docs({ version: "v1", auth });
-    const institutions_index = title.length + author.length + co_authors.length + 5;
-    const abstract_index = institutions_index + institution.length;
-    const post_abstract_index = abstract_index + abstract.length + 10;
+
+    // Parse the co-authors JSON produced by the registration form. Falls back to
+    // an empty list if the value is missing or malformed.
+    let coAuthorsList = [];
+    try {
+        const parsed = JSON.parse(co_authors || "[]");
+        if (Array.isArray(parsed)) coAuthorsList = parsed;
+    } catch (e) {
+        coAuthorsList = [];
+    }
+
+    // One line per author, formatted "Name, Organization, ORCID". The main
+    // author comes first, then each co-author on its own line.
+    const formatPerson = (name, organization, orcid) =>
+        [name, organization, orcid].map((v) => (v || "").trim()).filter(Boolean).join(", ");
+
+    const authorLines = [
+        formatPerson(author, institution, orcidId),
+        ...coAuthorsList.map((ca) => formatPerson(ca.name, ca.organization, ca.orcidId)),
+    ].filter(Boolean);
+    const authorsBlock = authorLines.join("\n");
+
+    // Insert the whole entry at the top of the document in a single request so
+    // the style ranges below can use stable, 1-based indices.
+    const fullText = `${title}\n\n${authorsBlock}\n\n${abstract}\n`;
+    const authorsStart = title.length + 3;                 // after "<title>\n\n"
+    const authorsEnd = authorsStart + authorsBlock.length;
+    const abstractStart = authorsEnd + 2;                  // after "<authors>\n\n"
+    const abstractEnd = abstractStart + abstract.length;
+
     try {
         await docs.documents.batchUpdate({
             documentId,
             requestBody: {
                 requests: [
-                    {insertText: {location: {index: 1}, text: title + "\n"}},
-                    {insertText: {location: {index: title.length + 1}, text: "\n"}},
+                    {insertText: {location: {index: 1}, text: fullText}},
                     {
                         updateParagraphStyle: {
-                            range: {startIndex: 1, endIndex: title.length},
+                            range: {startIndex: 1, endIndex: title.length + 1},
                             paragraphStyle: {namedStyleType: "HEADING_1"},
                             fields: "namedStyleType",
                         }
                     },
-                    {insertText: {location: {index: title.length + 2}, text: author + ", " + co_authors}},
                     {
                         updateParagraphStyle: {
-                            range: {startIndex: title.length + 2, endIndex: institutions_index + 1},
+                            range: {startIndex: authorsStart, endIndex: authorsEnd},
                             paragraphStyle: {namedStyleType: "HEADING_3"},
                             fields: "namedStyleType",
                         }
                     },
                     {
                         updateTextStyle: {
-                            range: {startIndex: title.length + 2, endIndex: institutions_index},
+                            range: {startIndex: authorsStart, endIndex: authorsEnd},
                             textStyle: {bold: true},
                             fields: "bold",
                         }
                     },
                     {
-                        updateTextStyle: {
-                            range: {startIndex: institutions_index, endIndex: institutions_index + 1},
-                            textStyle: {underline: true},
-                            fields: "underline",
+                        updateParagraphStyle: {
+                            range: {startIndex: abstractStart, endIndex: abstractEnd},
+                            paragraphStyle: {namedStyleType: "NORMAL_TEXT"},
+                            fields: "namedStyleType",
                         }
                     },
-                    {insertText: {location: {index: institutions_index}, text: institution + "\n\n"}},
                     {
                         updateTextStyle: {
-                            range: {startIndex: abstract_index, endIndex: abstract_index + 2},
+                            range: {startIndex: abstractStart, endIndex: abstractEnd},
                             textStyle: {
                                 bold: false,
                                 underline: false,
@@ -67,8 +92,7 @@ export async function AddToDoc(formData) {
                             fields: "bold,underline,fontSize",
                         }
                     },
-                    {insertText: {location: {index: abstract_index + 1}, text: abstract + "\n"}},
-                    {insertPageBreak: {location: {index: abstract_index + abstract.length + 2}}},
+                    {insertPageBreak: {location: {index: abstractEnd + 1}}},
                 ],
             },
         });
