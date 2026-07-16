@@ -33,13 +33,10 @@ export default function Header() {
                                     id="navbarSupportedContent">
                                     <ul id="nav" className="navbar-nav ms-auto">
                                         {links.map((link) => (
-                                            link.id != 9
-                                                ? <li className="nav-item">
+                                            <li className="nav-item">
                                                     <Link className="page-scroll" to={link.link}>{link.link_name}</Link>
                                                 </li>
-                                                : <li className="nav-item">
-                                                    <Link className="page-scroll" onClick={() => setShow(true)}>{link.link_name}</Link>
-                                                </li>
+
                                         ))}
                                     </ul>
                                 </div>

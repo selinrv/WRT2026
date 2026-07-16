@@ -28,7 +28,7 @@ export const categories = [
     },
     {
         label: "Student",
-        subtext: "",
+        subtext: " ",
         price: "50€",
         earlybird: "50€",
         value: 50,
@@ -390,7 +390,7 @@ export default function RegistrationForm() {
                                                 <input className="currency-checkbox" type="checkbox" checked={book}
                                                     onChange={(e) => setBook(e.target.checked)}
                                                 />
-                                                I want printed copy of full paper publication
+                                                I want printed copy of the book
                                             </label>
                                             <input type="hidden" name="currency" value={book ? 100 : 0} />
                                         </div>
