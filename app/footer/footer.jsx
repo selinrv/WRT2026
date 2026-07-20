@@ -43,11 +43,11 @@ export const links = [
         link_name: "Topics",
         link: "/#about",
     },
-   /* {
+    {
         id: 3,
-        link_name: "Past Events",
-        link: "/#past-events-slider"
-    },*/
+        link_name: "Speakers",
+        link: "/#keynote-speakers"
+    },
     {
         id: 4,
         link_name: "Committee",

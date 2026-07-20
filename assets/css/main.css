@@ -1101,7 +1101,8 @@ p {
   font-weight: 400;
 }
 
-.committee-section {
+.committee-section,
+#keynote-speakers {
   background: #282E63;
 }
 .schedule-item .image img.addBgS {
@@ -2891,6 +2892,129 @@ p {
 .wrt-tag.position-tag {
   background: rgb(44, 56, 205);
 }
+
+/* ====== Keynote speakers ====== */
+.wrt-keynote__grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1rem, 2vw, 1.25rem);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.wrt-keynote__card{
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  border-radius: 18px;
+  background: rgb(38, 41, 77);
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 10px 30px rgba(0,0,0,.06);
+  backdrop-filter: blur(8px);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+
+.wrt-keynote__grid li:first-child .wrt-keynote__photo {
+  object-position: 0 -10px;
+}
+.wrt-keynote__photo{
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(255,255,255,.1);
+
+}
+
+@media (prefers-reduced-motion: reduce){
+  .wrt-keynote__card{ transition: none; }
+}
+
+.wrt-keynote__card:hover{
+  transform: translateY(-2px);
+  border-color: rgba(0,0,0,.10);
+  box-shadow: 0 14px 40px rgba(0,0,0,.09);
+}
+
+.wrt-keynote__body{ min-width: 0; }
+
+.wrt-keynote__name{
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.25;
+}
+
+.wrt-keynote__org{
+  margin: .4rem 0 0;
+  font-size: .95rem;
+  opacity: .7;
+}
+
+.wrt-keynote__talk{
+  margin: .6rem 0 0;
+  font-size: .98rem;
+  line-height: 1.45;
+  opacity: .9;
+}
+
+.wrt-keynote__toggle{
+  margin-top: .85rem;
+  padding: .4rem .75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgb(44, 56, 205);
+  color: #fff;
+  font-size: .82rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease;
+}
+
+.wrt-keynote__toggle:hover{
+  background: rgb(56, 68, 224);
+  border-color: rgba(255,255,255,.3);
+}
+
+.wrt-keynote__abstract{
+  margin: .85rem 0 0;
+  font-size: .92rem;
+  line-height: 1.55;
+  opacity: .85;
+}
+
+@media (max-width: 1199px){
+  .wrt-keynote__grid{ grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile: turn the grid into a swipeable slider */
+@media (max-width: 767px){
+  .wrt-keynote__grid{
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-inline: 0;
+    padding-bottom: .75rem;
+    /* thin, themed scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: rgb(44,56,205) transparent;
+  }
+  .wrt-keynote__grid > .wrt-keynote__card{
+    /* one card per view, with a peek of the next to signal the slider */
+    flex: 0 0 85%;
+    max-width: 85%;
+    scroll-snap-align: start;
+  }
+  .wrt-keynote__grid::-webkit-scrollbar{ height: 6px; }
+  .wrt-keynote__grid::-webkit-scrollbar-thumb{
+    background: rgb(44,56,205);
+    border-radius: 999px;
+  }
+}
+
 .editorial-modal {
   color: #26294D
 }

@@ -7,6 +7,7 @@ import Tickets from "../components/tickets";
 import Venue from "../components/venus";
 import Committie from "../components/commettie";
 import Deadlines from "../components/deadline"
+import Keynote from "../components/keynote"
 import bcrypt from 'bcryptjs';
 import crypto from 'node:crypto';
 
@@ -170,6 +171,7 @@ export default function Home() {
       <>
         <Homeslider />
         <Topics />
+        <Keynote />
         <Slider photos={photos}/>
         <Committie />
         <Past />
