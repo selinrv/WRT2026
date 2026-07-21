@@ -69,11 +69,13 @@ export function validateInput(input) {
         validationErrors.title = 'Please select registration category.'
     }
 
-    if (!isValidTopic(input.topic)) {
+    // Online viewing registrations hide the topic and presentation type fields,
+    // so these checks do not apply to them.
+    if (!isOnlineViewing && !isValidTopic(input.topic)) {
         validationErrors.title = 'Please select registration conference topic.'
     }
 
-    if (!isValidType(input.p_type)) {
+    if (!isOnlineViewing && !isValidType(input.p_type)) {
         validationErrors.title = 'Please select type of your presentation.'
     }
 
@@ -93,7 +95,7 @@ export function validateInput(input) {
         validationErrors.title = 'Incorrect email.';
     }
 
-    if (!isValidOrcidId(input.orcidId)) {
+    if (!isOnlineViewing && !isValidOrcidId(input.orcidId)) {
         validationErrors.title = 'Please provide a valid ORCID iD (e.g. 0000-0002-1825-0097).';
     }
 

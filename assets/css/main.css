@@ -1937,6 +1937,10 @@ p {
   line-height: 30px;
 }
 
+.submit-section {
+  background: #26294d;
+}
+
 /*===========================
     13.footer css
 ===========================*/

@@ -3,6 +3,7 @@ import Topics from "../components/topics";
 import Slider from "../components/slider";
 import Past from "../components/pastconference";
 import RegistrationForm from "../components/registration";
+import PaperUploadCta from "../components/paper-cta";
 import Tickets from "../components/tickets";
 import Venue from "../components/venus";
 import Committie from "../components/commettie";
@@ -179,6 +180,7 @@ export default function Home() {
         <Venue />
         <Tickets />
         <RegistrationForm />
+        <PaperUploadCta />
       </>
   )
 }

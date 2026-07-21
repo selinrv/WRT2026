@@ -254,8 +254,9 @@ async function createLineItem(formData, token, registrationId) {
     const name = formData.get("author").split(" ");
     const item = {
         name: "WRT 2026 Registration (" + formData.get("author") + ", Id: " + registrationId + ")",
-        rate: formData.get('total').replace(/[^0-9.]/g, ''),
-        description: formData.get("author") + 'registration (payment in ' + formData.get("currency").toUpperCase() + ')',
+        // The free "Online" category (value = 1) always has a zero total.
+        rate: formData.get('category') === '1' ? 0 : formData.get('total').replace(/[^0-9.]/g, ''),
+        description: formData.get("author") + ' registration (payment in ' + formData.get("currency").toUpperCase() + ')',
         product_type: "service",
     }
     try {

@@ -23,7 +23,7 @@ export default function Tickets() {
     };
 
     return (
-        <section id="pricing" className="pricing-section pt-150 pb-100 pt-md-50">
+        <section id="pricing" className="pricing-section pt-100 pb-100 pt-md-50">
             <div className="container">
                 <div className="row justify-content-center mb-5">
                     <div className="col-lg-8 text-center">

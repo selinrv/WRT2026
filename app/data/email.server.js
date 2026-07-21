@@ -117,7 +117,8 @@ export async function sendEmail(emailData, registrationId, plainPassword) {
             
             p_type: emailData.get('p_type'),
             abstract_title: emailData.get('abstract_title'),
-            total: emailData.get('total'),
+            // The free "Online" category (value = 1) always has a zero total.
+            total: emailData.get('category') === '1' ? 0 : emailData.get('total'),
             password: plainPassword,
             invoiceId: getInvouceUrl.invoiceUrl,
             invoiceUrl: invoiceUrl,

@@ -8,6 +8,7 @@ const STEPS = [
 ];
 
 const MAX_FILE_MB = 25;
+const MAX_PAGES = 6;
 const ACCEPTED = [".doc", ".docx"];
 const LICENSE_ACCEPTED = [".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png"];
 
@@ -54,6 +55,81 @@ function humanSize(bytes) {
     return `${n.toFixed(n < 10 && i > 0 ? 1 : 0)} ${units[i]}`;
 }
 
+// A .docx is a ZIP archive; Word caches the page count of the last save in
+// docProps/app.xml as <Pages>N</Pages>. We read that value without any library
+// by walking the ZIP central directory and inflating just that one entry with
+// the browser's built-in DecompressionStream.
+//
+// NOTE: this is an ESTIMATE — it's whatever app last saved the file computed,
+// and may be missing/stale for files not authored in Word (Google Docs export,
+// python-docx, some LibreOffice saves). Returns null when it can't be
+// determined (not a .docx, no cached value, or an unsupported browser).
+async function getDocxPageCount(file) {
+    try {
+        if (typeof DecompressionStream === "undefined") return null;
+        const buf = new Uint8Array(await file.arrayBuffer());
+        const view = new DataView(buf.buffer);
+
+        // Locate the End Of Central Directory record (scan backwards; the ZIP
+        // comment can be up to 65535 bytes, so cap the search there).
+        let eocd = -1;
+        const minEocd = Math.max(0, buf.length - 22 - 65535);
+        for (let i = buf.length - 22; i >= minEocd; i--) {
+            if (view.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+        }
+        if (eocd < 0) return null;
+
+        const cdOffset = view.getUint32(eocd + 16, true);
+        const cdCount = view.getUint16(eocd + 10, true);
+        const decoder = new TextDecoder();
+
+        // Walk the central directory looking for docProps/app.xml.
+        let p = cdOffset;
+        let localOffset = null, method = null, compSize = null;
+        for (let n = 0; n < cdCount; n++) {
+            if (view.getUint32(p, true) !== 0x02014b50) break;
+            const nameLen = view.getUint16(p + 28, true);
+            const extraLen = view.getUint16(p + 30, true);
+            const commentLen = view.getUint16(p + 32, true);
+            const name = decoder.decode(buf.subarray(p + 46, p + 46 + nameLen));
+            if (name === "docProps/app.xml") {
+                method = view.getUint16(p + 10, true);
+                compSize = view.getUint32(p + 20, true);
+                localOffset = view.getUint32(p + 42, true);
+                break;
+            }
+            p += 46 + nameLen + extraLen + commentLen;
+        }
+        if (localOffset === null) return null;
+
+        // The local header's name/extra lengths can differ from the central
+        // directory's, so read them here to find where the data begins.
+        if (view.getUint32(localOffset, true) !== 0x04034b50) return null;
+        const lNameLen = view.getUint16(localOffset + 26, true);
+        const lExtraLen = view.getUint16(localOffset + 28, true);
+        const dataStart = localOffset + 30 + lNameLen + lExtraLen;
+        const compData = buf.subarray(dataStart, dataStart + compSize);
+
+        let xmlBytes;
+        if (method === 0) {
+            xmlBytes = compData; // stored, no compression
+        } else if (method === 8) {
+            const stream = new Blob([compData]).stream()
+                .pipeThrough(new DecompressionStream("deflate-raw"));
+            xmlBytes = new Uint8Array(await new Response(stream).arrayBuffer());
+        } else {
+            return null;
+        }
+
+        const match = decoder.decode(xmlBytes).match(/<Pages>(\d+)<\/Pages>/);
+        if (!match) return null;
+        const pages = parseInt(match[1], 10);
+        return Number.isFinite(pages) && pages > 0 ? pages : null;
+    } catch {
+        return null;
+    }
+}
+
 export default function PaperUpload() {
     const data = useActionData();
     const navigation = useNavigation();
@@ -65,6 +141,7 @@ export default function PaperUpload() {
     const [step, setStep] = useState(0);
     const [values, setValues] = useState(EMPTY);
     const [paperFile, setPaperFile] = useState(null);
+    const [paperPages, setPaperPages] = useState(null);
     const [licenseFile, setLicenseFile] = useState(null);
     const [supplementaryFile, setSupplementaryFile] = useState(null);
     const [confirmed, setConfirmed] = useState(false);
@@ -87,6 +164,7 @@ export default function PaperUpload() {
             formRef.current?.reset();
             setValues(EMPTY);
             setPaperFile(null);
+            setPaperPages(null);
             setLicenseFile(null);
             setSupplementaryFile(null);
             setConfirmed(false);
@@ -105,6 +183,21 @@ export default function PaperUpload() {
             setErrors(data.errors);
         }
     }, [data]);
+
+    // Estimate the manuscript's page count from the .docx metadata whenever the
+    // selected file changes. Only .docx exposes a cached count; anything else
+    // (or an unreadable file) leaves paperPages null and the check is skipped.
+    useEffect(() => {
+        let cancelled = false;
+        if (!paperFile || !paperFile.name.toLowerCase().endsWith(".docx")) {
+            setPaperPages(null);
+            return;
+        }
+        getDocxPageCount(paperFile).then((pages) => {
+            if (!cancelled) setPaperPages(pages);
+        });
+        return () => { cancelled = true; };
+    }, [paperFile]);
 
     function validateStep(current) {
         const e = {};
@@ -382,7 +475,10 @@ export default function PaperUpload() {
                                                         <span className="pu-file-icon">📄</span>
                                                         <div className="pu-file-meta">
                                                             <strong>{paperFile.name}</strong>
-                                                            <span>{humanSize(paperFile.size)}</span>
+                                                            <span>
+                                                                {humanSize(paperFile.size)}
+                                                                {paperPages ? ` · ~${paperPages} page${paperPages > 1 ? "s" : ""}` : ""}
+                                                            </span>
                                                         </div>
                                                         <button type="button" className="pu-file-remove"
                                                                 onClick={(e) => {
@@ -398,10 +494,17 @@ export default function PaperUpload() {
                                                         <span className="pu-dropzone__icon">⬆</span>
                                                         <strong>Drag &amp; drop your manuscript</strong>
                                                         <span>or click to browse — {ACCEPTED.join(", ")} up to {MAX_FILE_MB} MB</span>
+                                                        <span>Manuscript shouldn't exceed 6 pages</span>
                                                     </div>
                                                 )}
                                             </div>
                                             {errors.paper && <p className="pu-error">{errors.paper}</p>}
+                                            {paperPages > MAX_PAGES && (
+                                                <p className="pu-warning">
+                                                    ⚠ This document appears to be ~{paperPages} pages. The limit is {MAX_PAGES} pages —
+                                                    please shorten your manuscript. (Page count is estimated from the file and may vary.)
+                                                </p>
+                                            )}
                                         </div>
 
                                         <div className="col-md-12">
@@ -483,7 +586,7 @@ export default function PaperUpload() {
                                         <Row label="Affiliations" value={values.institutions || "—"} />
                                         <Row label="Title" value={values.abstract_title} />
                                         <Row label="Keywords" value={values.keywords || "—"} />
-                                        <Row label="Manuscript" value={paperFile ? `${paperFile.name} (${humanSize(paperFile.size)})` : "—"} />
+                                        <Row label="Manuscript" value={paperFile ? `${paperFile.name} (${humanSize(paperFile.size)}${paperPages ? `, ~${paperPages} pages` : ""})` : "—"} />
                                         <Row label="Signed license" value={licenseFile ? `${licenseFile.name} (${humanSize(licenseFile.size)})` : "—"} />
                                         <Row label="Supplementary" value={supplementaryFile ? supplementaryFile.name : "—"} />
                                     </div>
@@ -561,6 +664,7 @@ const paperUploadStyles = `
 .pu-progress__bar { display:block; height:100%; background:linear-gradient(90deg,#1c63ff,#16a34a); transition:width .3s ease; }
 .pu-panel { border:0; padding:0; margin:0; min-inline-size:auto; }
 .pu-error { color:#dc2626; font-size:13px; margin-top:6px; }
+.pu-warning { color:#b45309; background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:10px 14px; font-size:13px; line-height:1.5; margin-top:10px; }
 .pu-counter { font-size:13px; color:#9aa3b2; margin-top:6px; }
 .pu-dropzone { border:2px dashed #c7d0de; border-radius:14px; padding:46px 20px; text-align:center; cursor:pointer; transition:all .2s; background:#fbfcfe; }
 .pu-dropzone:hover, .pu-dropzone--active { border-color:#1c63ff; background:#f3f7ff; }

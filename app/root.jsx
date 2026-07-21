@@ -17,6 +17,7 @@ import "../assets/css/LineIcons.2.0.css";
 import "../assets/css/bootstrap-5.0.0-beta1.min.css";
 import Header from "./header/header.jsx";
 import Footer from "./footer/footer.jsx";
+import WhatsAppWidget from "./components/whatsapp.jsx";
 import { Toaster } from "sonner";
 
 export const links = () => [
@@ -59,44 +60,63 @@ export function Layout({ children }) {
 
   return (
     <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="canonical" href="https://wrt2026.com.ua/" />
-        <Meta />
-        <Links />
-        <script src={"../assets/js/main.js"}></script>
-        {GA_MEASUREMENT_ID ? (
-            <>
-              <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} />
-              <script
-                  dangerouslySetInnerHTML={{
-                    __html: `
+    <head>
+      <meta charSet="utf-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <link rel="canonical" href="https://wrt2026.com.ua/"/>
+      <Meta/>
+      <Links/>
+      <script src={"../assets/js/main.js"}></script>
+      <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(d, w, c) {
+                  w.BrevoConversationsID = '669f70a2c5a9b43f4847aeed';
+                  w[c] = w[c] || function() {
+                      (w[c].q = w[c].q || []).push(arguments);
+                  };
+                  var s = d.createElement('script');
+                  s.async = true;
+                  s.src = 'https://conversations-widget.brevo.com/brevo-conversations.js';
+                  if (d.head) d.head.appendChild(s);
+              })(document, window, 'BrevoConversations');
+            `
+          }}
+      />
+
+      {GA_MEASUREMENT_ID ? (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}/>
+            <script
+                dangerouslySetInnerHTML={{
+                  __html: `
                   window.dataLayer = window.dataLayer || [];
                   function gtag(){dataLayer.push(arguments);}
                   gtag('js', new Date());
                   // Disable automatic page_view; we’ll send our own on route changes.
                   gtag('config', '${GA_MEASUREMENT_ID}', { send_page_view: false });
                 `
-                  }}
-              />
-            </>
-        ) : null}
-      </head>
-      <body>
-        <Header />
-        {children}
-        <Footer />
-        <Toaster position="bottom-center" richColors />
-        <ScrollRestoration />
-        <Scripts />
-      </body>
+                }}
+            />
+          </>
+      ) : null}
+
+    </head>
+    <body>
+    <Header/>
+    {children}
+    <Footer/>
+    {/* <WhatsAppWidget /> */}
+    <Toaster position="bottom-center" richColors/>
+    <ScrollRestoration/>
+    <Scripts/>
+    </body>
     </html>
   );
 }
 
 export default function App() {
-  return <Outlet />;
+  return <Outlet/>;
 }
 
 export function CatchBoundary() {

@@ -111,6 +111,11 @@ export default function RegistrationForm() {
         if (found?.label === "Online" && type === "Poster") {
             setType("");
         }
+        // The "Online viewing" option is only offered for the plain "Online" category,
+        // so clear it when switching away to avoid a lingering hidden checked state.
+        if (!(found?.label === "Online" && found?.subtext !== "With Paper Publication")) {
+            setOnlineViewing(false);
+        }
     };
 
     const handleCoAuthorChange = (index, field, val) => {
@@ -191,9 +196,12 @@ export default function RegistrationForm() {
     const coAuthorAddBtnStyle = { ...coAuthorBtnBaseStyle, background: "#1a7f5a" };
     const coAuthorRemoveBtnStyle = { ...coAuthorBtnBaseStyle, background: "#b23b3b" };
 
+    const selectedCategory = categories.find((c) => String(c.value) === String(selected));
     // "Poster" presentation is not offered for the Online registration categories.
-    const isOnlineCategory =
-        categories.find((c) => String(c.value) === String(selected))?.label === "Online";
+    const isOnlineCategory = selectedCategory?.label === "Online";
+    // The "Online viewing" checkbox is only offered for the plain "Online"
+    // category — not "Online - With Paper Publication", which still needs an abstract.
+    const isOnlineViewingEligible = isOnlineCategory && selectedCategory?.subtext !== "With Paper Publication";
 
     return (
         <section id="registration" className="contact-section pt-150 pb-100 pt-md-50">
@@ -224,18 +232,21 @@ export default function RegistrationForm() {
                                                    placeholder="Author Email" />
                                         </div>
                                     </div>
-                                    <div className="col-md-6">
-                                        <div className="single-form">
-                                            <input type="text" className="form-input" id="orcidId" name="orcidId"
-                                                   placeholder="ORCID iD (e.g. 0000-0002-1825-0097)" required />
+                                    {!onlineViewing && (
+                                        <div className="col-md-6">
+                                            <div className="single-form">
+                                                <input type="text" className="form-input" id="orcidId" name="orcidId"
+                                                       placeholder="ORCID iD (e.g. 0000-0002-1825-0097)" required />
+                                            </div>
                                         </div>
-                                    </div>
+                                    )}
                                     <div className="col-md-6">
                                         <div className="single-form">
                                             <input type="text" className="form-input" id="institutions" name="institutions"
                                                    placeholder="Organization" />
                                         </div>
                                     </div>
+                                    {!onlineViewing && (
                                     <div className="col-md-12">
                                         <label style={{ display: "block", marginBottom: "10px" }}>Co-Authors</label>
                                         {coAuthors.map((ca, index) => (
@@ -275,7 +286,8 @@ export default function RegistrationForm() {
                                         ))}
                                         <input type="hidden" name="co_authors" value={coAuthorsJson} />
                                     </div>
-                                    <div className="col-md-4">
+                                    )}
+                                    <div className={onlineViewing ? "col-md-6" : "col-md-4"}>
                                         <div className="single-form">
                                             <select
                                                 value={selected}
@@ -295,6 +307,7 @@ export default function RegistrationForm() {
                                             <input type="hidden" name="selected_category" value={selectedText ? selectedText.label + (selectedText.subtext ? " - " + selectedText.subtext : "") : ""} />
                                         </div>
                                     </div>
+                                    {!onlineViewing && (
                                     <div className="col-md-5">
                                         <div className="single-form">
                                             <select
@@ -313,6 +326,8 @@ export default function RegistrationForm() {
                                             <p>Selected: {topic}</p>
                                         </div>
                                     </div>
+                                    )}
+                                    {!onlineViewing && (
                                     <div className="col-md-3">
                                         <div className="single-form">
                                             <select
@@ -332,33 +347,42 @@ export default function RegistrationForm() {
                                             <p>Selected: {type}</p>
                                         </div>
                                     </div>
+                                    )}
+                                    {isOnlineViewingEligible && (
+                                        <div className="col-md-12">
+                                            <div className="single-form" style={{ display: "flex", alignItems: "center", minHeight: "56px" }}>
+                                                <label style={{ marginBottom: 0 }}>
+                                                    <input className="online-only-checkbox currency-checkbox" type="checkbox" checked={onlineViewing}
+                                                           onChange={(e) => setOnlineViewing(e.target.checked)}
+                                                    />
+                                                    Viewing without abstract
+                                                </label>
+                                                <input type="hidden" name="online_viewing" value={onlineViewing ? "yes" : "no"} />
+                                                {/* Online viewing carries no abstract, co-authors, ORCID, topic or
+                                                presentation type. These are all NOT NULL columns, so send blank
+                                                placeholders rather than omitting the fields entirely. */}
+                                                {onlineViewing && (
+                                                    <>
+                                                        <input type="hidden" name="abstract_title" value=" " />
+                                                        <input type="hidden" name="abstract" value=" " />
+                                                        <input type="hidden" name="co_authors" value="[]" />
+                                                        <input type="hidden" name="orcidId" value="" />
+                                                        <input type="hidden" name="topic" value="" />
+                                                        <input type="hidden" name="p_type" value="" />
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
                                     {!onlineViewing && (
-                                        <div className="col-md-6">
+                                        <div className="col-md-12">
                                             <div className="single-form">
                                                 <input type="text" className="form-input" id="abstract_title" name="abstract_title"
                                                        placeholder="Abstract Title" />
                                             </div>
                                         </div>
                                     )}
-                                    <div className="col-md-6">
-                                        <div className="single-form" style={{ display: "flex", alignItems: "center", minHeight: "56px" }}>
-                                            <label style={{ marginBottom: 0 }}>
-                                                <input className="currency-checkbox" type="checkbox" checked={onlineViewing}
-                                                    onChange={(e) => setOnlineViewing(e.target.checked)}
-                                                />
-                                                Online viewing without participation and abstract
-                                            </label>
-                                            <input type="hidden" name="online_viewing" value={onlineViewing ? "yes" : "no"} />
-                                            {/* abstract_title and abstract are NOT NULL columns, so send a blank
-                                                placeholder rather than omitting the fields entirely. */}
-                                            {onlineViewing && (
-                                                <>
-                                                    <input type="hidden" name="abstract_title" value=" " />
-                                                    <input type="hidden" name="abstract" value=" " />
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
+
                                     {!onlineViewing && (
                                         <div className="col-md-12">
                                             <div className="single-form">
