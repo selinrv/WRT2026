@@ -202,6 +202,10 @@ export default function RegistrationForm() {
     // The "Online viewing" checkbox is only offered for the plain "Online"
     // category — not "Online - With Paper Publication", which still needs an abstract.
     const isOnlineViewingEligible = isOnlineCategory && selectedCategory?.subtext !== "With Paper Publication";
+    // Accompanying person / visitor registrations don't submit a paper, so the
+    // paper-specific fields are hidden for them just like for online viewing.
+    const isVisitor = selectedCategory?.label === "Accompanying person / Visitor";
+    const hidePaperFields = onlineViewing || isVisitor;
 
     return (
         <section id="registration" className="contact-section pt-150 pb-100 pt-md-50">
@@ -232,7 +236,7 @@ export default function RegistrationForm() {
                                                    placeholder="Author Email" />
                                         </div>
                                     </div>
-                                    {!onlineViewing && (
+                                    {!hidePaperFields && (
                                         <div className="col-md-6">
                                             <div className="single-form">
                                                 <input type="text" className="form-input" id="orcidId" name="orcidId"
@@ -246,7 +250,7 @@ export default function RegistrationForm() {
                                                    placeholder="Organization" />
                                         </div>
                                     </div>
-                                    {!onlineViewing && (
+                                    {!hidePaperFields && (
                                     <div className="col-md-12">
                                         <label style={{ display: "block", marginBottom: "10px" }}>Co-Authors</label>
                                         {coAuthors.map((ca, index) => (
@@ -287,7 +291,7 @@ export default function RegistrationForm() {
                                         <input type="hidden" name="co_authors" value={coAuthorsJson} />
                                     </div>
                                     )}
-                                    <div className={onlineViewing ? "col-md-6" : "col-md-4"}>
+                                    <div className={hidePaperFields ? "col-md-6" : "col-md-4"}>
                                         <div className="single-form">
                                             <select
                                                 value={selected}
@@ -307,7 +311,7 @@ export default function RegistrationForm() {
                                             <input type="hidden" name="selected_category" value={selectedText ? selectedText.label + (selectedText.subtext ? " - " + selectedText.subtext : "") : ""} />
                                         </div>
                                     </div>
-                                    {!onlineViewing && (
+                                    {!hidePaperFields && (
                                     <div className="col-md-5">
                                         <div className="single-form">
                                             <select
@@ -327,7 +331,7 @@ export default function RegistrationForm() {
                                         </div>
                                     </div>
                                     )}
-                                    {!onlineViewing && (
+                                    {!hidePaperFields && (
                                     <div className="col-md-3">
                                         <div className="single-form">
                                             <select
@@ -358,23 +362,23 @@ export default function RegistrationForm() {
                                                     Viewing without abstract
                                                 </label>
                                                 <input type="hidden" name="online_viewing" value={onlineViewing ? "yes" : "no"} />
-                                                {/* Online viewing carries no abstract, co-authors, ORCID, topic or
-                                                presentation type. These are all NOT NULL columns, so send blank
-                                                placeholders rather than omitting the fields entirely. */}
-                                                {onlineViewing && (
-                                                    <>
-                                                        <input type="hidden" name="abstract_title" value=" " />
-                                                        <input type="hidden" name="abstract" value=" " />
-                                                        <input type="hidden" name="co_authors" value="[]" />
-                                                        <input type="hidden" name="orcidId" value="" />
-                                                        <input type="hidden" name="topic" value="" />
-                                                        <input type="hidden" name="p_type" value="" />
-                                                    </>
-                                                )}
                                             </div>
                                         </div>
                                     )}
-                                    {!onlineViewing && (
+                                    {/* Registrations that don't submit a paper (online viewing or accompanying
+                                    person / visitor) still need values for these NOT NULL columns, so send blank
+                                    placeholders for the hidden fields. */}
+                                    {hidePaperFields && (
+                                        <>
+                                            <input type="hidden" name="abstract_title" value=" " />
+                                            <input type="hidden" name="abstract" value=" " />
+                                            <input type="hidden" name="co_authors" value="[]" />
+                                            <input type="hidden" name="orcidId" value="" />
+                                            <input type="hidden" name="topic" value="" />
+                                            <input type="hidden" name="p_type" value="" />
+                                        </>
+                                    )}
+                                    {!hidePaperFields && (
                                         <div className="col-md-12">
                                             <div className="single-form">
                                                 <input type="text" className="form-input" id="abstract_title" name="abstract_title"
@@ -383,7 +387,7 @@ export default function RegistrationForm() {
                                         </div>
                                     )}
 
-                                    {!onlineViewing && (
+                                    {!hidePaperFields && (
                                         <div className="col-md-12">
                                             <div className="single-form">
                                                 <textarea value={value}

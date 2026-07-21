@@ -57,11 +57,15 @@ function isValidType(value) {
 export function validateInput(input) {
     let validationErrors = {};
 
-    // "Online viewing without participation and abstract" registrations submit no
-    // abstract at all, so the abstract checks below do not apply to them.
+    // Registrations that submit no paper skip the paper-specific checks below:
+    // "Online viewing without participation and abstract", and the accompanying
+    // person / visitor category (value 201), which only provides name, email,
+    // organization and category.
     const isOnlineViewing = input.online_viewing === "yes";
+    const isVisitor = String(input.category) === "201";
+    const skipPaper = isOnlineViewing || isVisitor;
 
-    if (!isOnlineViewing && !isValidAbstract(input.abstract)) {
+    if (!skipPaper && !isValidAbstract(input.abstract)) {
         validationErrors.title = 'Incorrect abstract. Must be at most 3500 characters long.'
     }
 
@@ -69,13 +73,13 @@ export function validateInput(input) {
         validationErrors.title = 'Please select registration category.'
     }
 
-    // Online viewing registrations hide the topic and presentation type fields,
-    // so these checks do not apply to them.
-    if (!isOnlineViewing && !isValidTopic(input.topic)) {
+    // These fields are hidden for registrations that submit no paper, so the
+    // checks do not apply to them.
+    if (!skipPaper && !isValidTopic(input.topic)) {
         validationErrors.title = 'Please select registration conference topic.'
     }
 
-    if (!isOnlineViewing && !isValidType(input.p_type)) {
+    if (!skipPaper && !isValidType(input.p_type)) {
         validationErrors.title = 'Please select type of your presentation.'
     }
 
@@ -83,7 +87,7 @@ export function validateInput(input) {
         validationErrors.title = 'Poster presentation is not available for the Online registration categories.'
     }
 
-    if (!isOnlineViewing && !isValidAbstractTitle(input.abstract_title)) {
+    if (!skipPaper && !isValidAbstractTitle(input.abstract_title)) {
         validationErrors.title = 'Abstract title cannot be empty.'
     }
 
@@ -95,7 +99,7 @@ export function validateInput(input) {
         validationErrors.title = 'Incorrect email.';
     }
 
-    if (!isOnlineViewing && !isValidOrcidId(input.orcidId)) {
+    if (!skipPaper && !isValidOrcidId(input.orcidId)) {
         validationErrors.title = 'Please provide a valid ORCID iD (e.g. 0000-0002-1825-0097).';
     }
 

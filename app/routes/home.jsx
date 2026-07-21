@@ -69,7 +69,11 @@ export async function action({ request }) {
 
     // These registrations carry no abstract, so there is nothing to publish to
     // the abstracts Google Doc — they skip it and go straight to the invoice.
+    // Online viewing and the accompanying person / visitor category (201) both
+    // submit no paper.
     const isOnlineViewing = formData.get('online_viewing') === 'yes';
+    const isVisitor = String(formData.get('category')) === '201';
+    const skipDoc = isOnlineViewing || isVisitor;
 
 
 
@@ -92,7 +96,7 @@ export async function action({ request }) {
         }
 
         try {
-            if (!isOnlineViewing) {
+            if (!skipDoc) {
                 const doc = await AddToDoc(formData);
                 console.log("Doc Status", doc)
                 docStatus = doc;
@@ -104,7 +108,7 @@ export async function action({ request }) {
         }
 
         try {
-            if (isOnlineViewing || docStatus?.data.ok) {
+            if (skipDoc || docStatus?.data.ok) {
                 console.log("Starting creating invoice");
                 const invoice = await createInvoice(formData, registrationId);
                 console.log("invoiceStatus", invoice)
