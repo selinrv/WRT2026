@@ -26,7 +26,7 @@ model ContactForm {
 model Registration {
   id             Int      @id @default(autoincrement())
   author         String
-  co_authors     String
+  co_authors     String   @db.LongText
   abstract_title String   @db.LongText
   abstract       String   @db.LongText
   institutions   String   @db.LongText

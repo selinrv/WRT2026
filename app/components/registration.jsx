@@ -56,6 +56,34 @@ export const categories = [
 ]
 
 
+// Pull a human-readable reason out of whatever shape the action returned in
+// `data.errors`: a validation object ({ field: message }), a serialized Error
+// (has a `.message`), or a plain string. Prisma errors prefix the failed query
+// invocation on earlier lines, so we keep the last non-empty line — that's the
+// actual cause (e.g. "...too long for the column's type. Column: co_authors").
+function getErrorReason(errors) {
+    if (!errors) return "";
+    let raw = "";
+    if (typeof errors === "string") {
+        raw = errors;
+    } else if (typeof errors.message === "string") {
+        raw = errors.message;
+    } else if (typeof errors === "object") {
+        raw = Object.values(errors)
+            .filter((v) => typeof v === "string" && v.trim())
+            .join(" ");
+    }
+    const lines = raw.split("\n").map((l) => l.trim()).filter(Boolean);
+    return lines.length ? lines[lines.length - 1] : "";
+}
+
+// ORCID iD: 16 digits in groups of 4, the last character may be an X checksum.
+// Kept in sync with isValidOrcidId in app/data/validation.server.js.
+const ORCID_RE = /^\d{4}-\d{4}-\d{4}-\d{3}[\dX]$/;
+function isValidOrcid(value) {
+    return ORCID_RE.test(String(value).trim());
+}
+
 export default function RegistrationForm() {
     const data = useActionData();
     const [value, setValue] = useState();
@@ -98,7 +126,12 @@ export default function RegistrationForm() {
             toast.success("Thank you for registering! Check your email for your registration details and payment instructions.");
             setCoAuthors([{ name: "", organization: "", orcidId: "" }]);
         } else if (data?.errors) {
-            toast.error("Something went wrong with your registration. Please check the form and try again.");
+            const reason = getErrorReason(data.errors);
+            toast.error(
+                reason
+                    ? `Registration failed: ${reason}`
+                    : "Something went wrong with your registration. Please check the form and try again."
+            );
         }
     }, [data]);
 
@@ -139,6 +172,23 @@ export default function RegistrationForm() {
             (ca) => ca.name.trim() || ca.organization.trim() || ca.orcidId.trim()
         )
     );
+
+    // Co-author ORCID iDs are optional, but any that are filled in must be valid.
+    const coAuthorOrcidErrors = coAuthors.map(
+        (ca) => ca.orcidId.trim() !== "" && !isValidOrcid(ca.orcidId)
+    );
+    const hasCoAuthorOrcidError = coAuthorOrcidErrors.some(Boolean);
+
+    // Block submission client-side when a co-author ORCID is malformed, so the
+    // user gets immediate feedback instead of a round-trip validation error.
+    const handleSubmit = (e) => {
+        if (hasCoAuthorOrcidError) {
+            e.preventDefault();
+            toast.error(
+                "Please enter a valid ORCID iD for each co-author (e.g. 0000-0002-1825-0097), or leave the field blank."
+            );
+        }
+    };
 
     const [searchParams] = useSearchParams();
 
@@ -222,7 +272,7 @@ export default function RegistrationForm() {
                 <div className="row">
                     <div className="col-lg-12">
                         <div className="contact-form-wrapper">
-                            <Form method="post" id="contact-form" className="contact-form" ref={formRef}>
+                            <Form method="post" id="contact-form" className="contact-form" ref={formRef} onSubmit={handleSubmit}>
                                 <div className="row">
                                     <div className="col-md-6">
                                         <div className="single-form">
@@ -254,38 +304,45 @@ export default function RegistrationForm() {
                                     <div className="col-md-12">
                                         <label style={{ display: "block", marginBottom: "10px" }}>Co-Authors</label>
                                         {coAuthors.map((ca, index) => (
-                                            <div key={index}
-                                                 className="single-form"
-                                                 style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "20px" }}>
-                                                <input type="text" className="form-input"
-                                                       style={{ flex: 1, marginBottom: 0 }}
-                                                       placeholder="Co-Author Name"
-                                                       value={ca.name}
-                                                       onChange={(e) => handleCoAuthorChange(index, "name", e.target.value)} />
-                                                <input type="text" className="form-input"
-                                                       style={{ flex: 1, marginBottom: 0 }}
-                                                       placeholder="Organization"
-                                                       value={ca.organization}
-                                                       onChange={(e) => handleCoAuthorChange(index, "organization", e.target.value)} />
-                                                <input type="text" className="form-input"
-                                                       style={{ flex: 1, marginBottom: 0 }}
-                                                       placeholder="ORCID iD"
-                                                       value={ca.orcidId}
-                                                       onChange={(e) => handleCoAuthorChange(index, "orcidId", e.target.value)} />
-                                                <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
-                                                    {coAuthors.length > 1 && (
-                                                        <button type="button"
-                                                                onClick={() => removeCoAuthor(index)}
-                                                                aria-label="Remove co-author"
-                                                                style={coAuthorRemoveBtnStyle}>&minus;</button>
-                                                    )}
-                                                    {index === coAuthors.length - 1 && (
-                                                        <button type="button"
-                                                                onClick={addCoAuthor}
-                                                                aria-label="Add co-author"
-                                                                style={coAuthorAddBtnStyle}>+</button>
-                                                    )}
+                                            <div key={index} style={{ marginBottom: "20px" }}>
+                                                <div className="single-form"
+                                                     style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: 0 }}>
+                                                    <input type="text" className="form-input"
+                                                           style={{ flex: 1, marginBottom: 0 }}
+                                                           placeholder="Co-Author Name"
+                                                           value={ca.name}
+                                                           onChange={(e) => handleCoAuthorChange(index, "name", e.target.value)} />
+                                                    <input type="text" className="form-input"
+                                                           style={{ flex: 1, marginBottom: 0 }}
+                                                           placeholder="Organization"
+                                                           value={ca.organization}
+                                                           onChange={(e) => handleCoAuthorChange(index, "organization", e.target.value)} />
+                                                    <input type="text" className="form-input"
+                                                           style={{ flex: 1, marginBottom: 0, ...(coAuthorOrcidErrors[index] ? { borderColor: "red" } : {}) }}
+                                                           placeholder="ORCID iD"
+                                                           aria-invalid={coAuthorOrcidErrors[index] ? "true" : undefined}
+                                                           value={ca.orcidId}
+                                                           onChange={(e) => handleCoAuthorChange(index, "orcidId", e.target.value)} />
+                                                    <div style={{ display: "flex", gap: "6px", flexShrink: 0 }}>
+                                                        {coAuthors.length > 1 && (
+                                                            <button type="button"
+                                                                    onClick={() => removeCoAuthor(index)}
+                                                                    aria-label="Remove co-author"
+                                                                    style={coAuthorRemoveBtnStyle}>&minus;</button>
+                                                        )}
+                                                        {index === coAuthors.length - 1 && (
+                                                            <button type="button"
+                                                                    onClick={addCoAuthor}
+                                                                    aria-label="Add co-author"
+                                                                    style={coAuthorAddBtnStyle}>+</button>
+                                                        )}
+                                                    </div>
                                                 </div>
+                                                {coAuthorOrcidErrors[index] && (
+                                                    <p style={{ color: "red", margin: "6px 0 0" }}>
+                                                        Invalid ORCID iD. Use the format 0000-0002-1825-0097.
+                                                    </p>
+                                                )}
                                             </div>
                                         ))}
                                         <input type="hidden" name="co_authors" value={coAuthorsJson} />

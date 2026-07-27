@@ -103,6 +103,24 @@ export function validateInput(input) {
         validationErrors.title = 'Please provide a valid ORCID iD (e.g. 0000-0002-1825-0097).';
     }
 
+    // Co-author ORCID iDs are optional, but any that are supplied must be valid.
+    // The registration form serializes co-authors as a JSON array into co_authors.
+    if (!skipPaper) {
+        let coAuthors = [];
+        try {
+            const parsed = JSON.parse(input.co_authors || "[]");
+            if (Array.isArray(parsed)) coAuthors = parsed;
+        } catch {
+            coAuthors = [];
+        }
+        const hasInvalidCoAuthorOrcid = coAuthors.some(
+            (ca) => ca && typeof ca.orcidId === "string" && ca.orcidId.trim() !== "" && !isValidOrcidId(ca.orcidId)
+        );
+        if (hasInvalidCoAuthorOrcid) {
+            validationErrors.title = 'Please provide a valid ORCID iD for each co-author (e.g. 0000-0002-1825-0097), or leave it blank.';
+        }
+    }
+
     if (!isValidName(input.author)) {
         validationErrors.title = 'Incorrect author name. Must be at most 100 characters long.'
     }
