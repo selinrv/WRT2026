@@ -21,8 +21,8 @@ export default function Footer() {
                 </div>
                 <div className="copyright-area">
                     <div className="row align-items-center">
-                        <div className="col-md-6">
-
+                        <div className="col-md-12">
+                            <div className="copyright-area-inner">Developed by <a href="https://polyany.io">Polyany Web Development Company</a></div>
                         </div>
 
                     </div>

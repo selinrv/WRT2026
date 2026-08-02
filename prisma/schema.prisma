@@ -51,6 +51,7 @@ model Paper {
   manuscript_link String   @db.LongText
   license_link    String?  @db.LongText
   status          String   @default("Uploaded. Waiting to start the review process")
+  notes           String?  @db.LongText
   createdAt       DateTime @default(now())
 
   @@map("papers")
@@ -84,4 +85,10 @@ model Zohocontacts {
   registrationItemId String?
   invoiceUrl         String?  @db.LongText
   createdAt          DateTime @default(now())
+}
+
+model Admins {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
 }

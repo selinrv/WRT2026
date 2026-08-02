@@ -6,7 +6,8 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "create-admin": "node --env-file=.env scripts/create-admin.js"
   },
   "dependencies": {
     "@prisma/client": "^6.14.0",

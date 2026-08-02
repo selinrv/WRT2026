@@ -1,6 +1,7 @@
 import * as React from 'react'
 import {
   isRouteErrorResponse,
+  Link,
   Links,
   Meta,
   Outlet,
@@ -119,40 +120,42 @@ export default function App() {
   return <Outlet/>;
 }
 
-export function CatchBoundary() {
-  const caughtResponse = useCatch();
-
-  return (
-      <Document title={caughtResponse.statusText}>
-        <main>
-          <Error title={caughtResponse.statusText}>
-            <p>
-              {caughtResponse.data?.message ||
-                  'Something went wrong. Please try again later.'}
-            </p>
-            <p>
-              Back to <Link to="/">safety</Link>.
-            </p>
-          </Error>
-        </main>
-      </Document>
-  );
-}
-
+// Rendered inside Layout, so it returns page content only — no <html> shell.
 export function ErrorBoundary({ error }) {
+  let title = 'An error occurred';
+  let message = 'Something went wrong. Please try again later.';
+  let stack = null;
+
+  if (isRouteErrorResponse(error)) {
+    title = error.status === 404 ? 'Page not found' : `${error.status} ${error.statusText}`;
+    message =
+        error.status === 404
+            ? 'The page you are looking for does not exist.'
+            : error.data?.message || (typeof error.data === 'string' ? error.data : message);
+  } else if (error instanceof Error) {
+    message = error.message;
+    // Only in dev — React Router already redacts server errors in production.
+    if (import.meta.env.DEV) stack = error.stack;
+  }
+
   return (
-      <Document title="An error occurred">
-        <main>
-          <Error title="An error occurred">
-            <p>
-              {error.message || 'Something went wrong. Please try again later.'}
-            </p>
-            <p>
-              Back to <Link to="/">safety</Link>.
-            </p>
-          </Error>
-        </main>
-      </Document>
+      <main className="error-boundary pt-100 pb-100">
+        <div className="container text-center">
+          <h3>{title}</h3>
+          <p>{message}</p>
+          {stack && <pre className="error-boundary__stack">{stack}</pre>}
+          <p>
+            Back to <Link to="/">safety</Link>.
+          </p>
+        </div>
+        <style>{`
+          .error-boundary { padding-top: 160px; padding-bottom: 120px; }
+          .error-boundary h3 { color:#1f2937; margin-bottom:14px; }
+          .error-boundary p { color:#6b7280; }
+          .error-boundary a { color:#1c63ff; font-weight:600; }
+          .error-boundary__stack { text-align:left; background:#f7f9fc; border:1px solid #eef1f6; border-radius:12px; padding:18px; overflow-x:auto; font-size:12.5px; color:#374151; margin:20px 0; }
+        `}</style>
+      </main>
   );
 }
 

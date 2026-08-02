@@ -1949,6 +1949,15 @@ p {
   z-index: 1;
 }
 
+.copyright-area-inner {
+  text-align: center;
+}
+.copyright-area-inner a:hover {
+  color: #4E6EF1;
+}
+.copyright-area-inner a {
+  color: #fff;
+}
 .footer .map-img {
   position: absolute;
   width: 100%;
