@@ -9,8 +9,6 @@ import Venue from "../components/venus";
 import Committie from "../components/commettie";
 import Deadlines from "../components/deadline"
 import Keynote from "../components/keynote"
-import bcrypt from 'bcryptjs';
-import crypto from 'node:crypto';
 
 
 
@@ -24,16 +22,10 @@ export function meta() {
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-const plainPassword = crypto
-    .randomBytes(12)
-    .toString('base64')
-    .slice(0, 12)
-    .replace(/[+/=]/g, 'x');
 
-// 2. Hash it
-const hashedPassword = await bcrypt.hash(plainPassword, 10);
-
-async function addRegistation(formData) {
+// The password is generated per registration inside the action — held at module
+// scope it would be created once at server start and shared by every registrant.
+async function addRegistation(formData, hashedPassword) {
     return await prisma.registration.create({
         data: {
             author: formData.get('author'),
@@ -61,6 +53,10 @@ export async function action({ request }) {
     const { sendEmail } = await import("../data/email.server");
     const { AddToDoc } = await import("../data/google.server");
     const { SaveToTable } = await import("../data/sheets.server");
+    const { hashPassword, generatePassword } = await import("../data/password.server.js");
+
+    // One fresh password per submission, emailed to this registrant only.
+    const plainPassword = generatePassword();
 
     let docStatus;
     let invoiceStatus;
@@ -87,7 +83,7 @@ export async function action({ request }) {
 
         try {
             console.log("Starting registration");
-            const getId = await addRegistation(formData);
+            const getId = await addRegistation(formData, await hashPassword(plainPassword));
             registrationId = getId.id;
             console.log("registrationId", getId.id);
         } catch (error) {
@@ -123,7 +119,6 @@ export async function action({ request }) {
         try {
             if (invoiceStatus?.ok) {
                 console.log("registrationId", registrationId);
-                console.log("plainPassword", plainPassword);
                 console.log("Starting sending email");
                 const email = sendEmail(formData, registrationId, plainPassword);
                 console.log("Email", email)

@@ -79,7 +79,7 @@ export async function createInvoice(formData, registrationId) {
             "Призначення платежу: Інформаційно-консультаційні послуги для " + formData.get("author") + " в рамках VIII Міжнародної конференції WRT2026 5-9 жовтня 2026 року"
     } else {
         notes = "Payment details:\n" +
-            "Company Name: ГО ВІРТУС\n" +
+            "Company Name: NGO WRTYS\n" +
              "Purpose of payment: Information and consulting services for " + formData.get("author") + " within the framework of the VIII International Conference WRT2026 October 5-9, 2026\n" +
             "IBAN Code: UA343052990000026007016802276\n" +
             "Name of the bank: JSC CB \"PRIVATBANK\", 1D HRUSHEVSKOHO STR., KYIV, 01001, UKRAINE\n" +

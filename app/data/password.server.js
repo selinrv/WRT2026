@@ -10,6 +10,12 @@ const KEY_LENGTH = 64;
 
 // Stored as `scrypt$<salt>$<hash>` so the format is self-describing and we can
 // tell a hashed password from a legacy plain-text one.
+// Registration passwords are generated for the registrant and emailed to them,
+// so they have to survive being retyped: base64 minus the fiddly characters.
+export function generatePassword() {
+    return randomBytes(12).toString("base64").slice(0, 12).replace(/[+/=]/g, "x");
+}
+
 export async function hashPassword(plainPassword) {
     const salt = randomBytes(16).toString("hex");
     const derived = await scrypt(plainPassword, salt, KEY_LENGTH);

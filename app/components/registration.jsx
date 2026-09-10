@@ -277,7 +277,7 @@ export default function RegistrationForm() {
                                     <div className="col-md-6">
                                         <div className="single-form">
                                             <input type="text" className="form-input" id="name" name="author"
-                                                   placeholder="Author Name" />
+                                                   placeholder="Author Firstname and Lastname" />
                                         </div>
                                     </div>
                                     <div className="col-md-6">

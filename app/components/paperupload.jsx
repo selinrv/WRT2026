@@ -14,7 +14,7 @@ const LICENSE_ACCEPTED = [".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png"];
 
 // Human-readable labels for error keys, used in the failure toast.
 const FIELD_LABELS = {
-    author: "Author name",
+    author: "Author Firstname and Lastname",
     email: "Email",
     co_authors: "Co-authors",
     institutions: "Affiliations",
@@ -342,6 +342,15 @@ export default function PaperUpload() {
                                 manuscript using the <strong>Paper Template</strong>, sign the{" "}
                                 <strong>Publication License Agreement</strong>, and upload both files in{" "}
                                 <strong>Step 2 (Paper)</strong>.
+                            </p>
+                            <p className="pu-downloads__text">
+                                <strong>Papers must not exceed 8 pages.</strong>
+                            </p>
+                            <p className="pu-downloads__text">
+                                Papers without signed <strong>Publication License Agreement</strong> cannot be published in the proceedings.
+                            </p>
+                            <p className="pu-downloads__text">
+                                Only registered participants can upload manuscript.
                             </p>
                             <div className="pu-downloads__actions">
                                 <a

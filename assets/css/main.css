@@ -3028,6 +3028,102 @@ p {
   }
 }
 
+/* Abstract popup */
+.wrt-keynote__overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 1055;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 2rem);
+  background: rgba(10, 12, 30, .65);
+  backdrop-filter: blur(4px);
+}
+
+.wrt-keynote__modal{
+  position: relative;
+  width: min(100%, 680px);
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border-radius: 18px;
+  background: rgb(38, 41, 77);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 24px 60px rgba(0,0,0,.35);
+  color: #fff;
+}
+
+.wrt-keynote__modal-close{
+  position: absolute;
+  top: .75rem;
+  right: .75rem;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: transparent;
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease;
+}
+
+.wrt-keynote__modal-close:hover{
+  background: rgb(44, 56, 205);
+  border-color: rgba(255,255,255,.3);
+}
+
+.wrt-keynote__modal-head{
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding-right: 2.25rem;
+}
+
+.wrt-keynote__modal-photo{
+  width: 84px;
+  height: 84px;
+  flex: 0 0 auto;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.1);
+  object-position: top;
+}
+
+.wrt-keynote__modal-name{
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.wrt-keynote__modal-org{
+  margin: .35rem 0 0;
+  font-size: .92rem;
+  opacity: .7;
+}
+
+.wrt-keynote__modal-talk{
+  margin: 1.15rem 0 0;
+  font-size: 1.02rem;
+  line-height: 1.45;
+  opacity: .95;
+}
+
+.wrt-keynote__modal-abstract{
+  margin: .85rem 0 0;
+  font-size: .94rem;
+  line-height: 1.6;
+  opacity: .85;
+}
+
+@media (max-width: 575px){
+  .wrt-keynote__modal-head{ flex-direction: column; align-items: flex-start; }
+}
+
 .editorial-modal {
   color: #26294D
 }
