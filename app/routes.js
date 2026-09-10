@@ -6,5 +6,6 @@ export default [index("routes/home.jsx"),
     route("privacy-policy", "routes/privacy.jsx"),
     route("contact-form", "routes/contact.jsx"),
     route("paper-upload", "routes/paper-upload.jsx"),
+    route("ar", "routes/ar.jsx"),
     route("admin", "routes/admin.jsx")
 ];
