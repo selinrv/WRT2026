@@ -2906,7 +2906,27 @@ p {
   background: rgb(44, 56, 205);
 }
 
-/* ====== Keynote speakers ====== */
+/* ====== Keynote speaker country ====== */
+.wrt-keynote__country{
+  margin: .4rem 0 0;
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  font-size: .95rem;
+  opacity: .75;
+}
+
+.wrt-keynote__country .country {
+  margin-top: 2px;
+}
+
+.wrt-keynote__flag{
+  flex: none;
+  width: auto;
+  height: 14px;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(128,128,128,.35);
+}
 .wrt-keynote__grid{
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -2931,6 +2951,10 @@ p {
 .wrt-keynote__grid li:first-child .wrt-keynote__photo {
   object-position: 0 -10px;
 }
+.wrt-keynote__card.country-Australia .wrt-keynote__photo,
+.wrt-keynote__card.country-Latvia .wrt-keynote__photo {
+  object-position: 0 -35px;
+}
 .wrt-keynote__photo{
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -2938,7 +2962,6 @@ p {
   border-radius: 14px;
   margin-bottom: 1rem;
   border: 1px solid rgba(255,255,255,.1);
-
 }
 
 @media (prefers-reduced-motion: reduce){
@@ -3091,7 +3114,15 @@ p {
   object-fit: cover;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,.1);
+}
+
+.wrt-keynote__modal-head.speaker-Canada .wrt-keynote__modal-photo{
   object-position: top;
+}
+
+.wrt-keynote__modal-head.speaker-Australia .wrt-keynote__modal-photo,
+.wrt-keynote__modal-head.speaker-Latvia .wrt-keynote__modal-photo{
+  object-position: 0 -13px;
 }
 
 .wrt-keynote__modal-name{

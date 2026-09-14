@@ -7,6 +7,8 @@ export default function Keynote() {
         {
             name: 'Prof. Patricio F. Mendez',
             organization: 'Director, Canadian Center for Welding and Joining',
+            country: 'Canada',
+            flag: 'assets/img/flags/canada.svg',
             img: 'assets/img/Image_Mendez_2026.jpeg',
             title: 'Handheld Laser Beam Welding and its Fast Adoption in Industry',
             abstract: 'Handheld Laser Beam Welding (HLBW) is the most impactful welding technology innovation since the adoption of inverters in arc processes. This technology has enough similarities with arc welding that it is being adopted at a very fast rate in welding shops across the world; simultaneously, the differences with arc welding enable welders with minimal skills to accomplish welds of the highest quality. Cost and equipment size are comparable to arc welding equipment, but unlike arc welding, torch standoff and travel speed are set by the process, eliminating the need for skills in torch control. Codes and standards are still not ready to treat the particular advantages and challenges of HLBW and its practical requirements. Safety is an issue of significant difference with arc welding, the focus of much effort. This presentation will discuss the physical considerations that enable the paradoxical advantages of HLBW.'
@@ -14,23 +16,29 @@ export default function Keynote() {
         {
             name: 'Dr. Mykola Lavrskyi',
             organization: 'Research and Development Engineer, Institute of Technological Research for Materials, Metallurgy, and Processes',
+            country: 'France',
+            flag: 'assets/img/flags/france.svg',
             img: 'assets/img/photo_2026-09-03 09.59.11.jpeg',
             title: 'Deep Learning for EBSD-Based Phase Segmentation in Low-Carbon Steels',
             abstract: 'Characterizing the microstructure of multiphase steels is essential for process control and alloy design. This complex and time-consuming task can be automated using convolutional neural networks (CNNs). Significant progress in microstructure segmentation has been achieved by combining CNNs with the U-Net architecture and electron backscatter diffraction (EBSD) data. However, supervised learning requires large representative databases of labeled EBSD maps, which considerably complicates the preparation of training data. Weak supervision offers a promising approach to reduce this labeling effort. In this study, weakly supervised U-Net models are applied to discriminate martensite, upper bainite, and lower bainite in single-phase and multiphase EBSD maps. Their robustness to different EBSD acquisition conditions is also evaluated. The developed models achieve an overall segmentation accuracy exceeding 90%. This presentation will discuss their performance, limitations, and potential for automated steel microstructure characterization.'
         },
         {
-            name: 'TBD',
-            organization: 'SLV Halle GmbH',
-            img: 'assets/img/keitel.jpg',
-            title: 'Qualification and Certification in Welding Engineering',
-            abstract: 'A review of current European and international frameworks for the qualification of welding personnel and the certification of welded products. The presentation addresses harmonisation of standards, the role of education and training, and the challenges of maintaining competence in a rapidly changing technological landscape.'
+            name: 'Prof. Madeleine Du Toit',
+            organization: 'School of Mechanical, Materials, Mechatronic and Biomedical Engineering, Wollongong, Australia',
+            country: 'Australia',
+            flag: 'assets/img/flags/australia.svg',
+            img: 'assets/img/0f14cb8d-7be6-43d6-aee7-3b3d87d03591.jpg',
+            title: 'From Outback to Ocean - Confronting pipeline welding challenges in AUstralia',
+            abstract: ''
         },
         {
-            name: 'TBD',
-            organization: 'French National Centre for Scientific Research',
-            img: 'assets/img/olive.jpg',
-            title: 'Hydrogen Effects on Welded Structures',
-            abstract: 'Hydrogen embrittlement remains a critical concern for the integrity of welded structures, particularly with the growing use of hydrogen as an energy carrier. This keynote covers the mechanisms of hydrogen uptake and diffusion in weld metal and heat-affected zones, experimental characterisation techniques, and strategies to mitigate hydrogen-induced cracking.'
+            name: 'Dr.Sc.Ing. Inga Lasenko',
+            organization: 'Head of Laboratory, Leading Researcher, Institute of Mechanical Engineering, Aerospace Technology, and Transportation',
+            country: 'Latvia',
+            flag: 'assets/img/flags/latvia.svg',
+            img: 'assets/img/PHOTO-2026-09-14-16-35-36.jpg',
+            title: '',
+            abstract: ''
         },
     ]
 
@@ -98,7 +106,7 @@ export default function Keynote() {
                         {speakers.map((s, i) => {
                             const isTBD = s.name === 'TBD'
                             return (
-                                <li className="wrt-keynote__card" key={i}>
+                                <li className={`wrt-keynote__card country-${s.country}`} key={i}>
                                     <img
                                         className="wrt-keynote__photo"
                                         src={isTBD ? placeholderImg : s.img}
@@ -110,6 +118,17 @@ export default function Keynote() {
                                         {!isTBD && (
                                             <>
                                                 <p className="wrt-keynote__org">{s.organization}</p>
+
+                                                <p className="wrt-keynote__country">
+                                                    <img
+                                                        className="wrt-keynote__flag"
+                                                        src={s.flag}
+                                                        alt=""
+                                                        aria-hidden="true"
+                                                    />
+                                                    <span className="country">{s.country}</span>
+                                                </p>
+
                                                 <p className="wrt-keynote__talk">{s.title}</p>
 
                                                 <button
@@ -150,7 +169,9 @@ export default function Keynote() {
                             &times;
                         </button>
 
-                        <div className="wrt-keynote__modal-head">
+
+
+                        <div className={`wrt-keynote__modal-head speaker-${openSpeaker.country}`}>
                             <img
                                 className="wrt-keynote__modal-photo"
                                 src={openSpeaker.img}
@@ -161,6 +182,15 @@ export default function Keynote() {
                                     {openSpeaker.name}
                                 </h3>
                                 <p className="wrt-keynote__modal-org">{openSpeaker.organization}</p>
+                                <p className="wrt-keynote__country">
+                                    <img
+                                        className="wrt-keynote__flag"
+                                        src={openSpeaker.flag}
+                                        alt=""
+                                        aria-hidden="true"
+                                    />
+                                    {openSpeaker.country}
+                                </p>
                             </div>
                         </div>
 
