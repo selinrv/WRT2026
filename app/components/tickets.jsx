@@ -77,8 +77,14 @@ export default function Tickets() {
                                         <span className="price d-block my-3">
                                             {p.price}
                                         </span>
-                                        <Link to="#contact-form" className="main-btn btn-hover"
-                                              onClick={() => chooseAndScroll(p.value)}>Buy Ticket</Link>
+                                        {p.disabled ? (
+                                            <span className="main-btn btn-hover">Sold Out</span>
+                                        ) : (
+                                            <Link to="#contact-form" className="main-btn btn-hover"
+                                                   onClick={() =>chooseAndScroll(p.value)}>
+                                            Buy Ticket
+                                        </Link>
+                                        )}
                                     </div>
                                 </div>
                             </SwiperSlide>

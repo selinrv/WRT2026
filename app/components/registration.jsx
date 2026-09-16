@@ -11,6 +11,7 @@ export const categories = [
         price: "300€",
         earlybird: "250/300€",
         value: 300,
+        disabled: true,
     },
     {
         label: "Regular",
@@ -18,6 +19,7 @@ export const categories = [
         price: "200€",
         earlybird: "250/300€",
         value: 200,
+        disabled: true,
     },
     {
         label: "Young Professional",
@@ -25,6 +27,7 @@ export const categories = [
         price: "200€",
         earlybird: "175/200€",
         value: 202,
+        disabled: true,
     },
     {
         label: "Student",
@@ -32,12 +35,14 @@ export const categories = [
         price: "50€",
         earlybird: "50€",
         value: 50,
+        disabled: true,
     },
     {
         label: "Accompanying person / Visitor",
         price: "200€",
         earlybird: "175/200€",
         value: 201,
+        disabled: false,
     },
     {
         label: "Online",
@@ -45,13 +50,15 @@ export const categories = [
         price: "0€",
         earlybird: "175/200€",
         value: 1,
+        disabled: false,
     },
-    {
+   {
         label: "Online",
         subtext: "With Paper Publication",
         price: "100€",
         earlybird: "175/200€",
         value: 100,
+       disabled: true,
     },
 ]
 
@@ -255,7 +262,16 @@ export default function RegistrationForm() {
     // Accompanying person / visitor registrations don't submit a paper, so the
     // paper-specific fields are hidden for them just like for online viewing.
     const isVisitor = selectedCategory?.label === "Accompanying person / Visitor";
-    const hidePaperFields = onlineViewing || isVisitor;
+    const onlineRegistration = selectedCategory?.label === "Online";
+    const hidePaperFields = onlineViewing || isVisitor || isOnlineCategory;
+
+    useEffect(() => {
+        const loadValue = 'Accompanying person / Visitor';
+        const found = categories.find(c => c.label === loadValue);
+        console.log("found", found)
+        setSelected(found.value || "");
+        setSelectedText(found.label || "");
+    }, []);
 
     return (
         <section id="registration" className="contact-section pt-150 pb-100 pt-md-50">
@@ -358,6 +374,7 @@ export default function RegistrationForm() {
                                             >
                                                 <option value="">-- Choose your registration category --</option>
                                                 {categories.map((c) => (
+                                                    c.disabled ? "" :
                                                     <option key={c.label} value={c.value}>
                                                         {c.label} {c.subtext ? " - " + c.subtext : ""} / {c.price}
                                                     </option>
@@ -409,7 +426,7 @@ export default function RegistrationForm() {
                                         </div>
                                     </div>
                                     )}
-                                    {isOnlineViewingEligible && (
+                                    {/*{isOnlineViewingEligible && (
                                         <div className="col-md-12">
                                             <div className="single-form" style={{ display: "flex", alignItems: "center", minHeight: "56px" }}>
                                                 <label style={{ marginBottom: 0 }}>
@@ -421,7 +438,7 @@ export default function RegistrationForm() {
                                                 <input type="hidden" name="online_viewing" value={onlineViewing ? "yes" : "no"} />
                                             </div>
                                         </div>
-                                    )}
+                                    )}*/}
                                     {/* Registrations that don't submit a paper (online viewing or accompanying
                                     person / visitor) still need values for these NOT NULL columns, so send blank
                                     placeholders for the hidden fields. */}
