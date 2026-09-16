@@ -32,9 +32,9 @@ export default function Keynote() {
             abstract: ''
         },
         {
-            name: 'Dr.Sc.Ing. Inga Lasenko',
+            name: 'TBD',
             organization: 'Head of Laboratory, Leading Researcher, Institute of Mechanical Engineering, Aerospace Technology, and Transportation',
-            country: 'Latvia',
+            country: '',
             flag: 'assets/img/flags/latvia.svg',
             img: 'assets/img/PHOTO-2026-09-14-16-35-36.jpg',
             title: '',
