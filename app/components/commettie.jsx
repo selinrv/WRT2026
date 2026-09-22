@@ -35,7 +35,7 @@ export default function Committie() {
             img: 'assets/img/yashenkov.jpg'
         },
         {
-            name: 'Lina Gribanova',
+            name: 'Lina Grybanova',
             img: 'assets/img/photo_2026-02-26 20.23.08.jpeg'
         },
 
