@@ -1,4 +1,4 @@
-import { Form, useActionData, useNavigation, useSearchParams } from "react-router-dom";
+import { Form, useActionData, useNavigation, useSearchParams, useRouteLoaderData } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import 'react-phone-number-input/style.css'
@@ -107,6 +107,10 @@ export default function RegistrationForm() {
     const navigation = useNavigation();
     const isSubmitting = navigation.formData != null;
     const isBusy = navigation.state !== "idle";
+    const { TURNSTILE_SITE_KEY } = useRouteLoaderData("root") ?? {};
+    const turnstileRef = useRef(null);
+    const turnstileWidgetId = useRef(null);
+    const [turnstileToken, setTurnstileToken] = useState("");
     const types = [
         {
             label: "Oral in Person",
@@ -126,7 +130,47 @@ export default function RegistrationForm() {
         if (navigation.state === "idle" && formRef.current && !(data?.errors)) {
             formRef.current.reset();
         }
+        // Turnstile tokens are single-use, so issue a fresh one after every submission.
+        if (navigation.state === "idle" && turnstileWidgetId.current !== null) {
+            window.turnstile?.reset(turnstileWidgetId.current);
+            setTurnstileToken("");
+        }
     }, [navigation.state]);
+
+    useEffect(() => {
+        if (!TURNSTILE_SITE_KEY) return;
+
+        const render = () => {
+            if (!turnstileRef.current || turnstileWidgetId.current !== null) return;
+            turnstileWidgetId.current = window.turnstile.render(turnstileRef.current, {
+                sitekey: TURNSTILE_SITE_KEY,
+                callback: (token) => setTurnstileToken(token),
+                "expired-callback": () => setTurnstileToken(""),
+                "error-callback": () => setTurnstileToken(""),
+            });
+        };
+
+        if (window.turnstile) {
+            render();
+        } else {
+            let script = document.getElementById("cf-turnstile-script");
+            if (!script) {
+                script = document.createElement("script");
+                script.id = "cf-turnstile-script";
+                script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+                script.async = true;
+                document.head.appendChild(script);
+            }
+            script.addEventListener("load", render);
+        }
+
+        return () => {
+            if (turnstileWidgetId.current !== null) {
+                window.turnstile?.remove(turnstileWidgetId.current);
+                turnstileWidgetId.current = null;
+            }
+        };
+    }, [TURNSTILE_SITE_KEY]);
 
     useEffect(() => {
         if (data?.success) {
@@ -189,6 +233,11 @@ export default function RegistrationForm() {
     // Block submission client-side when a co-author ORCID is malformed, so the
     // user gets immediate feedback instead of a round-trip validation error.
     const handleSubmit = (e) => {
+        if (!turnstileToken) {
+            e.preventDefault();
+            toast.error("Please complete the security check before submitting.");
+            return;
+        }
         if (hasCoAuthorOrcidError) {
             e.preventDefault();
             toast.error(
@@ -202,8 +251,6 @@ export default function RegistrationForm() {
     useEffect(() => {
         const price = searchParams.get("price");
         if (price) {
-            setSelected(price);
-
             const el = document.getElementById("registration-category");
             el?.scrollIntoView({ behavior: "smooth", block: "center" });
         }
@@ -266,11 +313,12 @@ export default function RegistrationForm() {
     const hidePaperFields = onlineViewing || isVisitor || isOnlineCategory;
 
     useEffect(() => {
-        const loadValue = 'Accompanying person / Visitor';
-        const found = categories.find(c => c.label === loadValue);
-        console.log("found", found)
-        setSelected(found.value || "");
-        setSelectedText(found.label || "");
+        // A ?price= link picks the category; otherwise default to visitor.
+        const price = searchParams.get("price");
+        const found = (price && categories.find(c => String(c.value) === price))
+            || categories.find(c => c.label === 'Accompanying person / Visitor');
+        setSelected(found.value);
+        setSelectedText(found);
     }, []);
 
     return (
@@ -510,8 +558,13 @@ export default function RegistrationForm() {
                                         </div>
                                     </div>
                                     <div className="col-12">
+                                        <div className="single-form">
+                                            <div ref={turnstileRef}></div>
+                                        </div>
+                                    </div>
+                                    <div className="col-12">
                                         <div className="submit-btn">
-                                            <button type="submit" className={isSubmitting ? "main-btn btn-hover loading" : "main-btn btn-hover"} id="save-data"  disabled={isBusy}>
+                                            <button type="submit" className={isSubmitting ? "main-btn btn-hover loading" : "main-btn btn-hover"} id="save-data"  disabled={isBusy || !turnstileToken}>
                                                 {isSubmitting ? "Please wait, registration in process" : "Register"}
                                             </button>
                                         </div>

@@ -2777,7 +2777,7 @@ p {
 
 /* ====== Base section helpers (safe to include once) ====== */
 .wrt-container{
-  width: min(1140px, calc(100% - 2rem));
+  width: min(1300px, calc(100% - 1rem));
   margin-inline: auto;
 }
 
@@ -2928,12 +2928,29 @@ p {
   box-shadow: 0 0 0 1px rgba(128,128,128,.35);
 }
 .wrt-keynote__grid{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(1rem, 2vw, 1.25rem);
+  /* room for the card hover lift/shadow and the pagination below */
+  padding: 6px 4px 4.5rem;
+}
+.wrt-keynote__grid .swiper-wrapper{
   padding: 0;
   margin: 0;
   list-style: none;
+}
+/* equal-height cards */
+.wrt-keynote__grid .swiper-slide{
+  height: auto;
+}
+/* beat the global `.swiper-slide img` radius */
+.wrt-keynote__grid .wrt-keynote__photo{ border-radius: 14px; }
+.wrt-keynote__grid .wrt-keynote__flag{ border-radius: 2px; }
+.wrt-keynote__grid .swiper-pagination{
+  top: auto;
+  bottom: 0;
+}
+.wrt-keynote__grid .swiper-button-prev,
+.wrt-keynote__grid .swiper-button-next{
+  --swiper-navigation-top-offset: 45%;
+  color: #fff;
 }
 
 .wrt-keynote__card{
@@ -2948,7 +2965,10 @@ p {
   transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
 }
 
-.wrt-keynote__grid li:first-child .wrt-keynote__photo {
+.wrt-keynote__card.country-Ukraine .wrt-keynote__photo {
+  object-position: -13px;
+}
+.wrt-keynote__card.country-Canada .wrt-keynote__photo {
   object-position: 0 -10px;
 }
 .wrt-keynote__card.country-Australia .wrt-keynote__photo,
@@ -2995,8 +3015,14 @@ p {
   opacity: .9;
 }
 
-.wrt-keynote__toggle{
+.wrt-keynote__actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
   margin-top: .85rem;
+}
+
+.wrt-keynote__toggle{
   padding: .4rem .75rem;
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.18);
@@ -3018,37 +3044,6 @@ p {
   font-size: .92rem;
   line-height: 1.55;
   opacity: .85;
-}
-
-@media (max-width: 1199px){
-  .wrt-keynote__grid{ grid-template-columns: repeat(2, 1fr); }
-}
-
-/* Mobile: turn the grid into a swipeable slider */
-@media (max-width: 767px){
-  .wrt-keynote__grid{
-    display: flex;
-    grid-template-columns: none;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scroll-padding-inline: 0;
-    padding-bottom: .75rem;
-    /* thin, themed scrollbar */
-    scrollbar-width: thin;
-    scrollbar-color: rgb(44,56,205) transparent;
-  }
-  .wrt-keynote__grid > .wrt-keynote__card{
-    /* one card per view, with a peek of the next to signal the slider */
-    flex: 0 0 85%;
-    max-width: 85%;
-    scroll-snap-align: start;
-  }
-  .wrt-keynote__grid::-webkit-scrollbar{ height: 6px; }
-  .wrt-keynote__grid::-webkit-scrollbar-thumb{
-    background: rgb(44,56,205);
-    border-radius: 999px;
-  }
 }
 
 /* Abstract popup */
@@ -3076,7 +3071,9 @@ p {
   box-shadow: 0 24px 60px rgba(0,0,0,.35);
   color: #fff;
 }
-
+#keynote-speakers .swiper-pagination {
+  display: none;
+}
 .wrt-keynote__modal-close{
   position: absolute;
   top: .75rem;
@@ -3116,8 +3113,11 @@ p {
   border: 1px solid rgba(255,255,255,.1);
 }
 
-.wrt-keynote__modal-head.speaker-Canada .wrt-keynote__modal-photo{
-  object-position: top;
+.wrt-keynote__modal-head.speaker-Canada .wrt-keynote__modal-photo {
+  object-position: 0 -5px;
+}
+.wrt-keynote__modal-head.speaker-Ukraine .wrt-keynote__modal-photo {
+  object-position: -6px 0;
 }
 
 .wrt-keynote__modal-head.speaker-Australia .wrt-keynote__modal-photo,
@@ -3142,6 +3142,39 @@ p {
   font-size: 1.02rem;
   line-height: 1.45;
   opacity: .95;
+}
+
+.wrt-keynote__tabs{
+  display: flex;
+  gap: .25rem;
+  margin: 1.15rem 0 0;
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+
+.wrt-keynote__tab{
+  padding: .55rem 1rem;
+  margin-bottom: -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: .94rem;
+  opacity: .7;
+  cursor: pointer;
+  transition: opacity .18s ease, border-color .18s ease;
+}
+
+.wrt-keynote__tab:hover{ opacity: 1; }
+
+.wrt-keynote__tab[aria-selected="true"]{
+  opacity: 1;
+  border-bottom-color: #fff;
+}
+
+.wrt-keynote__tab:focus-visible{
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .wrt-keynote__modal-abstract{

@@ -45,8 +45,31 @@ async function addRegistation(formData, hashedPassword) {
     });
 }
 
+async function verifyTurnstile(token, request) {
+    const body = new URLSearchParams({
+        secret: process.env.TURNSTILE_SECRET_KEY ?? "",
+        response: token ?? "",
+    });
+    const ip = request.headers.get("CF-Connecting-IP") ?? request.headers.get("X-Forwarded-For")?.split(",")[0].trim();
+    if (ip) body.append("remoteip", ip);
+
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body });
+    const outcome = await res.json();
+    return outcome.success === true;
+}
+
 export async function action({ request }) {
     const formData = await request.formData();
+
+    try {
+        if (!(await verifyTurnstile(formData.get("cf-turnstile-response"), request))) {
+            return { errors: "Security check failed. Please try again." };
+        }
+    } catch (error) {
+        console.log("Turnstile verification error", error);
+        return { errors: "Security check could not be verified. Please try again." };
+    }
+    formData.delete("cf-turnstile-response");
     const expenseData = Object.fromEntries(formData);
     const { validateInput } = await import("../data/validation.server");
     const { createInvoice } = await import("../data/zoho.server");

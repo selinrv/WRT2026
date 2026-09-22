@@ -42,7 +42,8 @@ export const links = () => [
 
 export async function loader() {
   return Response.json({
-    GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID ?? null
+    GA_MEASUREMENT_ID: process.env.GA_MEASUREMENT_ID ?? null,
+    TURNSTILE_SITE_KEY: process.env.TURNSTILE_SITE_KEY ?? null
   });
 }
 
